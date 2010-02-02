@@ -1,0 +1,97 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div id="paste_options">
+        <ul class="left">
+            <li>language:</li>
+            <li class="fieldValue" wicket:id="type">blah</li>
+        </ul>
+
+        <div style="float:right; margin-top: 1em; padding-right: 30px;">
+            <a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a>&nbsp;&nbsp;
+            <a href="#addComment">Add Comment</a>&nbsp;&nbsp;
+            <a href="#comments">Comments (<span wicket:id="commentsCount">[commentsCount]</span>)</a>&nbsp;&nbsp;
+            <a href="#rawtext">Raw text</a>
+        </div>
+
+    </div>
+    <div id="paste_content">
+        <div id="textLeft"></div>
+        <div id="textRight"></div>
+        <div id="textCenter" class="view">
+            <div wicket:id="highlightedContent">[highlightedContent]</div>
+
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <div id="paste_content">
+        <div id="textLeft"></div>
+        <div id="textRight"></div>
+
+        <div id="textCenter">
+            <a name="comments"></a>
+            <strong>Comments:</strong>
+            <br/><br/>
+            <ul wicket:id="commentListContainer">
+                <li wicket:id="commentList">
+                    <img wicket:id="image" border="0" />
+                    <strong wicket:id="name">[name]</strong> said <span wicket:id="comment">[comment]</span>
+                </li>
+            </ul>
+            <p wicket:id="noComments">No comments</p>
+
+            <hr/>
+        </div>
+    </div>
+
+
+    <div id="paste_content">
+        <div id="textLeft"></div>
+        <div id="textRight"></div>
+
+        <div id="textCenter">
+            <form wicket:id="commentForm">
+
+                <div id="feedbackPanel">
+                  <span wicket:id="feedback">[feedback]</span>
+                </div>
+                
+                <a name="addComment"></a>
+                <strong>Add a comment:</strong>
+                <br/><br/>
+                Name: <input type="text" wicket:id="name" style="background-color: #eee;"/>
+                Email: <input type="text" wicket:id="email" style="background-color: #eee;"/> (never shared anywhere)
+                <span style="display: none; visibility: hidden;"><input type="text" wicket:id="confirmEmail"/></span>
+                <br/>
+                <textarea wicket:id="comment" rows="0" cols="0"
+                          style="height: 75px; width: 60%; background-color: #eee; border: 1px solid #555; margin-top: 5px;"></textarea>
+                <br/>
+                <input type="submit" wicket:id="addComment" value="Add Comment"/>
+            </form>
+
+            <hr/>
+
+        </div>
+    </div>
+
+
+    <div id="paste_content">
+        <div id="textLeft"></div>
+        <div id="textRight"></div>
+
+
+        <div id="textCenter">
+            <a name="rawtext"></a>
+
+            <p><strong>Raw text of paste:</strong></p>
+
+            <textarea wicket:id="content" id="rawPaste" wrap="off"
+                      style="height: 250px; width: 100%; background-color: #eeeeee; border: 1px solid #555;"></textarea>
+        </div>
+    </div>
+
+    <wicket:child/>
+
+</wicket:extend>
+</html>

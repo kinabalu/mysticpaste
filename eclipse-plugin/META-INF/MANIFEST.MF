@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MysticPaste Plug-in
+Bundle-SymbolicName: com.mysticcoders.mysticpaste;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: com.mysticcoders.mysticpaste.Activator
+Bundle-Vendor: Mystic Coders LLC
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jface.text;bundle-version="3.4.0",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.4.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
+Bundle-ClassPath: .,
+ lib/apache-mime4j-0.5.jar,
+ lib/commons-codec-1.3.jar,
+ lib/commons-logging-1.1.1.jar,
+ lib/httpclient-4.0-beta2.jar,
+ lib/httpcore-4.0-beta3.jar,
+ lib/httpmime-4.0-beta2.jar

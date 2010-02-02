@@ -1,0 +1,124 @@
+*paster.vim*  Plugin for pasting text on a public pastebin or board
+
+Paste text from the current document onto a public pastebin or board.  This 
+implementation is written in vim to reduce external depencencies to Python or
+Perl.  The only external dependency is cURL (e.g. /usr/bin/curl in UNIX-like
+systems) as an HTTP posting tool.  This posting tool, and all its command line
+parameters are configurable by the user.
+
+
+*paster-features*
+
+* Pastes to any pastebin with a public API
+* The end-user's nick is configurable per use, or via .vimrc
+* Sends syntax highlighting information if the target supports it
+* Uses standard vim range commands for its use
+* Copies the URL where the text was pasted to the system clipboard and the
+  status line
+
+
+*paster-usage*
+
+Install paster.vim to the appropriate default vim scripts directory for your
+configuration, normally $HOME/.vim/plugin 
+
+Once installed, the Paste[bin] command may be invoked in any of these patterns:
+
+- :.Paste -- paste the current line
+- :%Paste -- paste the entire document
+- :42,69Paste -- paste lines 42 through 69, inclusive
+
+The Paste command will work with selections made in visual mode as well.
+
+Paste will prompt for a value if the user hasn't defined a /nick or ID prior
+to the command's first invocation. 
+
+Upon successful completion, Paste will display the URL to the paste.  Under
+gvim, Paste will also copy it to the window manager's clipboard.
+
+
+*paster-requirements*
+
+The initial versions of paster.vim were coded and tested under OS X, Linux,
+and Solaris.  As such, they all use /usr/bin/curl for posting data to the
+pastebin.  Any reasonably recent version of cURL is acceptable, and vim
+6.2 or later.
+
+
+*paster-configuration*
+
+The script relies on several pastebin- and environment-dependent symbolic
+constants that the user may override to customize the target pastebin or
+the tool used for posting the text to it.  As long as cURL is installed,
+the Paste[bin] function should work without ever having to touch any of
+the configuration parameters.
+
+CONSTANT              DEFAULT VALUE              DESCRIPTION
+--------              -------------              -----------
+PASTE_COMMAND         curl                       The command, usually
+                                                 /usr/bin/curl.
+
+PASTE_CONTROL         -isv                       Default control arguments
+                                                 for PASTE_COMMAND.
+
+PASTE_FIXED_ARGUMENTS ""                         Empty; used for passing 
+                                                 command line arguments too
+                                                 PASTE_COMMAND that won't
+                                                 change in between
+                                                 invocations.
+
+PASTE_FORMAT          -d "format=textFormat"     The variable that the
+                                                 specific pastebin uses for
+                                                 specifying the text syntax
+                                                 highlighting text.
+
+                                                 The 'textFormat' will be 
+                                                 substituted with a value
+                                                 from PASTE_SYNTAX_OPTIONS. 
+
+PASTE_NICK            -d "poster=nickID"         The variable holding an
+                                                 identification string for
+                                                 the poster; in IRC, this is
+                                                 usually a nick.
+
+                                                 'nickID' will be replaced
+                                                 by the value input for /nick
+                                                 or ID when prompted, or by
+                                                 the value of g:nickID.
+
+                                                 :let g:nickID is supported
+                                                 in .vimrc.
+
+PASTE_PAYLOAD         -d "@-"                    The URL-encoded payload as
+                                                 expected by the PASTE_COMMAND
+
+PASTE_RESPONSE_FLAG   "^Location"                A marker to identify which
+                                                 string contains the post's
+                                                 URI in the response.  See
+                                                 the source code for details.
+
+PASTE_SYNTAX_OPTIONS  dictionary                 A dictionary with a cross
+                                                 reference of vim filetype
+                                                 values and the token that
+                                                 the pastebin uses for
+                                                 specifying the syntax hilite
+                                                 for that filetype.
+
+PASTE_TEXT_AREA       code2                      The HTML form element name
+                                                 that holds the text being
+                                                 pasted.
+
+PASTE_URI             http://ciurana.eu/pastebin The pastebin URI to use for
+                                                 posting requests.
+
+
+*paster-about*
+
+Eugene Ciurana, http://eugeneciurana.com/contact or http://ciurana.eu/contact
+for your questions.
+
+Project page:  http://eugeneciurana.com/paster.vim
+
+For interactive discussions, find me as pr3d4t0r at
+irc://irc.freenode.net/##java
+

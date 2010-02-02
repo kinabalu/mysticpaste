@@ -1,0 +1,18 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<wicket:head>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+</wicket:head>
+</head>
+<wicket:panel>
+
+    <script wicket:id="highlighterCore">[highlighter core]</script>
+    <script wicket:id="highlighterLanguage">[highlighter language]</script>
+    <script language="javascript" type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+
+    <pre wicket:id="code" class="java"></pre>
+    
+</wicket:panel>
+</html>

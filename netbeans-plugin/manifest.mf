@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.mysticcoders.mysticpaste.nb
+OpenIDE-Module-Layer: com/mysticcoders/mysticpaste/nb/layer.xml
+OpenIDE-Module-Localizing-Bundle: com/mysticcoders/mysticpaste/nb/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -1,0 +1,53 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+    <style type="text/css">
+        label {
+            width: 6em;
+            float: left;
+            text-align: right;
+            margin-right: 0.5em;
+            display: block
+        }
+
+        .submit input {
+            margin-left: 6.5em;
+        }
+
+        div.wicket-aa {
+            font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana;
+            font-size: 12px;
+            background-color: white;
+            border-width: 1px;
+            border-color: #cccccc;
+            border-style: solid;
+            padding: 2px;
+            margin: 1px 0 0 0;
+            text-align:left;
+        }
+        div.wicket-aa ul { list-style:none; padding: 2px; margin:0; }
+        div.wicket-aa ul li.selected { background-color: #FFFF00; padding: 2px; margin:0; }
+
+        fieldset#searchBundle {
+            margin-top: 5px;
+        }
+
+        fieldset#searchBundle p {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        ul#actions li, fieldset#bundleLanguages ul li {
+            list-style-type: none;
+            background: none;
+        }
+    </style>
+
+</wicket:head>
+<wicket:extend>
+
+    <form wicket:id="form">
+    <input type="text" wicket:id="field" />
+    </form>
+    
+</wicket:extend>
+</html>

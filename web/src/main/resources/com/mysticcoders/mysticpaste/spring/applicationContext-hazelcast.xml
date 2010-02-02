@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!-- Configurer that replaces ${...} placeholders with values from properties files -->
+    <!-- (in this case, JDBC related properties) -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+                <value>classpath:application-override.properties</value>
+                <value>/etc/mysticpaste/application.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <!-- Services Beans -->
+    <bean id="pasteService" class="com.mysticcoders.mysticpaste.services.PasteServiceImpl">
+        <property name="itemDao" ref="pasteItemDao"/>
+        <property name="tokenLength" value="${private.token.length}" />
+        <property name="twitterUsername" value="${twitter.username}" />
+        <property name="twitterPassword" value="${twitter.password}" />
+        <property name="twitterEnabled" value="${twitter.enabled}" />
+    </bean>
+
+    <!-- DAOs -->
+    <bean id="pasteItemDao" class="com.mysticcoders.mysticpaste.persistence.hazelcast.PasteItemDaoImpl">
+<!--
+        <property name="sessionFactory" ref="sessionFactory"/>
+-->
+    </bean>
+
+    <bean id="pasteCommentDao" class="com.mysticcoders.mysticpaste.persistence.hazelcast.PasteCommentDaoImpl">
+<!--
+        <property name="sessionFactory" ref="sessionFactory"/>
+-->
+    </bean>
+
+    <!-- Wicket Application -->
+    <bean id="wicketApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication">
+        <!--
+        <constructor-arg>
+            <bean class="com.mysticcoders.mysticpasteste.PastebinConfig">
+                <property name="someProp" value="${some.value}"/>
+            </bean>
+        </constructor-arg>
+        <property name="configurationType" value="${wicket.configuration.type}" />
+        <property name="someService" ref="someServiceBean" />
+        -->
+    </bean>
+
+    <!--  Database Beans -->
+<!--
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+-->
+
+    <!-- Hibernate session factory -->
+<!--
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="use_outer_join">${hibernate.use_outer_join}</prop>
+
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+                <prop key="hibernate.cache.provider_class">${hibernate.cache.provider}</prop>
+
+                <prop key="hibernate.connection.pool_size">10</prop>
+                <prop key="hibernate.jdbc.batch_size">1000</prop>
+                <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.mysticcoders.mysticpaste.model.PasteItem</value>
+                <value>com.mysticcoders.mysticpaste.model.Client</value>
+                <value>com.mysticcoders.mysticpaste.model.PasteComment</value>
+            </list>
+        </property>
+
+        <property name="schemaUpdate" value="${hibernate.schemaUpdate}"/>
+    </bean>
+-->
+
+    <!-- Tell Spring it should use @Transactional annotations -->
+    <!--<tx:annotation-driven/>-->
+
+<!--
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+-->
+</beans>

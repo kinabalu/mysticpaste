@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Edit">
+            <file name="com-mysticcoders-mysticpaste-nb-MysticPasteAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Edit">
+            <file name="com-mysticcoders-mysticpaste-nb-MysticPasteAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1575"/>
+            </file>
+            <file name="com-mysticcoders-mysticpaste-nb-MysticPasteAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/com-mysticcoders-mysticpaste-nb-MysticPasteAction.instance"/>
+                <attr name="position" intvalue="1550"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

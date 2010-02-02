@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+		<!-- Java source Editor -->
+		<viewerContribution
+			targetID="#CompilationUnitEditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.JAVA5" />
+		</viewerContribution>
+		
+		<!-- Default Text Editor -->
+		<viewerContribution
+			targetID="#TextEditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.TEXT" />
+		</viewerContribution>
+		
+		<!-- Structured Text Editors -->
+		<viewerContribution
+			targetID="org.eclipse.core.runtime.xml.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.XML" />
+		</viewerContribution>
+		<viewerContribution
+			targetID="org.eclipse.core.runtime.xml.source2.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.XML" />
+		</viewerContribution>
+		<viewerContribution
+			targetID="org.eclipse.wst.javascript.core.javascriptsource.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.JAVASCRIPT" />
+		</viewerContribution>		
+		<viewerContribution
+			targetID="org.eclipse.wst.html.core.htmlsource.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.HTML" />
+		</viewerContribution>
+		<viewerContribution
+			targetID="org.eclipse.wst.css.core.csssource.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.CSS" />
+		</viewerContribution>
+		<viewerContribution
+			targetID="org.eclipse.jst.jsp.core.jspsource.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.TEXT" />
+		</viewerContribution>
+		<viewerContribution
+			targetID="org.eclipse.jst.jsp.core.jspfragmentsource.source.EditorContext"
+			id="com.mysticcoders.mysticpaste.actions.compilationuniteditor">
+			<action
+				label="%Add_to_MysticPaste.name"
+				icon="$nl$/icons/mystic16.png"
+				class="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction"
+				menubarPath="group.add"
+				id="com.mysticcoders.mysticpaste.popup.actions.MysticPasteAction.TEXT" />
+		</viewerContribution>
+   </extension>
+
+</plugin>

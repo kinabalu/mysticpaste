@@ -1,0 +1,37 @@
+<idea-plugin version="2">
+    <name>MysticPastePlugin</name>
+    <description>
+        <![CDATA[
+        This plugin takes a selection from the IDEA editor, and posts it to http://mysticpaste.com.  It then provides the URL in the clipboard
+      ]]>
+    </description>
+    <version>0.2.1</version>
+    <vendor url="http://www.mysticcoders.com" email="talk@mysticcoders.com" logo="http://www.mysticcoders.com/assets/logo-16x16.jpg">Mystic Coders, LLC</vendor>
+    <idea-version since-build="8000"/>
+
+    <change-notes>
+        <![CDATA[
+        <p>
+            <ul>
+                <li> Added the notification on the bottom right alerting the user that the paste action was successful</li>
+            </ul>
+        </p>
+        ]]>
+    </change-notes>
+
+    <project-components>
+        <component>
+            <implementation-class>com.mysticcoders.mysticpaste.plugin.MysticPasteIndicationComponent
+            </implementation-class>
+        </component>
+    </project-components>
+
+    <actions>
+        <action id="com.mysticcoders.mysticpaste.plugin.PastebinAction"
+                class="com.mysticcoders.mysticpaste.plugin.PastebinAction" text="Add to Mystic Paste..."
+                description="Sends the selection to MysticPaste.com">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+
+</idea-plugin>
