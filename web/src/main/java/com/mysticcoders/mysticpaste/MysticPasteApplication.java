@@ -39,10 +39,12 @@ public class MysticPasteApplication extends WebApplication {
         super.init();
 
         uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "wicket-uploads");
+/*
         // Ensure folder exists
         if(!uploadFolder.mkdirs()) {
             throw new RuntimeException("Fatal error: Can't create temp directory for uploads at: " + System.getProperty("java.io.tmpdir"));
         }
+*/
 
         addComponentInstantiationListener(getSpringComponentInjector(this));
 

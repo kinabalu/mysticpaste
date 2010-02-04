@@ -83,6 +83,7 @@ public class PasteItemPage extends BasePage {
         protected void onSubmit() {
 
 
+/*
             final FileUpload upload = fileUploadField.getFileUpload();
             if (upload != null)
             {
@@ -105,6 +106,7 @@ public class PasteItemPage extends BasePage {
                     throw new IllegalStateException("Unable to write file");
                 }
             }
+*/
 
             PasteItem pasteItem = PasteForm.this.getModelObject();
             if (pasteItem.getContent() == null || pasteItem.getContent().equals("")) {
@@ -147,17 +149,21 @@ public class PasteItemPage extends BasePage {
             return false;
         }
 
-        private FileUploadField fileUploadField;        
+/*
+        private FileUploadField fileUploadField;
 
         private FileUpload imageFile;
+*/
 
         public PasteForm(String id, IModel<PasteItem> model) {
             super(id, model);
 
+/*
             setMultiPart(true);
             setMaxSize(Bytes.kilobytes(1024));
 
             add(fileUploadField = new FileUploadField("imageFile", new PropertyModel(PasteForm.this,  "imageFile")));
+*/
 
             add(new CheckBox("private"));
             add(new CheckBox("twitter", new PropertyModel<Boolean>(PasteForm.this, "twitter")));

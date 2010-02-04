@@ -49,7 +49,7 @@ public class TestPastePage extends AbstractIntegrationTest {
         tester = new WicketTester(new MysticPasteApplication() {
             @Override
             protected IComponentInstantiationListener getSpringComponentInjector(WebApplication application) {
-                return new SpringComponentInjector(application, appctx);
+                return new SpringComponentInjector(application, appctx, true);
             }
         });
     }
