@@ -9,6 +9,7 @@ import org.apache.wicket.behavior.SimpleAttributeModifier;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import org.apache.wicket.markup.html.link.ExternalLink;
 
 /**
  * Base Page for the application.
@@ -51,6 +52,8 @@ public class BasePage extends WebPage {
         }
         pluginLinkContainer.add(new BookmarkablePageLink<Void>("pluginLink", PluginPage.class));
         add(pluginLinkContainer);
+
+        add(new ExternalLink("sourceLink", "http://github.com/kinabalu/mysticpaste/"));
 
         add(new TagExternalLink("homeLink", "http://www.mysticcoders.com"));
         add(new GoogleAnalyticsSnippet("ga-js") {

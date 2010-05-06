@@ -56,10 +56,13 @@ public class PluginServlet extends HttpServlet {
 
 
         StringBuilder sb = new StringBuilder("http://");
+        sb.append("mysticpaste.com");
+/*
         sb.append(req.getServerName());
         if (req.getServerPort() != 80) {
             sb.append(":").append(req.getServerPort());
         }
+*/
 
         sb.append("/view/").append(item.getId());
 

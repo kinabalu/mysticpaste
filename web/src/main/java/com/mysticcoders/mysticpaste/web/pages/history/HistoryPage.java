@@ -70,13 +70,13 @@ public class HistoryPage extends BasePage {
         historyDataViewContainer.setOutputMarkupId(true);
         add(historyDataViewContainer);
 
-        add(new PagingNavigator("pageNav", historyDataView) {
+        add(new AjaxPagingNavigator("pageNav", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
         });
-        add(new PagingNavigator("pageNav2", historyDataView) {
+        add(new AjaxPagingNavigator("pageNav2", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
