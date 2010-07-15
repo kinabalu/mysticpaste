@@ -176,56 +176,56 @@
             <artifactId>hazelcast</artifactId>
         </dependency>
 
-                <!-- SimpleDS for GAE -->
-                <dependency>
-                    <groupId>org.extrema-sistemas</groupId>
-                    <artifactId>simpleds</artifactId>
-                </dependency>
+        <!-- SimpleDS for GAE -->
+        <dependency>
+            <groupId>org.extrema-sistemas</groupId>
+            <artifactId>simpleds</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>com.google.appengine</groupId>
-                    <artifactId>appengine-api-1.0-sdk</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>asm</groupId>
-                    <artifactId>asm</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jta_1.1_spec</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jta_1.1_spec</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>javax.jdo</groupId>
-                    <artifactId>jdo2-api</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo2-api</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jpa_3.0_spec</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jpa_3.0_spec</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-jpa</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jpa</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-enhancer</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-core</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>com.google.appengine.orm</groupId>
-                    <artifactId>datanucleus-appengine</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>com.google.appengine.orm</groupId>
+            <artifactId>datanucleus-appengine</artifactId>
+        </dependency>
 
         <!-- TWITTER4J DEPENDENCIES -->
         <dependency>
@@ -364,7 +364,7 @@
             </plugin>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
+                <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -407,26 +407,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <wicket.version>1.4.5</wicket.version>
-        <jetty.version>6.1.4</jetty.version>
-        <spring.version>2.5.5</spring.version>
-        <hibernate.version>3.4.0.GA</hibernate.version>
-        <c3p0.version>0.9.1.2</c3p0.version>
-        <junit.version>4.5</junit.version>
-        <postgres.version>8.3-603.jdbc4</postgres.version>
-        <commons-lang.version>2.4</commons-lang.version>
-        <javamail.version>1.4.1</javamail.version>
-        <commons-fileupload.version>1.2.1</commons-fileupload.version>
-        <jta.version>1.0.1B</jta.version>
-        <dbcp.version>1.2.2</dbcp.version>
-        <slf4j.version>1.4.2</slf4j.version>
-        <log4j.version>1.2.14</log4j.version>
-        <easymock.version>2.4</easymock.version>
-        <resteasy.version>1.0.2.GA</resteasy.version>
-        <hazelcast.version>1.7.1</hazelcast.version>
-    </properties>
 
     <profiles>
         <profile>

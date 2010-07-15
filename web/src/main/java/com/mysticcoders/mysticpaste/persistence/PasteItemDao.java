@@ -1,6 +1,8 @@
 package com.mysticcoders.mysticpaste.persistence;
 
+import com.google.appengine.api.datastore.Key;
 import com.mysticcoders.mysticpaste.model.PasteItem;
+import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 
 import java.util.List;
 
@@ -9,6 +11,11 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 public interface PasteItemDao {
+
+    public Long createSimpleObject(String content);
+
+    public SimpleObject retrieveSimpleObject(Long id);
+    
 
     Long create(PasteItem item);
 

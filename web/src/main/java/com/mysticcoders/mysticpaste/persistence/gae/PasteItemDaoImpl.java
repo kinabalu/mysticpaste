@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.persistence.gae;
 
 import com.google.appengine.api.datastore.Key;
 import com.mysticcoders.mysticpaste.model.PasteItem;
+import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import org.simpleds.EntityManager;
 import org.simpleds.SimpleQuery;
@@ -20,11 +21,14 @@ public class PasteItemDaoImpl implements PasteItemDao {
 
     String namespace = "default";
 
-    @Autowired
+//    @Autowired
     private EntityManager entityManager;
 
 
-/*
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     public Long createSimpleObject(String content) {
         SimpleObject so = new SimpleObject();
         so.setContent(content);
@@ -52,7 +56,6 @@ public class PasteItemDaoImpl implements PasteItemDao {
 
         return null;
     }
-*/
 
     public Long create(PasteItem item) {
 

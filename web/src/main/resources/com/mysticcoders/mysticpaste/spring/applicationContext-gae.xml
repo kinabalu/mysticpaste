@@ -54,10 +54,11 @@
     </bean>
 
     <!-- DAOs -->
-    <bean id="pasteItemDao" class="com.mysticcoders.mysticpaste.persistence.gae.PasteItemDaoImpl" />
-
-    <bean id="pasteCommentDao" class="com.mysticcoders.mysticpaste.persistence.gae.PasteCommentDaoImpl">
+    <bean id="pasteItemDao" class="com.mysticcoders.mysticpaste.persistence.gae.PasteItemDaoImpl">
+        <property name="entityManager" ref="entityManager" />
     </bean>
+
+    <bean id="pasteCommentDao" class="com.mysticcoders.mysticpaste.persistence.gae.PasteCommentDaoImpl" />
 
     <!-- Tell Spring it should use @Transactional annotations -->
     <!--

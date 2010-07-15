@@ -1,6 +1,7 @@
 package com.mysticcoders.mysticpaste.persistence.hibernate;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
+import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 
 import java.util.List;
@@ -15,6 +16,11 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
     protected PasteItemDaoImpl() {
         super(PasteItem.class);
     }
+
+    public Long createSimpleObject(String content) { return null; }
+
+    public SimpleObject retrieveSimpleObject(Long id) { return null; }
+
 
     public Long create(PasteItem item) {
         save(item);

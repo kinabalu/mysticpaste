@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.services;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.model.PasteStats;
+import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import com.mysticcoders.mysticpaste.utils.TokenGenerator;
 import org.slf4j.Logger;
@@ -42,6 +43,14 @@ public class PasteServiceImpl implements PasteService {
         this.itemDao = itemDao;
         this.tokenLength = tokenLength;
     }
+
+    public Long createSimpleObject(String content) {
+        return itemDao.createSimpleObject(content);
+    }
+
+    public SimpleObject retrieveSimpleObject(Long id) {
+        return itemDao.retrieveSimpleObject(id);
+    }    
 
     @Transactional(readOnly = true)
     public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded)

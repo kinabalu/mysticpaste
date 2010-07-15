@@ -10,6 +10,7 @@ import com.hazelcast.core.*;
 import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.MysticPasteHazelcastApplication;
 import com.mysticcoders.mysticpaste.model.PasteItem;
+import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import org.apache.wicket.Application;
 
@@ -21,6 +22,10 @@ import java.util.Arrays;
 public class PasteItemDaoImpl implements PasteItemDao {
 
     String namespace = "default";
+
+    public Long createSimpleObject(String content) { return null; }
+
+    public SimpleObject retrieveSimpleObject(Long id) { return null; }
 
     public Long create(PasteItem item) {
         IMap map = Hazelcast.getMap(namespace);

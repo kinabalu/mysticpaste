@@ -34,6 +34,7 @@
         </init-param>
 	</filter>
 
+<!--
 	<filter>
        <filter-name>open.hibernate.session.in.view</filter-name>
         <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
@@ -42,6 +43,7 @@
        <filter-name>open.hibernate.session.in.view</filter-name>
        <url-pattern>/*</url-pattern>
     </filter-mapping>
+-->
 
 	<filter-mapping>
 		<filter-name>wicket.mysticpaste</filter-name>
