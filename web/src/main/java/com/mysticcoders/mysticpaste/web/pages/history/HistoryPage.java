@@ -5,15 +5,14 @@ import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +43,7 @@ public class HistoryPage extends BasePage {
                 PasteItem pasteItem = item.getModelObject();
 
                 PageParameters params = new PageParameters();
-                params.put("0", Long.toString(pasteItem.getId()));
+                params.add("0", Long.toString(pasteItem.getId()));
                 item.add(new BookmarkablePageLink<Void>("viewLink", ViewPublicPage.class, params));
 
                 final String[] contentLines = pasteItem.getContent().split("\n");

@@ -7,7 +7,7 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
+import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.io.IObjectStreamFactory;
@@ -46,16 +46,17 @@ public class MysticPasteApplication extends WebApplication {
         }
 */
 
-        addComponentInstantiationListener(getSpringComponentInjector(this));
+        getComponentInstantiationListeners().add(getSpringComponentInjector(this));
 
         getMarkupSettings().setStripWicketTags(true);
 
-        mountBookmarkablePage("/home", HomePage.class);
-        mountBookmarkablePage("/new", PasteItemPage.class);
-        mountBookmarkablePage("/history", HistoryPage.class);
-        mountBookmarkablePage("/plugin", PluginPage.class);
-        mount(new IndexedParamUrlCodingStrategy("/view", ViewPublicPage.class));
-        mount(new IndexedParamUrlCodingStrategy("/private", ViewPrivatePage.class));
+
+        mountPage("/home", HomePage.class);
+        mountPage("/new", PasteItemPage.class);
+        mountPage("/history", HistoryPage.class);
+        mountPage("/plugin", PluginPage.class);
+        mount(new MountedMapper("/view/${pasteId}/${highlightLines}", ViewPublicPage.class));
+        mount(new MountedMapper("/private/${pasteId}/${highlightLines}", ViewPrivatePage.class));
 
         ServletContext servletContext = super.getServletContext();
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);

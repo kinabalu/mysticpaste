@@ -7,14 +7,14 @@
 package com.mysticcoders.mysticpaste.web.components;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.FormComponent;
 
-public class DefaultFocusBehavior extends AbstractBehavior {
+public class DefaultFocusBehavior extends Behavior {
     private static final long serialVersionUID = 1L;
 
-    private Component component;
+    private Component component;     // TODO is this really necessary with the new behavior now?
 
     @Override
     public void bind(Component component) {
@@ -26,8 +26,8 @@ public class DefaultFocusBehavior extends AbstractBehavior {
     }
 
     @Override
-    public void renderHead(IHeaderResponse iHeaderResponse) {
-        super.renderHead(iHeaderResponse);
+    public void renderHead(Component component, IHeaderResponse iHeaderResponse) {
+        super.renderHead(component, iHeaderResponse);
         iHeaderResponse.renderOnLoadJavascript("document.getElementById('"
                 + component.getMarkupId() + "').focus();");
     }

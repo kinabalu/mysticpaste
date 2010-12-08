@@ -10,13 +10,11 @@ import com.mysticcoders.mysticpaste.model.PasteComment;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.components.GravatarImage;
+import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
-import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -29,8 +27,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import java.io.Serializable;
@@ -50,13 +51,15 @@ public abstract class ViewPastePage extends BasePage {
     String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
     public ViewPastePage(PageParameters params) {
-        if (params.getString("0") == null) {
+        // TODO might have to change this to be getnamedParameter
+
+        if (params.get("pasteId") == null) {
             throw new RestartResponseException(PasteNotFound.class);
         }
 
         String highlightLines = null;
-        if (params.getString("1") != null) {
-            String[] lineNumbers = params.getString("1").split(",");
+        if (params.get("highlightLines") != null) {
+            String[] lineNumbers = params.get("highlightLines").toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
             for (String lineNumber : lineNumbers) {
@@ -82,7 +85,7 @@ public abstract class ViewPastePage extends BasePage {
             highlightLines = sb.substring(0, sb.length() - 1);
         }
 
-        final IModel<PasteItem> pasteModel = getPasteModel(params.getString("0"));
+        final IModel<PasteItem> pasteModel = getPasteModel(params.get("0").toString());
         if (pasteModel.getObject() == null) {
             throw new RestartResponseException(PasteNotFound.class);
         }
@@ -90,7 +93,7 @@ public abstract class ViewPastePage extends BasePage {
             throw new RestartResponseException(PasteSpam.class);
         }
 
-        this.setDefaultModel(new CompoundPropertyModel(pasteModel));
+        this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
         add(new Label("type"));
 
         /* COMMENTS COUNT */
@@ -122,7 +125,7 @@ public abstract class ViewPastePage extends BasePage {
                 markAbuseLabel.setDefaultModel(new Model<String>("Marked As Spam"));
                 markAbuseLabel.add(new SimpleAttributeModifier("style", "color: red; font-weight: bold;"));
 
-                target.addComponent(markAbuseLabel);
+                target.add(markAbuseLabel);
             }
         };
         add(markAbuseLink);
@@ -194,8 +197,7 @@ public abstract class ViewPastePage extends BasePage {
                 comment.setComment(commentBean.getComment());
                 comment.setTimestamp(new Date());
 
-                String ipAddress =
-                        ((WebRequest) getRequest()).getHttpServletRequest().getRemoteAddr();
+                String ipAddress = ((ServletWebRequest) getRequest()).getHttpServletRequest().getRemoteAddr();
 
                 comment.setIpAddress(ipAddress);
 
@@ -203,17 +205,15 @@ public abstract class ViewPastePage extends BasePage {
 
                 commentBean.clear();
 
-                target.addComponent(commentListContainer);
-                target.addComponent(commentsCountLabel);
-                target.addComponent(commentFeedbackPanel);
-                target.addComponent(noComments);
+                target.add(commentListContainer);
+                target.add(commentsCountLabel);
+                target.add(commentFeedbackPanel);
+                target.add(noComments);
 
-                form.visitFormComponents(new FormComponent.IVisitor() {
-                    public Object formComponent(IFormVisitorParticipant
-                            formComponent) {
-                        final FormComponent fc = (FormComponent) formComponent;
-                        target.addComponent(fc);
-                        return Component.IVisitor.CONTINUE_TRAVERSAL;
+                form.visitFormComponents(new IVisitor<FormComponent, Void>() {
+                    public void component(FormComponent formComponent, IVisit<Void> visit) {
+                        target.add(formComponent);
+                        visit.dontGoDeeper();
                     }
                 });
             }
@@ -221,7 +221,7 @@ public abstract class ViewPastePage extends BasePage {
             @Override
             protected void onError(final AjaxRequestTarget target, final Form form) {
                 // or update the feedback panel
-                target.addComponent(commentFeedbackPanel);
+                target.add(commentFeedbackPanel);
             }
 
         });
@@ -253,32 +253,16 @@ public abstract class ViewPastePage extends BasePage {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public String getEmail() {
             return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
 
         public String getConfirmEmail() {
             return confirmEmail;
         }
 
-        public void setConfirmEmail(String confirmEmail) {
-            this.confirmEmail = confirmEmail;
-        }
-
         public String getComment() {
             return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
         }
 
         public void clear() {

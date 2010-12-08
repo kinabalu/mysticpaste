@@ -1,22 +1,19 @@
 package com.mysticcoders.mysticpaste;
 
-import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.web.pages.SimpleObjectPage;
 import com.mysticcoders.mysticpaste.web.pages.SimpleObjectRetrievePage;
-import org.apache.wicket.protocol.http.HttpSessionStore;
 
 /**
- * Created by IntelliJ IDEA.
- * User: kinabalu
- * Date: May 13, 2010
- * Time: 2:11:10 PM
+ * Custom Wicket application class for the GAE port
+ *
+ * @author Andrew Lombardi <andrew@mysticcoders.com>
  */
 public class MysticPasteGAEApplication extends MysticPasteApplication {
 
     protected void init() {
         super.init();
-        mountBookmarkablePage("/simple", SimpleObjectPage.class);
-        mountBookmarkablePage("/simple.get", SimpleObjectRetrievePage.class);
+        mountPage("/simple", SimpleObjectPage.class);
+        mountPage("/simple.get", SimpleObjectRetrievePage.class);
     }
 
     /**
@@ -24,8 +21,10 @@ public class MysticPasteGAEApplication extends MysticPasteApplication {
      *
      * @return
      */
+/*
     @Override
     public HttpSessionStore newSessionStore() {
-        return new HttpSessionStore(this);
+        return new HttpSessionStore();
     }
+*/
 }

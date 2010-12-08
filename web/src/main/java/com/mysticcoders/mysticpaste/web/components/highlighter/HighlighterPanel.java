@@ -3,11 +3,13 @@ package com.mysticcoders.mysticpaste.web.components.highlighter;
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.PackageResourceReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +82,12 @@ public class HighlighterPanel extends Panel {
 
     public HighlighterPanel(String id, IModel model, String language) {
         this(id, model, language, null);
+    }
+
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shCore.css"));
+        response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shThemeDefault.css"));
+        response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class, "shCore.js"));
     }
 
     public HighlighterPanel(String id, IModel model, String language, String highlightLines) {

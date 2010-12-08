@@ -13,9 +13,9 @@ import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.Application;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.lang.Bytes;
@@ -125,12 +125,12 @@ public class PasteItemPage extends BasePage {
                 pasteService.createItem("web", pasteItem, twitter);
                 PageParameters params = new PageParameters();
                 if (pasteItem.isPrivate()) {
-                    this.setRedirect(true);
-                    params.put("0", pasteItem.getPrivateToken());
+//                    this.setRedirect(true);
+                    params.add("0", pasteItem.getPrivateToken());
                     setResponsePage(ViewPrivatePage.class, params);
                 } else {
-                    this.setRedirect(true);
-                    params.put("0", Long.toString(pasteItem.getId()));
+//                    this.setRedirect(true);
+                    params.add("0", Long.toString(pasteItem.getId()));
                     setResponsePage(ViewPublicPage.class, params);
                 }
             } catch (InvalidClientException e) {

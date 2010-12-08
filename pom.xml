@@ -337,7 +337,7 @@
     </dependencyManagement>
 
     <properties>
-        <wicket.version>1.4.0</wicket.version>
+        <wicket.version>1.5-SNAPSHOT</wicket.version>
         <jetty.version>6.1.4</jetty.version>
         <spring.version>3.0.0.RELEASE</spring.version>
         <hibernate.version>3.4.0.GA</hibernate.version>
