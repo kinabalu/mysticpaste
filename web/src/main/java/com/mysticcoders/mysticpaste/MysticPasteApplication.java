@@ -10,7 +10,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
-import org.apache.wicket.util.io.IObjectStreamFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -55,8 +54,12 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/new", PasteItemPage.class);
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
-        mount(new MountedMapper("/view/${pasteId}/${highlightLines}", ViewPublicPage.class));
-        mount(new MountedMapper("/private/${pasteId}/${highlightLines}", ViewPrivatePage.class));
+
+        mount(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
+//        getRootRequestMapperAsCompound().add(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
+//        getRootRequestMapperAsCompound().add(new MountedMapper("/view/${pasteId}/${highlightLines}", ViewPublicPage.class));
+//        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}", ViewPrivatePage.class));
+//        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}/${highlightLines}", ViewPrivatePage.class));
 
         ServletContext servletContext = super.getServletContext();
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);

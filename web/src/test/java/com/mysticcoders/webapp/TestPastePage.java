@@ -12,7 +12,7 @@ import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.spring.injection.annot.test.AnnotApplicationContextMock;
+import org.apache.wicket.spring.test.ApplicationContextMock;
 import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.application.IComponentInstantiationListener;
@@ -40,8 +40,8 @@ public class TestPastePage extends AbstractIntegrationTest {
 
     @Before
     public void setup() {
-        final AnnotApplicationContextMock appctx = new
-                AnnotApplicationContextMock();
+        final ApplicationContextMock appctx = new
+                ApplicationContextMock();
         appctx.putBean("pasteDao", dao);
         appctx.putBean("pasteService", svc);
         appctx.putBean("pasteCommentDao", commentDao);

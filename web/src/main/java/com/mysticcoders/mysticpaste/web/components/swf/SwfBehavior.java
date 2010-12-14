@@ -7,13 +7,13 @@
 package com.mysticcoders.mysticpaste.web.components.swf;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.request.resource.CompressedResourceReference;
 import org.apache.wicket.util.string.JavascriptUtils;
 
-public class SwfBehavior extends AbstractBehavior {
+public class SwfBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ public class SwfBehavior extends AbstractBehavior {
     }
 
     @Override
-	public void onRendered(Component component) {
+	public void afterRender(Component component) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(JavascriptUtils.SCRIPT_OPEN_TAG);
@@ -59,13 +59,15 @@ public class SwfBehavior extends AbstractBehavior {
 
         sb.append(JavascriptUtils.SCRIPT_CLOSE_TAG);
 
-        component.getResponse().write(sb.toString());        
+        component.getResponse();
+
+//        component.getResponse().write(sb.toString());
 	}
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(Component component, IHeaderResponse response) {
         try {
-            super.renderHead(response);
+            super.renderHead(component, response);
             response.renderJavascriptReference(SWFOBJECT_JS);
         } catch (RuntimeException exc) {
             throw exc;

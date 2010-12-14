@@ -2,11 +2,11 @@ package com.mysticcoders.mysticpaste.web.components.highlighter;
 
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -87,24 +87,36 @@ public class HighlighterPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shCore.css"));
         response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shThemeDefault.css"));
-        response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class, "shCore.js"));
     }
 
-    public HighlighterPanel(String id, IModel model, String language, String highlightLines) {
+    private String language;
+
+    public HighlighterPanel(String id, IModel model, String localLanguage, String highlightLines) {
         super(id);
 
-        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
-        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeDefault.css"));
+        this.language = localLanguage;
 
         Label codePanel = new Label("code", model);
         add(codePanel);
 
-        add(new JavaScriptReference("highlighterCore", HighlighterPanel.class, "shCore.js"));
+        WebMarkupContainer highlighterCoreContainer = new WebMarkupContainer("highlighterCore");
+        highlighterCoreContainer.add(new Behavior() {
+          public void renderHead(IHeaderResponse response) {
+            response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class,
+              "shCore.js"));
+          }
+        });
+        add( highlighterCoreContainer );
 
         if (language == null || getLanguageScript(language) == null) language = "text";
 
-        add(new JavaScriptReference("highlighterLanguage", HighlighterPanel.class,
-                getLanguageScript(language)));
+
+        WebMarkupContainer highlighterLanguageContainer = new WebMarkupContainer("highlighterLanguage");
+        highlighterLanguageContainer.add(new Behavior() {
+            public void renderHead(IHeaderResponse response) {
+                response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class, getLanguageScript(language)));
+            }
+        });
 
 
         StringBuffer brushConfig = new StringBuffer("brush: ");
