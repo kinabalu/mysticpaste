@@ -20,9 +20,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.devutils.stateless.StatelessComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@StatelessComponent
 public abstract class ViewPastePage extends BasePage {
 
     @SpringBean
@@ -50,16 +53,17 @@ public abstract class ViewPastePage extends BasePage {
     String justNumberPattern = "(\\d)+";
     String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
-    public ViewPastePage(PageParameters params) {
+    public ViewPastePage(final PageParameters params) {
         // TODO might have to change this to be getnamedParameter
 
-        if (params.get("pasteId") == null) {
+        if (params.get("0") == null) {
             throw new RestartResponseException(PasteNotFound.class);
         }
 
         String highlightLines = null;
-        if (params.get("highlightLines") != null) {
-            String[] lineNumbers = params.get("highlightLines").toString().split(",");
+
+        if (!params.get("1").isEmpty()) {
+            String[] lineNumbers = params.get("1").toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
             for (String lineNumber : lineNumbers) {
@@ -115,9 +119,11 @@ public abstract class ViewPastePage extends BasePage {
 
         final Label markAbuseLabel = new Label("markAbuseLabel", "Report Abuse");
         markAbuseLabel.setOutputMarkupId(true);
-        AjaxLink markAbuseLink = new AjaxLink("markAbuseLink") {
 
-            public void onClick(AjaxRequestTarget target) {
+        // TODO looks like AjaxLink is stateful
+        StatelessLink markAbuseLink = new StatelessLink("markAbuseLink") {
+
+            public void onClick() {
                 PasteItem pasteItem = pasteModel.getObject();
 
                 pasteService.markAbuse(pasteItem);
@@ -125,7 +131,7 @@ public abstract class ViewPastePage extends BasePage {
                 markAbuseLabel.setDefaultModel(new Model<String>("Marked As Spam"));
                 markAbuseLabel.add(new SimpleAttributeModifier("style", "color: red; font-weight: bold;"));
 
-                target.add(markAbuseLabel);
+//                target.add(markAbuseLabel);
             }
         };
         add(markAbuseLink);
@@ -154,7 +160,56 @@ public abstract class ViewPastePage extends BasePage {
         noComments.setOutputMarkupId(true);
         add(noComments);
 
-        Form form = new Form<CommentBean>("commentForm", new CompoundPropertyModel<CommentBean>(new CommentBean()));
+        StatelessForm<CommentBean> form = new StatelessForm<CommentBean>("commentForm", new CompoundPropertyModel<CommentBean>(new CommentBean())) {
+
+            @Override
+            public void onSubmit() {
+                CommentBean commentBean = getModelObject();
+
+                if (commentBean.getConfirmEmail() != null) {
+                    error("SPAM SPAM SPAM");
+                    return;
+                }
+                PasteItem pasteItem = pasteModel.getObject();
+                PasteComment comment = new PasteComment();
+                comment.setItem(pasteItem);
+                comment.setName(commentBean.getName());
+                comment.setEmail(commentBean.getEmail());
+                comment.setComment(commentBean.getComment());
+                comment.setTimestamp(new Date());
+
+                String ipAddress = ((ServletWebRequest) getRequest()).getHttpServletRequest().getRemoteAddr();
+
+                comment.setIpAddress(ipAddress);
+
+                pasteCommentDao.save(comment);
+
+                commentBean.clear();
+
+/*
+                target.add(commentListContainer);
+                target.add(commentsCountLabel);
+                target.add(commentFeedbackPanel);
+                target.add(noComments);
+
+                form.visitFormComponents(new IVisitor<FormComponent, Void>() {
+                    public void component(FormComponent formComponent, IVisit<Void> visit) {
+                        target.add(formComponent);
+                        visit.dontGoDeeper();
+                    }
+                });
+*/
+            }
+
+/*
+            @Override
+            protected void onError(final AjaxRequestTarget target, final Form form) {
+                // or update the feedback panel
+                target.add(commentFeedbackPanel);
+            }
+*/
+
+        };
         add(form);
 
         final FeedbackPanel commentFeedbackPanel = new FeedbackPanel("feedback");
@@ -179,50 +234,7 @@ public abstract class ViewPastePage extends BasePage {
         commentComment.setOutputMarkupId(true);
         form.add(commentComment);
 
-        form.add(new AjaxButton("addComment") {
-
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target, Form form) {
-                CommentBean commentBean = (CommentBean) form.getModelObject();
-
-                if (commentBean.getConfirmEmail() != null) {
-                    error("SPAM SPAM SPAM");
-                    return;
-                }
-                PasteItem pasteItem = pasteModel.getObject();
-                PasteComment comment = new PasteComment();
-                comment.setItem(pasteItem);
-                comment.setName(commentBean.getName());
-                comment.setEmail(commentBean.getEmail());
-                comment.setComment(commentBean.getComment());
-                comment.setTimestamp(new Date());
-
-                String ipAddress = ((ServletWebRequest) getRequest()).getHttpServletRequest().getRemoteAddr();
-
-                comment.setIpAddress(ipAddress);
-
-                pasteCommentDao.save(comment);
-
-                commentBean.clear();
-
-                target.add(commentListContainer);
-                target.add(commentsCountLabel);
-                target.add(commentFeedbackPanel);
-                target.add(noComments);
-
-                form.visitFormComponents(new IVisitor<FormComponent, Void>() {
-                    public void component(FormComponent formComponent, IVisit<Void> visit) {
-                        target.add(formComponent);
-                        visit.dontGoDeeper();
-                    }
-                });
-            }
-
-            @Override
-            protected void onError(final AjaxRequestTarget target, final Form form) {
-                // or update the feedback panel
-                target.add(commentFeedbackPanel);
-            }
+        form.add(new Button("addComment") {
 
         });
     }

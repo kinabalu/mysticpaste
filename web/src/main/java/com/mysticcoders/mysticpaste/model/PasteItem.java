@@ -26,7 +26,6 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 @Entity
-/*
 @Table(name = "PASTE_ITEMS")
 @NamedQueries({@NamedQuery(name = "item.getById",
                 query = "from PasteItem item where item.id = :id"),
@@ -45,7 +44,6 @@ import java.util.List;
         @NamedQuery(name = "item.count",
                 query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true")
 })
-*/
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
 

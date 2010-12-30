@@ -2,14 +2,21 @@ package com.mysticcoders.mysticpaste.web.components.highlighter;
 
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.string.JavaScriptUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,33 +98,40 @@ public class HighlighterPanel extends Panel {
 
     private String language;
 
+    /**
+     *
+     *
+     * @param id
+     * @param model
+     * @param localLanguage
+     * @param highlightLines
+     */
     public HighlighterPanel(String id, IModel model, String localLanguage, String highlightLines) {
         super(id);
 
         this.language = localLanguage;
 
-        Label codePanel = new Label("code", model);
-        add(codePanel);
-
-        WebMarkupContainer highlighterCoreContainer = new WebMarkupContainer("highlighterCore");
-        highlighterCoreContainer.add(new Behavior() {
-          public void renderHead(IHeaderResponse response) {
-            response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class,
-              "shCore.js"));
-          }
-        });
-        add( highlighterCoreContainer );
-
         if (language == null || getLanguageScript(language) == null) language = "text";
 
+        Label codePanel = new Label("code", model);
+        codePanel.add(new Behavior() {
 
-        WebMarkupContainer highlighterLanguageContainer = new WebMarkupContainer("highlighterLanguage");
-        highlighterLanguageContainer.add(new Behavior() {
-            public void renderHead(IHeaderResponse response) {
-                response.renderJavascriptReference(new PackageResourceReference(HighlighterPanel.class, getLanguageScript(language)));
+            @Override
+            public void beforeRender(Component component) {
+
+                ResourceReference highlighterCoreResource = new PackageResourceReference(HighlighterPanel.class, "shCore.js");
+                IRequestHandler highlighterCoreHandler = new ResourceReferenceRequestHandler(highlighterCoreResource);
+
+                ResourceReference highlighterLanguageResource = new PackageResourceReference(HighlighterPanel.class, getLanguageScript(language));
+                IRequestHandler highlighterLanguageHandler = new ResourceReferenceRequestHandler(highlighterLanguageResource);
+
+
+                JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterCoreHandler));
+                JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterLanguageHandler));
+                JavaScriptUtils.writeJavaScript(component.getResponse(), "SyntaxHighlighter.all();");
             }
         });
-
+        add(codePanel);
 
         StringBuffer brushConfig = new StringBuffer("brush: ");
         brushConfig.append(language);

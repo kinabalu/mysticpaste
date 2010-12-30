@@ -52,7 +52,7 @@ public class PasteItemPage extends BasePage {
     }
 
 
-    public class PasteForm extends Form<PasteItem> {
+    public class PasteForm extends StatelessForm<PasteItem> {
 
         private boolean twitter = false;
         private LanguageSyntax languageType = HighlighterPanel.getLanguageSyntax("plain");

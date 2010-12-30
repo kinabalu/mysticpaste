@@ -26,9 +26,9 @@ public class DefaultFocusBehavior extends Behavior {
     }
 
     @Override
-    public void renderHead(Component component, IHeaderResponse iHeaderResponse) {
-        super.renderHead(component, iHeaderResponse);
-        iHeaderResponse.renderOnLoadJavascript("document.getElementById('"
+    public void renderHead(Component component, IHeaderResponse headerResponse) {
+        super.renderHead(component, headerResponse);
+        headerResponse.renderOnLoadJavaScript("document.getElementById('"
                 + component.getMarkupId() + "').focus();");
     }
 }

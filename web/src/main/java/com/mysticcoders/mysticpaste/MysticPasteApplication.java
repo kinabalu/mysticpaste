@@ -3,9 +3,11 @@ package com.mysticcoders.mysticpaste;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import com.mysticcoders.mysticpaste.web.pages.view.ViewPastePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.application.IComponentInstantiationListener;
+import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
@@ -46,6 +48,7 @@ public class MysticPasteApplication extends WebApplication {
 */
 
         getComponentInstantiationListeners().add(getSpringComponentInjector(this));
+        getComponentPreOnBeforeRenderListeners().add(new StatelessChecker());
 
         getMarkupSettings().setStripWicketTags(true);
 
@@ -55,8 +58,12 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
 
-        mount(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
-//        getRootRequestMapperAsCompound().add(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
+
+
+//        mount(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
+        mountPage("/view/${0}/${1}", ViewPublicPage.class);
+        mountPage("/private/${0}/${1}", ViewPrivatePage.class);
+
 //        getRootRequestMapperAsCompound().add(new MountedMapper("/view/${pasteId}/${highlightLines}", ViewPublicPage.class));
 //        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}", ViewPrivatePage.class));
 //        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}/${highlightLines}", ViewPrivatePage.class));

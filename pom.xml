@@ -81,6 +81,12 @@
 		            <artifactId>wicket-spring</artifactId>
 		            <version>${wicket.version}</version>
 		        </dependency>
+                <dependency>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-devutils</artifactId>
+                    <version>${wicket.version}</version>
+                </dependency>
+
 		        <!--  HIBERNATE DEPENDNECIES -->
 		        <dependency>
 		            <groupId>org.hibernate</groupId>

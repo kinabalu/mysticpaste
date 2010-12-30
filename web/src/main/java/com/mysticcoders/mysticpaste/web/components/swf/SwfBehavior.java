@@ -11,7 +11,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.resource.CompressedResourceReference;
-import org.apache.wicket.util.string.JavascriptUtils;
+import org.apache.wicket.util.string.JavaScriptUtils;
 
 public class SwfBehavior extends Behavior {
 
@@ -46,7 +46,7 @@ public class SwfBehavior extends Behavior {
 	public void afterRender(Component component) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(JavascriptUtils.SCRIPT_OPEN_TAG);
+        sb.append(JavaScriptUtils.SCRIPT_OPEN_TAG);
         sb.append("var flashvars = {}; var params = { menu: \"false\" }; var attributes = {};");
         sb.append("swfobject.embedSWF(");
         sb.append("\"").append(swfPath).append("\",");
@@ -57,7 +57,7 @@ public class SwfBehavior extends Behavior {
         sb.append("false,");
         sb.append("flashvars, params, attributes);");
 
-        sb.append(JavascriptUtils.SCRIPT_CLOSE_TAG);
+        sb.append(JavaScriptUtils.SCRIPT_CLOSE_TAG);
 
         component.getResponse();
 
@@ -68,7 +68,7 @@ public class SwfBehavior extends Behavior {
     public void renderHead(Component component, IHeaderResponse response) {
         try {
             super.renderHead(component, response);
-            response.renderJavascriptReference(SWFOBJECT_JS);
+            response.renderJavaScriptReference(SWFOBJECT_JS);
         } catch (RuntimeException exc) {
             throw exc;
         } catch (Exception exc) {

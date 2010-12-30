@@ -9,11 +9,10 @@ import java.util.Date;
  * @version $Revision$ $Date$
  */
 @Entity
-/*
+
 @Table(name = "CLIENTS")
 @NamedQueries({@NamedQuery(name = "client.id", query = "from Client c where c.id = :id"),
         @NamedQuery(name = "client.findByToken", query = "from Client c where c.token = :token")})
-*/
 public class Client implements Serializable {
     private static final long serialVersionUID = -7477330789867279559L;
 

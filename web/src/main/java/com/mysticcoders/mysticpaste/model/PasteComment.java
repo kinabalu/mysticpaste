@@ -9,7 +9,6 @@ import java.util.Date;
  * @version $Revision$ $Date$
  */
 @Entity
-/*
 @Table(name = "PASTE_COMMENTS")
 @NamedQueries({@NamedQuery(name = "comment.getById",
                 query = "from PasteComment comment where comment.id = :id"),
@@ -18,7 +17,6 @@ import java.util.Date;
         @NamedQuery(name = "comment.countByItemId",
                 query = "select count(comment) from PasteComment comment where comment.item.id = :id")
 })
-*/
 public class PasteComment implements Serializable {
     private static final long serialVersionUID = 1L;
 
