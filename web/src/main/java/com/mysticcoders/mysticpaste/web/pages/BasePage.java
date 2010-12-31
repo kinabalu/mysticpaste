@@ -4,12 +4,16 @@ import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+
+import java.util.Calendar;
 
 /**
  * Base Page for the application.
@@ -31,7 +35,21 @@ public class BasePage extends WebPage {
         init();
     }
 
+    protected String getTitle() {
+        return "Mystic Paste";
+    }
+
     private void init() {
+
+        AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
+            public String getObject() {
+                Calendar cal = Calendar.getInstance();
+                return ""+cal.get(Calendar.YEAR);
+            }
+        };
+
+        add(new Label("latestYear", dateModel));
+
         WebMarkupContainer newLinkContainer = new WebMarkupContainer("newLinkContainer");
         if (activePage != null && activePage.equals(PasteItemPage.class)) {
             newLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
@@ -64,4 +82,12 @@ public class BasePage extends WebPage {
             public boolean isVisible() { return true; }
         });
     }
+
+    @Override
+    protected void onBeforeRender() {
+        addOrReplace(new Label("title", getTitle()));
+
+        super.onBeforeRender();
+    }
+
 }

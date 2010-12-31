@@ -14,4 +14,7 @@ public class PluginPage extends BasePage {
         super(PluginPage.class);
     }
 
+    protected String getTitle() {
+        return "Plugins - Mystic Paste";
+    }
 }

@@ -47,20 +47,18 @@ public abstract class ViewPastePage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
-    @SpringBean
-    PasteCommentDao pasteCommentDao;
+    private String justNumberPattern = "(\\d)+";
+    private String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
-    String justNumberPattern = "(\\d)+";
-    String numbersWithRange = "\\d+\\s?-\\s?\\d+";
+    private String pasteId;
+
+    private String highlightLines;
 
     public ViewPastePage(final PageParameters params) {
-        // TODO might have to change this to be getnamedParameter
-
         if (params.get("0") == null) {
             throw new RestartResponseException(PasteNotFound.class);
         }
-
-        String highlightLines = null;
+        pasteId = params.get("0").toString();
 
         if (!params.get("1").isEmpty()) {
             String[] lineNumbers = params.get("1").toString().split(",");
@@ -89,7 +87,17 @@ public abstract class ViewPastePage extends BasePage {
             highlightLines = sb.substring(0, sb.length() - 1);
         }
 
-        final IModel<PasteItem> pasteModel = getPasteModel(params.get("0").toString());
+        init();
+    }
+
+    protected String getTitle() {
+        return "#" + pasteId + " - Mystic Paste";
+    }
+
+    private void init() {
+
+
+        final IModel<PasteItem> pasteModel = getPasteModel(pasteId);
         if (pasteModel.getObject() == null) {
             throw new RestartResponseException(PasteNotFound.class);
         }
@@ -99,15 +107,6 @@ public abstract class ViewPastePage extends BasePage {
 
         this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
         add(new Label("type"));
-
-        /* COMMENTS COUNT */
-        final Label commentsCountLabel = new Label("commentsCount", new Model() {
-            public Integer getObject() {
-                return pasteCommentDao.countComments((pasteModel.getObject()).getId());
-            }
-        });
-        commentsCountLabel.setOutputMarkupId(true);
-        add(commentsCountLabel);
 
         String language = pasteModel.getObject().getType();
         add(new HighlighterPanel("highlightedContent",
@@ -136,152 +135,8 @@ public abstract class ViewPastePage extends BasePage {
         };
         add(markAbuseLink);
         markAbuseLink.add(markAbuseLabel);
-
-        final WebMarkupContainer commentListContainer = new WebMarkupContainer("commentListContainer");
-        commentListContainer.setOutputMarkupId(true);
-
-        CommentListModel commentListModel = new CommentListModel(pasteModel.getObject().getId());
-        final ListView<PasteComment> commentList = new ListView<PasteComment>("commentList", commentListModel) {
-            @Override
-            protected void populateItem(final ListItem<PasteComment> item) {
-                item.add(new Label("name", new PropertyModel(item.getModel(), "name")));
-                item.add(new Label("comment", new PropertyModel(item.getModel(), "comment")));
-                item.add(new GravatarImage("image", new PropertyModel<String>(item.getModel(), "email")));
-            }
-        };
-        commentListContainer.add(commentList);
-        add(commentListContainer);
-
-        final Label noComments = new Label("noComments", "No Comments") {
-            public boolean isVisible() {
-                return commentList.size() == 0;
-            }
-        };
-        noComments.setOutputMarkupId(true);
-        add(noComments);
-
-        StatelessForm<CommentBean> form = new StatelessForm<CommentBean>("commentForm", new CompoundPropertyModel<CommentBean>(new CommentBean())) {
-
-            @Override
-            public void onSubmit() {
-                CommentBean commentBean = getModelObject();
-
-                if (commentBean.getConfirmEmail() != null) {
-                    error("SPAM SPAM SPAM");
-                    return;
-                }
-                PasteItem pasteItem = pasteModel.getObject();
-                PasteComment comment = new PasteComment();
-                comment.setItem(pasteItem);
-                comment.setName(commentBean.getName());
-                comment.setEmail(commentBean.getEmail());
-                comment.setComment(commentBean.getComment());
-                comment.setTimestamp(new Date());
-
-                String ipAddress = ((ServletWebRequest) getRequest()).getHttpServletRequest().getRemoteAddr();
-
-                comment.setIpAddress(ipAddress);
-
-                pasteCommentDao.save(comment);
-
-                commentBean.clear();
-
-/*
-                target.add(commentListContainer);
-                target.add(commentsCountLabel);
-                target.add(commentFeedbackPanel);
-                target.add(noComments);
-
-                form.visitFormComponents(new IVisitor<FormComponent, Void>() {
-                    public void component(FormComponent formComponent, IVisit<Void> visit) {
-                        target.add(formComponent);
-                        visit.dontGoDeeper();
-                    }
-                });
-*/
-            }
-
-/*
-            @Override
-            protected void onError(final AjaxRequestTarget target, final Form form) {
-                // or update the feedback panel
-                target.add(commentFeedbackPanel);
-            }
-*/
-
-        };
-        add(form);
-
-        final FeedbackPanel commentFeedbackPanel = new FeedbackPanel("feedback");
-        commentFeedbackPanel.setOutputMarkupId(true);
-        form.add(commentFeedbackPanel);
-
-        RequiredTextField<String> commentName = new RequiredTextField<String>("name");
-        commentName.setOutputMarkupId(true);
-        form.add(commentName);
-
-        RequiredTextField<String> commentEmail = new RequiredTextField<String>("email");
-        commentEmail.add(EmailAddressValidator.getInstance());
-        commentEmail.setOutputMarkupId(true);
-        form.add(commentEmail);
-
-        TextField<String> commentConfirmEmail = new TextField<String>("confirmEmail");
-        commentConfirmEmail.setOutputMarkupId(true);
-        form.add(commentConfirmEmail);
-
-        TextArea<String> commentComment = new TextArea<String>("comment");
-        commentComment.setRequired(true);
-        commentComment.setOutputMarkupId(true);
-        form.add(commentComment);
-
-        form.add(new Button("addComment") {
-
-        });
     }
 
     protected abstract IModel<PasteItem> getPasteModel(String id);
 
-    private class CommentListModel extends LoadableDetachableModel<List<PasteComment>> {
-
-        private Long pasteItemId;
-
-        public CommentListModel(Long pasteItemId) {
-            this.pasteItemId = pasteItemId;
-        }
-
-        @Override
-        protected List<PasteComment> load() {
-            return pasteCommentDao.findByPasteId(pasteItemId);
-        }
-    }
-
-    private class CommentBean implements Serializable {
-        private String name;
-        private String email;
-        private String confirmEmail;
-        private String comment;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getConfirmEmail() {
-            return confirmEmail;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void clear() {
-            this.name = null;
-            this.email = null;
-            this.confirmEmail = null;
-            this.comment = null;
-        }
-    }
 }

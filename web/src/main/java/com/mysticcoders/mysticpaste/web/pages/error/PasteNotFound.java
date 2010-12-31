@@ -9,4 +9,8 @@ import com.mysticcoders.mysticpaste.web.pages.BasePage;
  * Date: Mar 10, 2009
  */
 public class PasteNotFound extends BasePage {
+
+    protected String getTitle() {
+        return "Paste Not Found - Mystic Paste";
+    }
 }

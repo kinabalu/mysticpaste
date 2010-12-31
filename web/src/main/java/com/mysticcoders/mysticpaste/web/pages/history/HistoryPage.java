@@ -33,12 +33,16 @@ public class HistoryPage extends BasePage {
 
     DataView historyDataView;
 
+    protected String getTitle() {
+        return "Pastes - Mystic Paste";
+    }
+
     public HistoryPage() {
         super(HistoryPage.class);
 
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
 
-        historyDataView = new DataView<PasteItem>("history", historyDataProvider, 3) {
+        historyDataView = new DataView<PasteItem>("history", historyDataProvider, 5) {
             protected void populateItem(Item<PasteItem> item) {
                 PasteItem pasteItem = item.getModelObject();
 
