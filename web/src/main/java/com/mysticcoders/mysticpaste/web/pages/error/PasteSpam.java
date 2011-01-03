@@ -15,4 +15,9 @@ import com.mysticcoders.mysticpaste.web.pages.BasePage;
  * Date: July 5th, 2009
  */
 public class PasteSpam extends BasePage {
+
+    protected String getTitle() {
+        return "Paste Spam - Mystic Paste";
+    }
+
 }

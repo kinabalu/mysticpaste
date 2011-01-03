@@ -9,47 +9,43 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Mystic Paste</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
-    <!--[if IE]>
-      <link rel="stylesheet" type="text/css" href="css/ie.css" />
-    <![endif]-->
-
+    <title wicket:id="title">Mystic Paste</title>
   </head>
   <body>
-    <div id="leftSide">&nbsp;</div>
-    <div id="rightSide">&nbsp;</div>
 
-    <div style="margin-top: 5px; color: white; font-weight: bold; font-family: Arial, Helvetica; display: block;">
-        mysticpaste.
-    </div>
-    <div id="center">
+    <div class="container showgrid">
 
-      <div id="nav">
-        <ul id="menus">
-          <li class="cat-item"><a class="home" title="Home" wicket:id="homeLink">Home</a></li>
-          <li wicket:id="newLinkContainer" class="cat-item"><a wicket:id="newLink" accesskey="n" href="#" title="New Paste">New</a></li>
-          <li wicket:id="historyLinkContainer" class="cat-item"><a wicket:id="historyLink" accesskey="h" href="#" title="View Paste History">History</a></li>
-          <li wicket:id="pluginLinkContainer" class="cat-item"><a wicket:id="pluginLink" href="#" title="Plugins">Plugins</a></li>
-          <li class="cat-item"><a wicket:id="sourceLink" title="Source Code" target="_blank">Get Source</a></li>
-          <li><a class="lastmenu" href="javascript: return false;"> </a></li>
-        </ul>
-      </div>
-      <div id="header_bottom"> </div>
+        <div id="header" class="span-6">
+            <h1>mysticpaste.</h1>
+        </div>
+
+        <div class="span-18 last">
+
+            <ul class='tabs'>
+                <li><a wicket:id="homeLink">Home</a></li>
+                <li wicket:id="newLinkContainer"><a wicket:id="newLink" title="New Paste">New</a></li>
+                <li wicket:id="historyLinkContainer"><a wicket:id="historyLink" title="View Paste History">History</a></li>
+                <li wicket:id="pluginLinkContainer"><a wicket:id="pluginLink" title="Plugins">Plugins</a></li>
+                <li wicket:id="helpLinkContainer"><a wicket:id="helpLink" title="Help">Help</a></li>
+                <li><a wicket:id="sourceLink" title="Source Code">Get Source</a></li>
+            </ul>
+        </div>
 
       <!-- content -->
-      <div id="content">
+      <div class="span-24 last" id="content">
         <wicket:child/>
       </div>
-      <div class="clear"></div>
 
       <!-- footer -->
-        <div id="copyright">Copyright &copy; 2000-2009 Mystic Coders, LLC</div>
-        <div id="poweredby_footer">
+      <div class="span-24 last">
+        <div class="span-8" id="copyright">Copyright &copy; 2000 - <wicket:container wicket:id="latestYear">[latestYear]</wicket:container> Mystic Coders, LLC</div>
+        <div class="span-4 prepend-12 last" id="poweredby_footer">
             Powered By
             <a href="http://www.mysticcoders.com"><img src="images/powered-by-mystic.gif" alt="Powered by Mystic" border="0"/></a>
         </div>
-        
+      </div>
+
+
     </div>
 
     <span wicket:id="ga-js">[ga-js]</span>

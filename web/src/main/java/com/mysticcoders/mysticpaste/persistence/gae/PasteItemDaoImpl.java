@@ -1,11 +1,13 @@
 package com.mysticcoders.mysticpaste.persistence.gae;
 
+/*
 import com.google.appengine.api.datastore.Key;
+import org.simpleds.EntityManager;
+import org.simpleds.SimpleQuery;
+*/
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
-import org.simpleds.EntityManager;
-import org.simpleds.SimpleQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -22,23 +24,29 @@ public class PasteItemDaoImpl implements PasteItemDao {
     String namespace = "default";
 
 //    @Autowired
-    private EntityManager entityManager;
+//    private EntityManager entityManager;
 
 
+/*
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+*/
 
     public Long createSimpleObject(String content) {
+/*
         SimpleObject so = new SimpleObject();
         so.setContent(content);
 
         Key key = entityManager.put(so);
 
         return key.getId();
+*/
+        return null;
     }
 
     public SimpleObject retrieveSimpleObject(Long id) {
+/*
         SimpleQuery simpleQuery = entityManager.createQuery(SimpleObject.class);
 
 
@@ -53,31 +61,18 @@ public class PasteItemDaoImpl implements PasteItemDao {
                 return simpleObject;
             }
         }
+*/
 
         return null;
     }
 
     public Long create(PasteItem item) {
+/*
 
         System.out.println("entityManager:" + entityManager);
 
         Key key = entityManager.put("hithere");
         System.out.println("key:" + key);
-/*
-        IMap map = Hazelcast.getMap(namespace);
-
-        item.setId(((MysticPasteHazelcastApplication) Application.get()).nextId());
-
-        map.put(item.getId(), item);
-
-        if(item.isPrivate()) {
-            map.put(item.getPrivateToken(), item.getId());
-        } else {
-            List<Long> indexList = ((MysticPasteHazelcastApplication) Application.get()).getIndexList();
-            indexList.add(item.getId());
-        }
-
-        return item.getId();
 */
 
         return 0L;

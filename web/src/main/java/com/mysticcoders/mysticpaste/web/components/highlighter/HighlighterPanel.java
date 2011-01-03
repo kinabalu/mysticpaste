@@ -2,14 +2,24 @@ package com.mysticcoders.mysticpaste.web.components.highlighter;
 
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
+import org.springframework.web.util.JavaScriptUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -86,7 +96,25 @@ public class HighlighterPanel extends Panel {
         super(id);
 
         add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
-        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeDefault.css"));
+//        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
+        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeRDark.css"));
+        add(JavascriptPackageResource.getHeaderContribution(HighlighterPanel.class, "jquery-1.4.4.min.js"));
+
+/*
+        add(new HeaderContributor(new IHeaderContributor() {
+
+            public void renderHead(IHeaderResponse response) {
+
+                response.getResponse().write("<script type=\"text/javascript\">");
+                response.getResponse().write("$(document).ready(function() {");
+                response.getResponse().write("  $(\"link\").attr(\"href\",\"../resources/com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel/shThemeDjango.css\");");
+                response.getResponse().write("  return false;");
+                response.getResponse().write("});");
+                response.getResponse().write("</script>");
+
+            }
+        }));
+*/
 
         Label codePanel = new Label("code", model);
         add(codePanel);
@@ -107,5 +135,38 @@ public class HighlighterPanel extends Panel {
 
         codePanel.add(new AttributeModifier("class", true, new Model<String>(brushConfig.toString())));
 
+    }
+
+    public static HeaderContributor getHeaderContribution(final Class<?> scope, final String path, final String media, final String rel, final String title) {
+        return new HeaderContributor(new IHeaderContributor() {
+            private static final long serialVersionUID = 1L;
+
+            public void renderHead(IHeaderResponse response) {
+                ResourceReference reference = new CompressedResourceReference(scope, path);
+
+                CharSequence url = RequestCycle.get().urlFor(reference);
+
+                if (Strings.isEmpty(url)) {
+                    throw new IllegalArgumentException("url cannot be empty or null");
+                }
+                List<Object> token = Arrays.asList(new Object[]{"css", url, media});
+
+                response.getResponse().write("<link rel=\"" + (rel != null ? rel : "stylesheet") + " type=\"text/css\" href=\"");
+                response.getResponse().write(url);
+                response.getResponse().write("\"");
+                if (media != null)
+                {
+                    response.getResponse().write(" media=\"");
+                    response.getResponse().write(media);
+                    response.getResponse().write("\"");
+                }
+                if(title!=null) {
+                    response.getResponse().write(" title=\"");
+                    response.getResponse().write(title);
+                    response.getResponse().write("\"");
+                }
+                response.getResponse().println(" />");
+            }
+        });
     }
 }

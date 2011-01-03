@@ -21,6 +21,7 @@ public class SimpleObjectRetrievePage extends BasePage {
 
     public SimpleObjectRetrievePage(PageParameters params) {
 
+/*
         if(params.getAsLong("id") == null) {
             throw new RestartResponseException(SimpleObjectPage.class);
         }
@@ -36,5 +37,6 @@ public class SimpleObjectRetrievePage extends BasePage {
         };
 
         add(new Label("content", myModel));
+*/
     }
 }

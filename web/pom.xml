@@ -86,6 +86,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.googlecode.java-diff-utils</groupId>
+            <artifactId>diffutils</artifactId>
+        </dependency>
+
         <!--  WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -177,7 +182,7 @@
         </dependency>
 
         <!-- SimpleDS for GAE -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.extrema-sistemas</groupId>
             <artifactId>simpleds</artifactId>
         </dependency>
@@ -225,7 +230,7 @@
         <dependency>
             <groupId>com.google.appengine.orm</groupId>
             <artifactId>datanucleus-appengine</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- TWITTER4J DEPENDENCIES -->
         <dependency>

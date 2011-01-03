@@ -1,7 +1,9 @@
 package com.mysticcoders.mysticpaste.model.gae;
 
+/*
 import com.google.appengine.api.datastore.Key;
 import org.simpleds.annotations.Entity;
+*/
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -15,11 +17,11 @@ import java.io.Serializable;
  * Time: 2:05:17 PM
  * To change this template use File | Settings | File Templates.
  */
-@Entity
+//@Entity
 public class SimpleObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
+/*    @Id
     @Column
     @GeneratedValue
     private Key id;
@@ -49,5 +51,5 @@ public class SimpleObject implements Serializable {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 '}';
-    }
+    }*/
 }

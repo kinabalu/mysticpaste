@@ -1,15 +1,21 @@
 package com.mysticcoders.mysticpaste.web.pages;
 
+import com.mysticcoders.mysticpaste.web.components.blueprint.BluePrintCSS;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.*;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+
+import java.util.Calendar;
 
 /**
  * Base Page for the application.
@@ -31,7 +37,28 @@ public class BasePage extends WebPage {
         init();
     }
 
+    protected String getTitle() {
+        return "Mystic Paste";
+    }
+
     private void init() {
+
+/*
+        add(CSSPackageResource.getHeaderContribution(BasePage.class, "style.css"));
+        add(conditionalIEHeaderContribution(BasePage.class, "ie.css"));
+*/
+
+        add(new BluePrintCSS());
+
+        AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
+            public String getObject() {
+                Calendar cal = Calendar.getInstance();
+                return ""+cal.get(Calendar.YEAR);
+            }
+        };
+
+        add(new Label("latestYear", dateModel));
+
         WebMarkupContainer newLinkContainer = new WebMarkupContainer("newLinkContainer");
         if (activePage != null && activePage.equals(PasteItemPage.class)) {
             newLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
@@ -53,6 +80,13 @@ public class BasePage extends WebPage {
         pluginLinkContainer.add(new BookmarkablePageLink<Void>("pluginLink", PluginPage.class));
         add(pluginLinkContainer);
 
+        WebMarkupContainer helpLinkContainer = new WebMarkupContainer("helpLinkContainer");
+        if (activePage != null && activePage.equals(HelpPage.class)) {
+            helpLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
+        }
+        helpLinkContainer.add(new BookmarkablePageLink<Void>("helpLink", HelpPage.class));
+        add(helpLinkContainer);
+
         add(new ExternalLink("sourceLink", "http://github.com/kinabalu/mysticpaste/"));
 
         add(new TagExternalLink("homeLink", "http://www.mysticcoders.com"));
@@ -64,4 +98,28 @@ public class BasePage extends WebPage {
             public boolean isVisible() { return true; }
         });
     }
+
+    @Override
+    protected void onBeforeRender() {
+        addOrReplace(new Label("title", getTitle()));
+
+        super.onBeforeRender();
+    }
+
+
+    public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
+        return new HeaderContributor(new IHeaderContributor() {
+            private static final long serialVersionUID = 1L;
+
+            public void renderHead(IHeaderResponse response) {
+
+                response.getResponse().write("\n<!--[if IE]-->\n");
+                response.renderCSSReference(new CompressedResourceReference(scope, path));
+                response.getResponse().write("<![endif]-->\n");
+
+            }
+
+        });
+    }
+
 }

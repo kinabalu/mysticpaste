@@ -47,6 +47,10 @@ public class PasteItemPage extends BasePage {
         add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
     }
 
+    protected String getTitle() {
+        return "New - Mystic Paste";
+    }
+
     private String spamEmail;
 
     public String getSpamEmail() {

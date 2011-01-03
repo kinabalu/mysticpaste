@@ -3,6 +3,8 @@ package com.mysticcoders.mysticpaste;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import com.mysticcoders.mysticpaste.web.pages.view.DownloadPasteAsTextResource;
+import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.application.IComponentInstantiationListener;
@@ -48,6 +50,9 @@ public class MysticPasteApplication extends WebApplication {
 
         addComponentInstantiationListener(getSpringComponentInjector(this));
 
+        getSharedResources().add("textPasteResource", new PasteAsTextResource());
+        getSharedResources().add("downloadAsTextPasteResource", new DownloadPasteAsTextResource());
+
         getMarkupSettings().setStripWicketTags(true);
 
         mountBookmarkablePage("/home", HomePage.class);
@@ -56,9 +61,6 @@ public class MysticPasteApplication extends WebApplication {
         mountBookmarkablePage("/plugin", PluginPage.class);
         mount(new IndexedParamUrlCodingStrategy("/view", ViewPublicPage.class));
         mount(new IndexedParamUrlCodingStrategy("/private", ViewPrivatePage.class));
-
-        ServletContext servletContext = super.getServletContext();
-        applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
     }
 
     /**
@@ -78,15 +80,6 @@ public class MysticPasteApplication extends WebApplication {
 
     public Class<PasteItemPage> getHomePage() {
         return PasteItemPage.class;
-    }
-
-    private ApplicationContext applicationContext;
-
-
-    public Object getBean(String name) {
-        if (name == null) return null;
-
-        return applicationContext.getBean(name);
     }
 
 }

@@ -5,6 +5,7 @@ import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
+import difflib.DiffUtils;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -15,6 +16,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.diff.DiffUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,12 +36,16 @@ public class HistoryPage extends BasePage {
 
     DataView historyDataView;
 
+    protected String getTitle() {
+        return "Pastes - Mystic Paste";
+    }
+
     public HistoryPage() {
         super(HistoryPage.class);
 
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
 
-        historyDataView = new DataView<PasteItem>("history", historyDataProvider, 3) {
+        historyDataView = new DataView<PasteItem>("history", historyDataProvider, 10) {
             protected void populateItem(Item<PasteItem> item) {
                 PasteItem pasteItem = item.getModelObject();
 

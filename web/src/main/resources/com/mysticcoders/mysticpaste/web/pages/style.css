@@ -1,5 +1,5 @@
 body {
-	background: #BEC3C6 url(../images/bg.jpg) repeat-x;
+	background: #BEC3C6 url(images/bg.jpg) repeat-x;
 	color: #555;
 	font-family: Verdana,"BitStream vera Sans",Helvetica,Sans-serif;
 	font-size: 12px;
@@ -22,14 +22,14 @@ textarea, input, select {
 }
 
 #leftSide {
-	background: url(../images/bg_left.jpg) no-repeat;
+	background: url(images/bg_left.jpg) no-repeat;
 	width: 48px;
 	height: 600px;
 	float: left;
 }
 
 #rightSide {
-	background: url(../images/bg_right.jpg) no-repeat;
+	background: url(images/bg_right.jpg) no-repeat;
 	width: 48px;
 	height: 600px;
 	float: right;
@@ -41,14 +41,14 @@ textarea, input, select {
 }
 
 #header {
-	background: url(../images/header_bg.jpg);
+	background: url(images/header_bg.jpg);
 	height: 91px;
 }
 
 #header #logo {
 	height: 91px;
 	width: 261px;
-	background: url(../images/header_logo.jpg);
+	background: url(images/header_logo.jpg);
 }
 
 #header #logo a .logo {
@@ -62,7 +62,7 @@ textarea, input, select {
 
 #header_bottom {
 	height: 8px;
-	background: url(../images/header_bottom.jpg) repeat-x;
+	background: url(images/header_bottom.jpg) repeat-x;
 }
 
 #content {
@@ -74,21 +74,21 @@ textarea, input, select {
 }
 
 #footer_left {
-	background: url(../images/footer_bg_left.jpg) no-repeat;
+	background: url(images/footer_bg_left.jpg) no-repeat;
 	height: 87px;
 	width: 66px;
 	float: left;
 }
 
 #footer_right {
-	background: url(../images/footer_bg_right.jpg) no-repeat;
+	background: url(images/footer_bg_right.jpg) no-repeat;
 	height: 87px;
 	width: 66px;
 	float: right;
 }
 
 #footer_center {
-	background: url(../images/footer_bg.jpg) repeat-x;
+	background: url(images/footer_bg.jpg) repeat-x;
 	height: 87px;
 	margin-left: 66px;
 	margin-right: 66px;
@@ -105,7 +105,7 @@ textarea, input, select {
 }
 
 #menus li a {
-	background: transparent url(../images/menu.gif) no-repeat;
+	background: transparent url(images/menu.gif) no-repeat;
 	display: block;
 	color: #382E1F;
 	height: 31px;
@@ -331,7 +331,7 @@ div .pageNav a {
 
 .historyItemHeaderBottom {
 	height: 6px;
-	background: url(../images/header_bottom.jpg) repeat-x;
+	background: url(images/header_bottom.jpg) repeat-x;
 }
 
 li .feedbackPanelERROR {

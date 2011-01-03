@@ -1,37 +1,32 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div id="feedbackPanel">
+    <div class="span-24 last" id="feedbackPanel">
       <span wicket:id="feedback">[feedback]</span>
     </div>
-    <form wicket:id="pasteForm">
-    <div id="paste_options">
-      <ul>
-        <li>private:</li>
-        <li><input wicket:id="private" type="checkbox" /></li>
-      </ul>
-      <ul>
-        <li>language:</li>
-        <li>
-          <select wicket:id="type" class="language">
-            <option>Choose One</option>
-            <option>Java</option>
-            <option>Groovy</option>
-            <option>PHP</option>
-          </select>
-        </li>
-      </ul>
-        <ul>
-            <li>send to twitter:</li>
-            <li><input wicket:id="twitter" type="checkbox" /></li>
-        </ul>
-    </div>
-    <div id="paste_content">
-      <div id="textLeft"> </div>
-      <div id="textRight"> </div>
-      <div id="textCenter"><textarea wicket:id="content" wrap="off"></textarea>
 
-      <span style="display: none; visibility: hidden;"><input wicket:id="email" /></span>
-      </div>
+    <form wicket:id="pasteForm">
+        <div class="span-4 prepend-8">
+            send to twitter: <input wicket:id="twitter" type="checkbox" />
+        </div>
+        <div class="span-8">
+            <div class="span-2">language:</div>
+            <div class="span-6 last">
+              <select wicket:id="type" class="language">
+                <option>Choose One</option>
+                <option>Java</option>
+                <option>Groovy</option>
+                <option>PHP</option>
+              </select>
+            </div>
+        </div>
+        <div class="span-4 last">
+          private: <input wicket:id="private" type="checkbox" />
+        </div>
+
+    <div class="prepend-1 span-22 colborder last" id="paste_content">
+        <textarea wicket:id="content" wrap="off" style="width: 100%" width="95%"></textarea>
+
+        <span style="display: none; visibility: hidden;"><input wicket:id="email" /></span>
     </div>
 
 <!--
@@ -39,7 +34,7 @@
         <input wicket:id="imageFile" type="file" />        
     </div>
 -->
-    <div id="paste_submit">
+    <div class="prepend-9 span-15 last" id="paste_submit">
         <input type="submit" wicket:id="paste" accesskey="p" value="Paste" />
     </div>
     </form>

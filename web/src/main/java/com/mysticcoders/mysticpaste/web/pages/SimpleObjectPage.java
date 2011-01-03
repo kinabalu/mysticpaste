@@ -20,6 +20,7 @@ public class SimpleObjectPage extends BasePage {
     private PasteService pasteService;
 
     public SimpleObjectPage() {
+/*
         Form form = new Form<SimpleObject>("form", new CompoundPropertyModel<SimpleObject>(new SimpleObject())) {
             public void onSubmit() {
                 SimpleObject simpleObject = getModelObject();
@@ -35,5 +36,6 @@ public class SimpleObjectPage extends BasePage {
         add(form);
         form.add(new TextArea("content"));
         form.add(new FeedbackPanel("feedback"));
+*/
     }
 }
