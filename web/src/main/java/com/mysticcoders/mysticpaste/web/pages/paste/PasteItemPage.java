@@ -7,6 +7,7 @@ import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
+import com.mysticcoders.mysticpaste.web.components.blueprint.BluePrintCSS;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.components.DefaultFocusBehavior;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
@@ -14,8 +15,11 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.lang.Bytes;
@@ -172,7 +176,11 @@ public class PasteItemPage extends BasePage {
             add(new CheckBox("private"));
             add(new CheckBox("twitter", new PropertyModel<Boolean>(PasteForm.this, "twitter")));
 
-            add(new Button("paste"));
+
+            Button pasteButton = new Button("paste");
+            pasteButton.add(new Image("image", new CompressedResourceReference(BluePrintCSS.class, "icons/add.png")));
+            pasteButton.add(new Label("imageLabel", "Create Public Paste"));
+            add(pasteButton);
             
             DropDownChoice languageDDC = new DropDownChoice<LanguageSyntax>("type",
                     new PropertyModel<LanguageSyntax>(PasteForm.this, "languageType"),

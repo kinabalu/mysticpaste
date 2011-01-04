@@ -18,6 +18,7 @@ public class BluePrintCSS extends AbstractBehavior {
     private final CompressedResourceReference SCREEN_CSS = new CompressedResourceReference(BluePrintCSS.class, "screen.css");
     private final CompressedResourceReference TABS_CSS = new CompressedResourceReference(BluePrintCSS.class, "tabs.css");
     private final CompressedResourceReference TYPOGRAPHY_CSS = new CompressedResourceReference(BluePrintCSS.class, "typography.css");
+    private final CompressedResourceReference BUTTONS_CSS = new CompressedResourceReference(BluePrintCSS.class, "buttons.css");
 
 	/**
 	 * @see org.apache.wicket.markup.html.IHeaderContributor#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
@@ -35,5 +36,6 @@ public class BluePrintCSS extends AbstractBehavior {
 
         response.renderCSSReference(TABS_CSS, "screen, projection");
         response.renderCSSReference(TYPOGRAPHY_CSS, "screen, projection");
+        response.renderCSSReference(BUTTONS_CSS, "screen, projection");
 	}
 }
