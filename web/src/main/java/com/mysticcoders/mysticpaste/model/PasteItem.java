@@ -42,7 +42,9 @@ import java.util.List;
         @NamedQuery(name = "item.findByUser",
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.userToken = :token"),
         @NamedQuery(name = "item.count",
-                query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true")
+                query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
+        @NamedQuery(name = "item.hasChildren",
+                query = "from PasteItem item inner join fetch item.children where item.id = :itemId ")
 })
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
@@ -93,7 +95,7 @@ public class PasteItem implements Serializable {
     @Column(name = "PRIVATE_TOKEN", unique = true, updatable = false)
     protected String privateToken;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "PARENT_ITEM_ID", nullable = true)
     protected PasteItem parent;
 

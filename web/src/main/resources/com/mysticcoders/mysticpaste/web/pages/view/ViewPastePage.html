@@ -12,7 +12,8 @@
                 <li><a wicket:id="rawLink">Raw</a></li>
                 <li><a wicket:id="downloadLink">Download</a></li>
                 <li><a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></li>
-                <li><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
+                <li wicket:id="hasReplies"><a wicket:id="originalPasteLink">Original Paste</a></li>
+                <li wicket:id="hasNoReplies"><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
             </ul>
         </div>
         <div class="block_content">
@@ -27,9 +28,27 @@
 
     <p>&nbsp;</p>
 
+    <wicket:container wicket:id="hasChildPastes">
+        <div class="block">
+            <div class="block_head">
+                <div class="bheadl"></div>
+                <div class="bheadr"></div>
+
+                <h2>Paste Replies</h2>
+            </div>
+            <div class="block_content">
+                <ul>
+                    <li>Paste 1</li>
+                    <li>Paste 2</li>
+                </ul>
+            </div>
+        </div>
+    <p>&nbsp;</p>
+    </wicket:container>
+
     <div class="block">
 
-        <form>
+        <form wicket:id="replyForm">
         <div class="block_head">
             <div class="bheadl"></div>
             <div class="bheadr"></div>

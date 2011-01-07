@@ -40,4 +40,6 @@ public interface PasteService {
     long getLatestItemsCount(String clientToken) throws InvalidClientException;
 
     void markAbuse(PasteItem pasteItem);
+
+    boolean hasChildren(long pasteId);
 }

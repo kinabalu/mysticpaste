@@ -221,6 +221,10 @@ public class PasteServiceImpl implements PasteService {
         itemDao.markAbuse(pasteItem);
     }
 
+    public boolean hasChildren(long pasteId) {
+        return itemDao.hasChildren(pasteId);
+    }
+
     private void validateClient(String clientToken) throws InvalidClientException {
         // TODO add client validation
     }

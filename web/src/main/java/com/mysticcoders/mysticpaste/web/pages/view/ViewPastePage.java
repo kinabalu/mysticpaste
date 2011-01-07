@@ -6,39 +6,37 @@
  */
 package com.mysticcoders.mysticpaste.web.pages.view;
 
-import com.mysticcoders.mysticpaste.model.PasteComment;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
+import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
-import com.mysticcoders.mysticpaste.web.components.GravatarImage;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
-import org.apache.wicket.*;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.StatelessLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.*;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.resource.SharedResourceRequestTarget;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ViewPastePage extends BasePage {
 
@@ -63,12 +61,12 @@ public abstract class ViewPastePage extends BasePage {
 
         String highlightLines = null;
         if (!Strings.isEmpty(params.getString("1"))) {
-            if(params.getString("1").equals("text")) {
+            if (params.getString("1").equals("text")) {
                 RequestParameters rps = new RequestParameters();
                 rps.setResourceKey(new ResourceReference("textPasteResource").getSharedResourceKey());
                 getRequestCycle().setRequestTarget(new SharedResourceRequestTarget(rps));
                 return;
-            } else if(params.getString("1").equals("download")) {
+            } else if (params.getString("1").equals("download")) {
                 RequestParameters rps = new RequestParameters();
                 rps.setResourceKey(new ResourceReference("downloadAsTextPasteResource").getSharedResourceKey());
                 getRequestCycle().setRequestTarget(new SharedResourceRequestTarget(rps));
@@ -113,23 +111,44 @@ public abstract class ViewPastePage extends BasePage {
         this.setDefaultModel(new CompoundPropertyModel(pasteModel));
         add(new Label("type"));
 
+        WebMarkupContainer hasReplies = new WebMarkupContainer("hasReplies") {
+            @Override
+            public boolean isVisible() {
+                return pasteModel.getObject().getParent()!=null;
+            }
+        };
+
+        WebMarkupContainer hasChildPastes = new WebMarkupContainer("hasChildPastes") {
+            @Override
+            public boolean isVisible() {
+                return pasteService.hasChildren(pasteModel.getObject().getId());
+            }
+        };
+        add(hasChildPastes);
+
+        if(pasteModel.getObject().getParent()!=null) {
+            PasteItem pasteItem = pasteModel.getObject().getParent();
+            PageParameters pp = new PageParameters();
+            pp.put("0", pasteItem.getId());
+            hasReplies.add(new BookmarkablePageLink<Void>("originalPasteLink", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
+        }
+        add(hasReplies);
+
+        add(new WebMarkupContainer("hasNoReplies") {
+            @Override
+            public boolean isVisible() {
+                return pasteModel.getObject().getParent()==null;
+            }
+        });
+
         String language = pasteModel.getObject().getType();
         add(new HighlighterPanel("highlightedContent",
                 new PropertyModel(pasteModel, "content"),
                 language, false,
                 highlightLines));
 
-        add(new Label("content").setEscapeModelStrings(true));
-
-        PageParameters pp = new PageParameters();
-        pp.put("0", params.getString("0"));
-        pp.put("1", "text");
-        add(new BookmarkablePageLink<Void>("rawLink", ViewPublicPage.class, pp));
-
-        PageParameters pp2 = new PageParameters();
-        pp2.put("0", params.getString("0"));
-        pp2.put("1", "download");
-        add(new BookmarkablePageLink<Void>("downloadLink", ViewPublicPage.class, pp2));
+        add(createRawLink("rawLink", params));
+        add(createDownloadLink("downloadLink", params));
 
         final Label markAbuseLabel = new Label("markAbuseLabel", "Report Abuse");
         markAbuseLabel.setOutputMarkupId(true);
@@ -149,7 +168,75 @@ public abstract class ViewPastePage extends BasePage {
         add(markAbuseLink);
         markAbuseLink.add(markAbuseLabel);
 
+
+        Form<PasteItem> replyForm = new Form<PasteItem>("replyForm", pasteModel) {
+
+            @Override
+            protected void onSubmit() {
+                onPaste(getModel());
+            }
+        };
+        add(replyForm);
+        replyForm.add(new TextArea<String>("content"));
+
     }
+
+    private String replyPaste;
+
+    private void onPaste(IModel<PasteItem> pasteModel) {
+        PasteItem pI = pasteModel.getObject();
+
+/*
+        if (pasteItem.getContent() == null || pasteItem.getContent().equals("")) {
+            error("Paste content is required!");
+            return;
+        }
+
+        if (getSpamEmail() != null || hasSpamKeywords(pasteItem.getContent())) {
+            error("Spam Spam Spam Spam");
+            return;
+        }
+*/
+        PasteItem pasteItem = new PasteItem();
+        pasteItem.setContent(pI.getContent());
+        pasteItem.setPrivate(pI.isPrivate());
+        pasteItem.setType(pI.getType());
+        pasteItem.setParent(pI);
+
+        try {
+            pasteService.createItem("web", pasteItem);
+            PageParameters params = new PageParameters();
+            if (pasteItem.isPrivate()) {
+                this.setRedirect(true);
+                params.put("0", pasteItem.getPrivateToken());
+                setResponsePage(ViewPrivatePage.class, params);
+            } else {
+                this.setRedirect(true);
+                params.put("0", Long.toString(pasteItem.getId()));
+                setResponsePage(ViewPublicPage.class, params);
+            }
+        } catch (InvalidClientException e) {
+            // Do nothing at this point as we haven't defined what an "Invalid Client" is.
+            e.printStackTrace();
+        }
+
+    }
+
+    private BookmarkablePageLink<Void> createExportLink(String id, PageParameters params, String type) {
+        PageParameters pp = new PageParameters();
+        pp.put("0", params.getString("0"));
+        pp.put("1", type);
+        return new BookmarkablePageLink<Void>(id, ViewPublicPage.class, pp);
+    }
+
+    private BookmarkablePageLink<Void> createRawLink(String id, PageParameters params) {
+        return createExportLink(id, params, "text");
+    }
+
+    private BookmarkablePageLink<Void> createDownloadLink(String id, PageParameters params) {
+        return createExportLink(id, params, "download");
+    }
+
 
     protected abstract IModel<PasteItem> getPasteModel(String id);
 
