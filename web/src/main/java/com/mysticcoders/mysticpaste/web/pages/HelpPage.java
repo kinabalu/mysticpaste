@@ -8,4 +8,8 @@ package com.mysticcoders.mysticpaste.web.pages;
  * To change this template use File | Settings | File Templates.
  */
 public class HelpPage extends BasePage {
+
+    public HelpPage() {
+        super(HelpPage.class);
+    }
 }

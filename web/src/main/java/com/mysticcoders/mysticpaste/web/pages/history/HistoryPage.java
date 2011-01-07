@@ -59,15 +59,18 @@ public class HistoryPage extends BasePage {
 
                 item.add(new Label("posted", getElapsedTimeSincePost(pasteItem)));
 
-                item.add(new HighlighterPanel("content",
-                        new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType()));
 
+                item.add(new HighlighterPanel("content",
+                        new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType(), item.getIndex()>0));
+
+/*
                 item.add(new BookmarkablePageLink<Void>("viewLink2", ViewPublicPage.class, params) {
                     @Override
                     public boolean isVisible() {
                         return contentLines.length > 5;
                     }
                 });
+*/
             }
         };
 

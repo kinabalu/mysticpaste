@@ -43,13 +43,6 @@ public class BasePage extends WebPage {
 
     private void init() {
 
-/*
-        add(CSSPackageResource.getHeaderContribution(BasePage.class, "style.css"));
-        add(conditionalIEHeaderContribution(BasePage.class, "ie.css"));
-*/
-
-        add(new BluePrintCSS());
-
         AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
             public String getObject() {
                 Calendar cal = Calendar.getInstance();
@@ -61,35 +54,35 @@ public class BasePage extends WebPage {
 
         WebMarkupContainer newLinkContainer = new WebMarkupContainer("newLinkContainer");
         if (activePage != null && activePage.equals(PasteItemPage.class)) {
-            newLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
+            newLinkContainer.add(new SimpleAttributeModifier("class", "active"));
         }
         newLinkContainer.add(new BookmarkablePageLink<Void>("newLink", PasteItemPage.class));
         add(newLinkContainer);
 
         WebMarkupContainer historyLinkContainer = new WebMarkupContainer("historyLinkContainer");
         if (activePage != null && activePage.equals(HistoryPage.class)) {
-            historyLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
+            historyLinkContainer.add(new SimpleAttributeModifier("class", "active"));
         }
         historyLinkContainer.add(new BookmarkablePageLink<Void>("historyLink", HistoryPage.class));
         add(historyLinkContainer);
 
         WebMarkupContainer pluginLinkContainer = new WebMarkupContainer("pluginLinkContainer");
         if (activePage != null && activePage.equals(PluginPage.class)) {
-            pluginLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
+            pluginLinkContainer.add(new SimpleAttributeModifier("class", "active"));
         }
         pluginLinkContainer.add(new BookmarkablePageLink<Void>("pluginLink", PluginPage.class));
         add(pluginLinkContainer);
 
         WebMarkupContainer helpLinkContainer = new WebMarkupContainer("helpLinkContainer");
         if (activePage != null && activePage.equals(HelpPage.class)) {
-            helpLinkContainer.add(new SimpleAttributeModifier("class", "current_page_item"));
+            helpLinkContainer.add(new SimpleAttributeModifier("class", "active"));
         }
         helpLinkContainer.add(new BookmarkablePageLink<Void>("helpLink", HelpPage.class));
         add(helpLinkContainer);
 
         add(new ExternalLink("sourceLink", "http://github.com/kinabalu/mysticpaste/"));
 
-        add(new TagExternalLink("homeLink", "http://www.mysticcoders.com"));
+        add(new TagExternalLink("blogLink", "http://www.mysticcoders.com/blog"));
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {
                 return "UA-254925-6";

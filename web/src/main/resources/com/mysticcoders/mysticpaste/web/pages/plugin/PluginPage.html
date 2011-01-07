@@ -1,27 +1,43 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div id="textLeft"></div>
-    <div id="textRight"></div>
-    <div id="textCenter">       
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
 
-        <div class="pluginContent">
-            <div class="pluginHeader">Eclipse Plugin</div>
-            <div class="pluginText">
-                <a href="http://github.com/kinabalu/mysticpaste/tree/master/eclipse-plugin/build/plugins/">Download Now</a><br/><br/>
+            <h2>Eclipse Plugin</h2>
+
+            <ul class="tabs">
+                <li><a href="http://github.com/kinabalu/mysticpaste/tree/master/eclipse-plugin/build/plugins/">Download Now</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
                 Locate where on your file system Eclipse is installed. Under this directory there should be a "dropins"
                 folder, this is where the jar you built (or downloaded) for the plugin should reside.<br/>
                 Restart Eclipse, and voila!<br/>
                 <br/>
                 Note: on a Mac, you'll have to right click on Eclipse.app and choose "Show Package Contents", the
                 dropins folder will then be accessible through the Finder window which pops up.
-
-            </div>
         </div>
 
-        <div class="pluginContent">
-            <div class="pluginHeader">IDEA Plugin</div>
-            <div class="pluginText">
-                <a href="http://github.com/kinabalu/mysticpaste/tree/master/idea-plugin/build/">Download Now</a><br/><br/>
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>IDEA Plugin</h2>
+
+            <ul class="tabs">
+                <li><a href="http://github.com/kinabalu/mysticpaste/tree/master/idea-plugin/build/">Download Now</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
 
                 <strong>To install the MysticPaste Plugin for IDEA:</strong>
 
@@ -31,13 +47,25 @@
                     <li>Linux/Unix: $HOME/.IntelliJIdea80/config/plugins</li>
                 </ul>
 
-            </div>
         </div>
 
-        <div class="pluginContent">
-            <div class="pluginHeader">VIM Plugin</div>
-            <div class="pluginText">
-                <a href="http://github.com/kinabalu/mysticpaste/tree/master/vim-plugin/build/">Download Now</a><br/><br/>
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>VIM Plugin</h2>
+
+            <ul class="tabs">
+                <li><a href="http://github.com/kinabalu/mysticpaste/tree/master/vim-plugin/build/">Download Now</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
 
                 Mystic worked with <a href="http://www.eugeneciurana.com" target="_blank">Eugene Ciurana</a> on a configuration of MysticPaste for his
                 newly written VIM plugin.  Thanks Eugene!
@@ -51,13 +79,24 @@
                     <li>Windows: Same as above, but find the location of vim/gvim's configuration directory (none of us use Windows)</li>
                 </ul>
 
-            </div>
         </div>
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
 
-        <div class="pluginContent">
-            <div class="pluginHeader">Netbeans Plugin</div>
-            <div class="pluginText">
-                <a href="http://github.com/kinabalu/mysticpaste/tree/master/netbeans-plugin/build/">Download Now</a><br/><br/>
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Netbeans Plugin</h2>
+
+            <ul class="tabs">
+                <li><a href="http://github.com/kinabalu/mysticpaste/tree/master/netbeans-plugin/build/">Download Now</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
 
                 The MysticPaste Netbeans plugin was developed by <a href="http://blank.jasonwhaley.com" target="_blank">Jason Whaley</a> and is compatible with Netbeans 6.5.
                 <br /><br />
@@ -72,13 +111,23 @@
 
                 Now, when working in an editor, "Copy to Mystic Paste" is available in the global Edit menu.
 
-            </div>
         </div>
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
 
-        <div class="pluginContent">
-            <div class="pluginHeader">AppleScript Launchbar Plugin</div>
-            <div class="pluginText">
-                <a href="http://github.com/kinabalu/mysticpaste/tree/master/applescript-plugin/">Download Now</a><br/><br/>
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Applescript Launchbar Plugin</h2>
+
+            <ul class="tabs">
+                <li><a href="http://github.com/kinabalu/mysticpaste/tree/master/applescript-plugin/">Download Now</a></li>
+            </ul>
+        </div>
+        <div class="block_content">
 
                 The launchbar plugin was designed to grab any text via Instant Send or contained within the clipboard and running the applescript will automatically paste
                 the contents to MysticPaste.com and give you the full URL in the clipboard and select it with Launchbar.
@@ -93,9 +142,10 @@
                     <li>See the URL show up in launchbar and also contained within your clipboard for easy pasting</li>
                 </ol>
 
-            </div>
         </div>
-
+        <div class="bendl"></div>
+        <div class="bendr"></div>
     </div>
+
 </wicket:extend>
 </html>

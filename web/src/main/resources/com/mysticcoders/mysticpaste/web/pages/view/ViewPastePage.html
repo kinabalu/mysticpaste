@@ -1,42 +1,58 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div id="paste_options">
-        <ul class="left">
-            <li>language:</li>
-            <li class="fieldValue" wicket:id="type">blah</li>
-            <li>(<a wicket:id="rawLink">Raw</a> or <a wicket:id="downloadLink">Download</a>)</li>
-        </ul>
 
-        <div style="float:right; margin-top: 1em; padding-right: 30px;">
-            <a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a>&nbsp;&nbsp;
-            <a href="#replytopaste">Reply to Paste</a>
-            </div>
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
 
-    </div>
-    <div id="paste_content">
-        <div id="textLeft"></div>
-        <div id="textRight"></div>
-        <div id="textCenter" class="view">
+            <strong>Language: <wicket:container wicket:id="type">[type]</wicket:container></strong>
+
+            <ul class="tabs">
+                <li><a wicket:id="rawLink">Raw</a></li>
+                <li><a wicket:id="downloadLink">Download</a></li>
+                <li><a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></li>
+                <li><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
+            </ul>
+        </div>
+        <div class="block_content">
+
             <div wicket:id="highlightedContent">[highlightedContent]</div>
 
         </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
     </div>
 
     <p>&nbsp;</p>
 
-    <div id="paste_content">
-        <div id="textLeft"></div>
-        <div id="textRight"></div>
+    <div class="block">
 
+        <form>
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
 
-        <div id="textCenter">
+            <h2><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</h2>
+        </div>
+        <div class="block_content">
             <a name="replytopaste"></a>
-
-            <p><strong>Reply to paste:</strong></p>
 
             <textarea wicket:id="content" id="rawPaste" wrap="off"
                       style="height: 250px; width: 100%; background-color: #eeeeee; border: 1px solid #555;"></textarea>
+
+            <p>&nbsp;</p>
+
+            <p class="right" align="right">
+                <input type="submit" class="submit long" value="Reply" />
+            </p>
+
         </div>
+        </form>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
     </div>
 
     <wicket:child/>

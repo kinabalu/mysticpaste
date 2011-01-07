@@ -89,42 +89,39 @@ public class HighlighterPanel extends Panel {
     }
 
     public HighlighterPanel(String id, IModel model, String language) {
-        this(id, model, language, null);
+        this(id, model, language, false, null);
     }
 
-    public HighlighterPanel(String id, IModel model, String language, String highlightLines) {
+    public HighlighterPanel(String id, IModel model, String language, boolean excludeExternalResources) {
+        this(id, model, language, excludeExternalResources, null);
+    }
+
+    public HighlighterPanel(String id, IModel model, String language, final boolean excludeExternalResources, String highlightLines) {
         super(id);
 
-        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
-//        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
-        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeRDark.css"));
-        add(JavascriptPackageResource.getHeaderContribution(HighlighterPanel.class, "jquery-1.4.4.min.js"));
+        if(!excludeExternalResources) {
+            add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
+    //        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
+            add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeDefault.css"));
+            add(JavascriptPackageResource.getHeaderContribution(HighlighterPanel.class, "jquery-1.4.4.min.js"));
 
-/*
-        add(new HeaderContributor(new IHeaderContributor() {
+        }
 
-            public void renderHead(IHeaderResponse response) {
-
-                response.getResponse().write("<script type=\"text/javascript\">");
-                response.getResponse().write("$(document).ready(function() {");
-                response.getResponse().write("  $(\"link\").attr(\"href\",\"../resources/com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel/shThemeDjango.css\");");
-                response.getResponse().write("  return false;");
-                response.getResponse().write("});");
-                response.getResponse().write("</script>");
-
+        add(new JavaScriptReference("highlighterCore", HighlighterPanel.class, "shCore.js") {
+            @Override
+            public boolean isVisible() {
+                return !excludeExternalResources;
             }
-        }));
-*/
-
-        Label codePanel = new Label("code", model);
-        add(codePanel);
-
-        add(new JavaScriptReference("highlighterCore", HighlighterPanel.class, "shCore.js"));
+        });
 
         if (language == null || getLanguageScript(language) == null) language = "text";
 
+        // TODO we need to find out how to do smart header contribution so only the brushes we need get loaded, not multiple times
         add(new JavaScriptReference("highlighterLanguage", HighlighterPanel.class,
                 getLanguageScript(language)));
+
+        Label codePanel = new Label("code", model);
+        add(codePanel);
 
 
         StringBuffer brushConfig = new StringBuffer("brush: ");

@@ -116,7 +116,7 @@ public abstract class ViewPastePage extends BasePage {
         String language = pasteModel.getObject().getType();
         add(new HighlighterPanel("highlightedContent",
                 new PropertyModel(pasteModel, "content"),
-                language,
+                language, false,
                 highlightLines));
 
         add(new Label("content").setEscapeModelStrings(true));
