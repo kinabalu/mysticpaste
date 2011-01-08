@@ -32,7 +32,7 @@ public class HistoryPage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     DataView historyDataView;
 
@@ -63,14 +63,6 @@ public class HistoryPage extends BasePage {
                 item.add(new HighlighterPanel("content",
                         new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType(), item.getIndex()>0));
 
-/*
-                item.add(new BookmarkablePageLink<Void>("viewLink2", ViewPublicPage.class, params) {
-                    @Override
-                    public boolean isVisible() {
-                        return contentLines.length > 5;
-                    }
-                });
-*/
             }
         };
 
@@ -100,7 +92,7 @@ public class HistoryPage extends BasePage {
         });
     }
 
-    private String getElapsedTimeSincePost(PasteItem pasteItem) {
+    public static String getElapsedTimeSincePost(PasteItem pasteItem) {
         String returnString;
 
         Calendar today = Calendar.getInstance();

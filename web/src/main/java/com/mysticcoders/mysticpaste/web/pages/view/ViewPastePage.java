@@ -14,6 +14,7 @@ import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
+import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
@@ -26,10 +27,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.resource.SharedResourceRequestTarget;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -118,13 +118,38 @@ public abstract class ViewPastePage extends BasePage {
             }
         };
 
-        WebMarkupContainer hasChildPastes = new WebMarkupContainer("hasChildPastes") {
-            @Override
-            public boolean isVisible() {
+        final AbstractReadOnlyModel<List<PasteItem>> childPastes = new AbstractReadOnlyModel<List<PasteItem>>() {
+            public List<PasteItem> getObject() {
+//                return null;
                 return pasteService.hasChildren(pasteModel.getObject().getId());
             }
         };
+        WebMarkupContainer hasChildPastes = new WebMarkupContainer("hasChildPastes") {
+            @Override
+            public boolean isVisible() {
+                List<PasteItem> children = childPastes.getObject();
+                return children != null && children.size() > 0;
+            }
+        };
         add(hasChildPastes);
+
+        hasChildPastes.add(new ListView<PasteItem>("childPastes", childPastes) {
+
+            @Override
+            protected void populateItem(ListItem<PasteItem> item) {
+                PasteItem pasteItem = item.getModelObject();
+
+                PageParameters pp = new PageParameters();
+                pp.put("0", pasteItem.getId());
+                BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp);
+
+                viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "id")));
+
+                item.add(viewPaste);
+
+                item.add(new Label("posted", HistoryPage.getElapsedTimeSincePost(pasteItem)));      // TODO refactor this into it's own class
+            }
+        });
 
         if(pasteModel.getObject().getParent()!=null) {
             PasteItem pasteItem = pasteModel.getObject().getParent();

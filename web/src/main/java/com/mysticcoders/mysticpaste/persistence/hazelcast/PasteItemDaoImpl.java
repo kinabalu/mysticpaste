@@ -7,7 +7,6 @@
 package com.mysticcoders.mysticpaste.persistence.hazelcast;
 
 import com.hazelcast.core.*;
-import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.MysticPasteHazelcastApplication;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
@@ -17,7 +16,6 @@ import org.apache.wicket.Application;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Arrays;
 
 public class PasteItemDaoImpl implements PasteItemDao {
 
@@ -108,7 +106,7 @@ public class PasteItemDaoImpl implements PasteItemDao {
         item.markAbuse();
     }
 
-    public boolean hasChildren(long pasteId) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public List<PasteItem> getChildren(long pasteId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

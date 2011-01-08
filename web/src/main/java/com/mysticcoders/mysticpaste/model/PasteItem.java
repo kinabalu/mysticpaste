@@ -43,8 +43,8 @@ import java.util.List;
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.userToken = :token"),
         @NamedQuery(name = "item.count",
                 query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
-        @NamedQuery(name = "item.hasChildren",
-                query = "from PasteItem item inner join fetch item.children where item.id = :itemId ")
+        @NamedQuery(name = "item.children",
+                query = "from PasteItem item where item.parent.id = :itemId ")
 })
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
@@ -95,13 +95,9 @@ public class PasteItem implements Serializable {
     @Column(name = "PRIVATE_TOKEN", unique = true, updatable = false)
     protected String privateToken;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "PARENT_ITEM_ID", nullable = true)
     protected PasteItem parent;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    protected List<PasteItem> children;
-
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMMENT_ID", nullable = true)
@@ -225,14 +221,6 @@ public class PasteItem implements Serializable {
         this.parent = parent;
     }
 
-    public List<PasteItem> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<PasteItem> children) {
-        this.children = children;
-    }
-
     public List<PasteComment> getComments() {
         return comments;
     }
@@ -241,13 +229,6 @@ public class PasteItem implements Serializable {
         if(comments == null) comments = new ArrayList<PasteComment>();
 
         comments.add(comment);
-    }
-
-    public void addChild(PasteItem child) {
-        if (null == children) {
-            children = new ArrayList<PasteItem>();
-        }
-        children.add(child);
     }
 
     public int getContentLineCount() {

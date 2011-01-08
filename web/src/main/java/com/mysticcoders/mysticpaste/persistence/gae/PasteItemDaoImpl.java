@@ -159,8 +159,8 @@ public class PasteItemDaoImpl implements PasteItemDao {
 */
     }
 
-    public boolean hasChildren(long pasteId) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public List<PasteItem> getChildren(long pasteId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

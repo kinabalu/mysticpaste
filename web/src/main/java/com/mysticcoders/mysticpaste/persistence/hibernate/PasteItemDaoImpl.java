@@ -98,10 +98,10 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
         save(item);
     }
 
-    public boolean hasChildren(long pasteId) {
-        PasteItem item = (PasteItem)getSession().getNamedQuery("item.hasChildren")
-        .setParameter("itemId", pasteId).uniqueResult();
-
-        return item!=null && item.getChildren()!=null && item.getChildren().size() > 0;
+    public List<PasteItem> getChildren(long pasteId) {
+        return (List<PasteItem>)getSession()
+        .getNamedQuery("item.children")
+                .setParameter("itemId", pasteId)
+                .list();
     }
 }
