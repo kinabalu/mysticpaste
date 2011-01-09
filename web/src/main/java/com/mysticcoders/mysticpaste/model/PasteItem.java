@@ -1,8 +1,12 @@
 package com.mysticcoders.mysticpaste.model;
 
+import org.incava.util.diff.Diff;
+import org.incava.util.diff.Difference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -209,5 +213,66 @@ public class PasteItem implements Serializable {
 
         String[] lines = getContent().split("\n");
         return lines != null ? lines.length : 0;
+    }
+
+    /**
+     * Return a simplistic diff view of 2 pastes
+     *
+     * @param originalPaste
+     * @param revisedPaste
+     * @return
+     */
+    public static Object[] diffPastes(String originalPaste, String revisedPaste) {
+        int new_line_count = 0;
+        int old_line_count = 0;
+
+        List<String> original = Arrays.asList(originalPaste.split("\n"));
+        List<String> revised = Arrays.asList(revisedPaste.split("\n"));
+
+        List<Integer> changedLines = new ArrayList<Integer>();
+
+        int lineIndex = 0;
+
+        StringBuilder diffText = new StringBuilder();
+        List<Difference> diffs  = new Diff<String>(original, revised).diff();
+        for (Difference diff : diffs) {
+            int        del_start = diff.getDeletedStart();
+            int        del_end   = diff.getDeletedEnd();
+            int        add_start = diff.getAddedStart();
+            int        add_end   = diff.getAddedEnd();
+
+            if (del_end != Difference.NONE) {
+                for (; old_line_count < del_start; ++old_line_count, ++new_line_count) {
+                    diffText.append(original.get(old_line_count)).append("\n");
+                    lineIndex++;
+                }
+                for (; old_line_count <= del_end; ++old_line_count) {
+                    diffText.append("- ").append(original.get(old_line_count)).append("\n");
+                    changedLines.add(lineIndex);
+                    lineIndex++;
+                }
+            }
+
+            if (add_end != Difference.NONE) {
+                for (; new_line_count < add_start; ++new_line_count, ++old_line_count) {
+                    diffText.append(revised.get(new_line_count)).append("\n");
+                    lineIndex++;
+                }
+
+                for (; new_line_count <= add_end; ++new_line_count) {
+                    diffText.append("+ ").append(revised.get(new_line_count)).append("\n");
+                    changedLines.add(lineIndex);
+                    lineIndex++;
+                }
+
+            }
+        }
+
+        for (; new_line_count < revised.size(); ++new_line_count, ++old_line_count) {
+            diffText.append(revised.get(new_line_count));
+        }
+
+        return new Object[]{changedLines, diffText.toString()};        // TODO this is UGGGGGLY
+
     }
 }

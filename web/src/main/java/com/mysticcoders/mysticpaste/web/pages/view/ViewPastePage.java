@@ -28,11 +28,16 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.resource.SharedResourceRequestTarget;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.incava.util.diff.Diff;
+import org.incava.util.diff.Difference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +104,7 @@ public abstract class ViewPastePage extends BasePage {
         }
 
         // User must have copied just the funny private string rather than the whole bit
-        if(params.getAsInteger("0") == null && isPublic()) {
+        if (params.getAsInteger("0") == null && isPublic()) {
             PageParameters pp = new PageParameters();
             pp.put("0", params.getString("0"));
             throw new RestartResponseException(ViewPrivatePage.class, pp);
@@ -116,12 +121,36 @@ public abstract class ViewPastePage extends BasePage {
         this.setDefaultModel(new CompoundPropertyModel(pasteModel));
         add(new Label("type"));
 
-        WebMarkupContainer hasReplies = new WebMarkupContainer("hasReplies") {
+        WebMarkupContainer diffView = new WebMarkupContainer("diffView") {
             @Override
             public boolean isVisible() {
-                return pasteModel.getObject().getParent()!=null;
+                return pasteModel.getObject().getParent() != null;
             }
         };
+
+        if (pasteModel.getObject().getParent() != null) {
+            PasteItem parentPaste = pasteModel.getObject().getParent();
+            PageParameters pp = new PageParameters();
+            pp.put("0", parentPaste.getId());
+            diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
+
+
+            Object[] diffOutput = PasteItem.diffPastes(parentPaste.getContent(), pasteModel.getObject().getContent());
+
+            List<Integer> changedLines= (List<Integer>)diffOutput[0];       // TODO horrible horrible hackish thing, where do you get these things
+            String diffText = (String)diffOutput[1];
+
+            diffView.add(new HighlighterPanel("highlightedContent",
+                new Model<String>(diffText),
+                parentPaste.getType(),
+                false,
+                highlightLines,
+                changedLines));
+        }
+        add(diffView);
+
+
+
 
 /*
         final AbstractReadOnlyModel<List<PasteItem>> childPastes = new AbstractReadOnlyModel<List<PasteItem>>() {
@@ -157,21 +186,6 @@ public abstract class ViewPastePage extends BasePage {
                 item.add(viewPaste);
 
                 item.add(new Label("posted", HistoryPage.getElapsedTimeSincePost(pasteItem)));      // TODO refactor this into it's own class
-            }
-        });
-
-        if(pasteModel.getObject().getParent()!=null) {
-            PasteItem pasteItem = pasteModel.getObject().getParent();
-            PageParameters pp = new PageParameters();
-            pp.put("0", pasteItem.getId());
-            hasReplies.add(new BookmarkablePageLink<Void>("originalPasteLink", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
-        }
-        add(hasReplies);
-
-        add(new WebMarkupContainer("hasNoReplies") {
-            @Override
-            public boolean isVisible() {
-                return pasteModel.getObject().getParent()==null;
             }
         });
 
@@ -238,6 +252,7 @@ public abstract class ViewPastePage extends BasePage {
         pasteItem.setParent(pI);
 
         try {
+            pasteService.detachItem(pI);       // TODO this is a horrible hack, we should instead clone pasteItem in the Model
             pasteService.createItem("web", pasteItem);
             PageParameters params = new PageParameters();
             if (pasteItem.isPrivate()) {

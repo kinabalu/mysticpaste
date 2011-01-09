@@ -34,4 +34,6 @@ public interface PasteService {
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> hasChildren(PasteItem pasteItem);
+
+    void detachItem(PasteItem pasteItem);
 }

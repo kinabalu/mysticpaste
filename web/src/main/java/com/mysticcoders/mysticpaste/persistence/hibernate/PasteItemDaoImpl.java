@@ -84,4 +84,8 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
 //        return new ArrayList<PasteItem>();
     }
 
+    public void detachItem(PasteItem pasteItem) {
+        getSession().evict(pasteItem);
+    }
+
 }

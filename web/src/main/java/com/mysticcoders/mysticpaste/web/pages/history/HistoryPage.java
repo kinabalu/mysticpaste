@@ -5,7 +5,6 @@ import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
-import difflib.DiffUtils;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;

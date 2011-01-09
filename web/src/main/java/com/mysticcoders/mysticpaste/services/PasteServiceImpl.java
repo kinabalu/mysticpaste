@@ -209,6 +209,10 @@ public class PasteServiceImpl implements PasteService {
         return itemDao.getChildren(pasteItem);
     }
 
+    public void detachItem(PasteItem pasteItem) {
+        itemDao.detachItem(pasteItem);
+    }
+
     private void validateClient(String clientToken) throws InvalidClientException {
         // TODO add client validation
     }

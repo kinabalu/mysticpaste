@@ -87,8 +87,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.googlecode.java-diff-utils</groupId>
-            <artifactId>diffutils</artifactId>
+            <groupId>org.incava</groupId>
+            <artifactId>java-diff</artifactId>
         </dependency>
 
         <!--  WICKET DEPENDENCIES -->
@@ -136,11 +136,7 @@
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
         </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-        </dependency>
-        
+
         <!-- SPRING DEPENDENCIES -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -184,75 +180,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Hazelcast Dependencies -->
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-        </dependency>
-
-        <!-- SimpleDS for GAE -->
-<!--        <dependency>
-            <groupId>org.extrema-sistemas</groupId>
-            <artifactId>simpleds</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo2-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_3.0_spec</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jpa</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-enhancer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.appengine.orm</groupId>
-            <artifactId>datanucleus-appengine</artifactId>
-        </dependency>-->
-
-        <!-- TWITTER4J DEPENDENCIES -->
-        <dependency>
-           <groupId>net.homeip.yusuke</groupId>
-           <artifactId>twitter4j</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>nlog4j</artifactId>
-                </exclusion>
-            </exclusions>
-       </dependency>
 
         <dependency>
             <groupId>net.java.dev.jets3t</groupId>

@@ -1,6 +1,5 @@
 package com.mysticcoders.mysticpaste.web.pages;
 
-import com.mysticcoders.mysticpaste.web.components.blueprint.BluePrintCSS;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
 import org.apache.wicket.behavior.HeaderContributor;

@@ -35,4 +35,6 @@ public interface PasteItemDao {
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> getChildren(PasteItem pasteItem);
+
+    void detachItem(PasteItem pasteItem);
 }

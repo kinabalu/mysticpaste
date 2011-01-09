@@ -4,18 +4,19 @@ import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ResourceReference;
+import org.apache.wicket.Response;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.*;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.CssUtils;
 import org.apache.wicket.util.string.Strings;
+import org.incava.util.diff.Difference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,24 +84,28 @@ public class HighlighterPanel extends Panel {
         return null;
     }
 
-    public HighlighterPanel(String id, IModel model) {
+    public HighlighterPanel(String id, IModel<String> model) {
         this(id, model, null);
     }
 
-    public HighlighterPanel(String id, IModel model, String language) {
+    public HighlighterPanel(String id, IModel<String> model, String language) {
         this(id, model, language, false, null);
     }
 
-    public HighlighterPanel(String id, IModel model, String language, boolean excludeExternalResources) {
+    public HighlighterPanel(String id, IModel<String> model, String language, boolean excludeExternalResources) {
         this(id, model, language, excludeExternalResources, null);
     }
 
-    public HighlighterPanel(String id, IModel model, String language, final boolean excludeExternalResources, String highlightLines) {
+    public HighlighterPanel(String id, IModel<String> model, String language, final boolean excludeExternalResources, String highlightLines) {
+        this(id, model, language, excludeExternalResources, highlightLines, null);
+    }
+
+    public HighlighterPanel(String id, final IModel<String> model, String language, final boolean excludeExternalResources, String highlightLines, final List<Integer> changedLines) {
         super(id);
 
-        if(!excludeExternalResources) {
+        if (!excludeExternalResources) {
             add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
-    //        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
+            //        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
             add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeDefault.css"));
             add(JavascriptPackageResource.getHeaderContribution(HighlighterPanel.class, "jquery-1.4.4.min.js"));
 
@@ -123,12 +128,36 @@ public class HighlighterPanel extends Panel {
         add(codePanel);
 
 
+        if (changedLines != null && changedLines.size() > 0) {
+            add(new HeaderContributor(new IHeaderContributor() {
+
+                public void renderHead(IHeaderResponse response) {
+                    List<String> original = Arrays.asList(model.getObject().split("\n"));
+
+                    Response r = response.getResponse();
+
+                    r.write(CssUtils.INLINE_OPEN_TAG);
+
+                    for (Integer lineIndex : changedLines) {
+                        if(original.get(lineIndex).startsWith("+")) {
+                            r.write(".diff_text .line.number" + (lineIndex + 1) + " { background-color: #DCFFBE !important; }\n");
+                        } else if(original.get(lineIndex).startsWith("-")) {
+                            r.write(".diff_text .line.number" + (lineIndex + 1) + " { background-color: #FFDCD2 !important; }\n");
+                        }
+                    }
+
+                    r.write(CssUtils.INLINE_CLOSE_TAG);
+                }
+            }));
+        }
+
         StringBuffer brushConfig = new StringBuffer("brush: ");
         brushConfig.append(language);
         brushConfig.append("; toolbar: false");
+        if (changedLines != null)
+            brushConfig.append("; class-name: 'diff_text'");
         if (highlightLines != null)
             brushConfig.append("; highlight: [").append(highlightLines).append("]");
-
         codePanel.add(new AttributeModifier("class", true, new Model<String>(brushConfig.toString())));
 
     }
@@ -150,13 +179,12 @@ public class HighlighterPanel extends Panel {
                 response.getResponse().write("<link rel=\"" + (rel != null ? rel : "stylesheet") + " type=\"text/css\" href=\"");
                 response.getResponse().write(url);
                 response.getResponse().write("\"");
-                if (media != null)
-                {
+                if (media != null) {
                     response.getResponse().write(" media=\"");
                     response.getResponse().write(media);
                     response.getResponse().write("\"");
                 }
-                if(title!=null) {
+                if (title != null) {
                     response.getResponse().write(" title=\"");
                     response.getResponse().write(title);
                     response.getResponse().write("\"");

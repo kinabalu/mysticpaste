@@ -1,6 +1,32 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
+    <wicket:container wicket:id="diffView">
+    <div class="block">
+
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Diff With Original</h2>
+
+            <ul class="tabs">
+                <li><a wicket:id="originalPasteLink">Original Paste</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
+
+            <div wicket:id="highlightedContent">[highlightedContent]</div>
+
+        </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+    </wicket:container>
+
+
     <div class="block">
         <div class="block_head">
             <div class="bheadl"></div>
@@ -12,8 +38,7 @@
                 <li><a wicket:id="rawLink">Raw</a></li>
                 <li><a wicket:id="downloadLink">Download</a></li>
                 <li><a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></li>
-                <li wicket:id="hasReplies"><a wicket:id="originalPasteLink">Original Paste</a></li>
-                <li wicket:id="hasNoReplies"><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
+                <li><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
             </ul>
         </div>
         <div class="block_content">
@@ -45,35 +70,6 @@
     <p>&nbsp;</p>
     </wicket:container>
 
-    <wicket:remove>
-    <div class="block">
-
-        <form>
-        <div class="block_head">
-            <div class="bheadl"></div>
-            <div class="bheadr"></div>
-
-            <h2>Highlight Sections</h2>
-        </div>
-        <div class="block_content">
-
-            <p>
-                Highlight specific sections of paste (e.g. 1-3 or 1,2,3 or 1,2-3)
-                <input type="text" />
-            </p>
-
-            <p class="right" align="right">
-                <input type="submit" class="submit medium" value="Highlight" />
-            </p>
-
-        </div>
-        </form>
-
-        <div class="bendl"></div>
-        <div class="bendr"></div>
-    </div>
-    </wicket:remove>
-
     <div class="block">
 
         <form wicket:id="replyForm">
@@ -103,6 +99,7 @@
     </div>
 
     <wicket:child/>
+
 
 </wicket:extend>
 </html>
