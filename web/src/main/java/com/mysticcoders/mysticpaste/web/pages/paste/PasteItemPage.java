@@ -154,6 +154,7 @@ public class PasteItemPage extends BasePage {
 
             add(new FeedbackPanel("feedback"));
 
+            languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMCBain
 /*
             setMultiPart(true);
             setMaxSize(Bytes.kilobytes(1024));

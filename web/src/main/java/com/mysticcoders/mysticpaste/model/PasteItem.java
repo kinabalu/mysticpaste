@@ -88,7 +88,6 @@ public class PasteItem implements Serializable {
     @Transient
     protected int viewCount;
 
-
     public long getId() {
         return id;
     }
