@@ -32,24 +32,6 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
                 .uniqueResult();
     }
 
-/*
-    @SuppressWarnings("unchecked")
-    public List<PasteItem> findByLanguage(LanguageEnum languageType, int count, int startIndex) {
-        return getSession()
-                .getNamedQuery("item.findByLanguage")
-                .setParameter("type", languageType)
-                .setMaxResults(count).setFirstResult(startIndex).list();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<PasteItem> findByLanguageThreaded(LanguageEnum languageType, int count, int startIndex) {
-        return getSession()
-                .getNamedQuery("item.findByLanguageThreaded")
-                .setParameter("type", languageType)
-                .setMaxResults(count).setFirstResult(startIndex).list();
-    }
-*/
-
     @SuppressWarnings("unchecked")
     public List<PasteItem> find(int count, int startIndex) {
         return getSession().getNamedQuery("item.find")
@@ -94,14 +76,12 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
     }
 
     public List<PasteItem> getChildren(PasteItem pasteItem) {
-/*
         System.out.println("getChildren(PasteItem pasteItem)");
         return (List<PasteItem>)getSession()
         .getNamedQuery("item.children")
                 .setParameter("pasteItem", pasteItem)
                 .list();
-*/
-        return new ArrayList<PasteItem>();
+//        return new ArrayList<PasteItem>();
     }
 
 }
