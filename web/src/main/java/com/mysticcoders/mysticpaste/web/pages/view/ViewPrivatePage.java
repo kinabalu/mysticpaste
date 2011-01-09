@@ -23,8 +23,14 @@
             super(params);
         }
 
+        @Override
         protected IModel<PasteItem> getPasteModel(String id) {
             return new PasteModel(id);
+        }
+
+        @Override
+        protected boolean isPublic() {
+            return false;
         }
 
         private class PasteModel extends LoadableDetachableModel<PasteItem> {
@@ -35,6 +41,7 @@
                 this.id = id;
             }
 
+            @Override
             protected PasteItem load() {
                 try {
                     return pasteService.findPrivateItem("web", id);

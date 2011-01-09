@@ -1,21 +1,6 @@
 package com.mysticcoders.mysticpaste.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,10 +85,8 @@ public class PasteItem implements Serializable {
     @JoinColumn(name = "PARENT_ITEM_ID", nullable = true)
     protected PasteItem parent;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "COMMENT_ID", nullable = true)
-    protected List<PasteComment> comments;
-
+    @Transient
+    protected int viewCount;
 
 
     public long getId() {
@@ -220,16 +203,6 @@ public class PasteItem implements Serializable {
 
     public void setParent(PasteItem parent) {
         this.parent = parent;
-    }
-
-    public List<PasteComment> getComments() {
-        return comments;
-    }
-
-    public void addComment(PasteComment comment) {
-        if(comments == null) comments = new ArrayList<PasteComment>();
-
-        comments.add(comment);
     }
 
     public int getContentLineCount() {

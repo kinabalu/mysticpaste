@@ -30,8 +30,14 @@ public class ViewPublicPage extends ViewPastePage {
         super(params);
     }
 
+    @Override
     protected IModel<PasteItem> getPasteModel(String id) {
         return new PasteModel(id);
+    }
+
+    @Override
+    protected boolean isPublic() {
+        return true;
     }
 
     private class PasteModel extends LoadableDetachableModel<PasteItem> {
@@ -42,6 +48,7 @@ public class ViewPublicPage extends ViewPastePage {
             this.id = id;
         }
 
+        @Override
         protected PasteItem load() {
             try {
                 return pasteService.getItem("web", Long.parseLong(id));

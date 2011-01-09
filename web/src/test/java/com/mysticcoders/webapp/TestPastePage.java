@@ -2,7 +2,6 @@ package com.mysticcoders.webapp;
 
 import com.mysticcoders.integrations.AbstractIntegrationTest;
 import com.mysticcoders.mysticpaste.MysticPasteApplication;
-import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
@@ -30,9 +29,6 @@ public class TestPastePage extends AbstractIntegrationTest {
     @SpringBeanByType
     private PasteItemDao dao;
 
-    @SpringBeanByType
-    private PasteCommentDao commentDao;
-
     protected WicketTester tester;
 
     @Before
@@ -41,7 +37,6 @@ public class TestPastePage extends AbstractIntegrationTest {
                 AnnotApplicationContextMock();
         appctx.putBean("pasteDao", dao);
         appctx.putBean("pasteService", svc);
-        appctx.putBean("pasteCommentDao", commentDao);
 
         tester = new WicketTester(new MysticPasteApplication() {
             @Override

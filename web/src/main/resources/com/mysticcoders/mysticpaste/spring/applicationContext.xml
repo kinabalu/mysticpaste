@@ -30,10 +30,6 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="pasteCommentDao" class="com.mysticcoders.mysticpaste.persistence.hibernate.PasteCommentDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <!-- Wicket Application -->
     <bean id="wicketApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication">
         <!--

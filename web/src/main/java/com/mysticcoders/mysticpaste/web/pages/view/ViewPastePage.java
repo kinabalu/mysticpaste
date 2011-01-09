@@ -7,7 +7,6 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
@@ -43,9 +42,6 @@ public abstract class ViewPastePage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
-    @SpringBean
-    PasteCommentDao pasteCommentDao;
-
     String justNumberPattern = "(\\d)+";
     String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
@@ -53,6 +49,8 @@ public abstract class ViewPastePage extends BasePage {
         PageParameters params = RequestCycle.get().getPageParameters();
         return "#" + params.getString("0") + " - Mystic Paste";
     }
+
+    protected abstract boolean isPublic();
 
     public ViewPastePage(final PageParameters params) {
         if (params.getString("0") == null) {
@@ -100,11 +98,18 @@ public abstract class ViewPastePage extends BasePage {
             highlightLines = sb.substring(0, sb.length() - 1);
         }
 
+        // User must have copied just the funny private string rather than the whole bit
+        if(params.getAsInteger("0") == null && isPublic()) {
+            PageParameters pp = new PageParameters();
+            pp.put("0", params.getString("0"));
+            throw new RestartResponseException(ViewPrivatePage.class, pp);
+        }
+
         final IModel<PasteItem> pasteModel = getPasteModel(params.getString("0"));
-        if (pasteModel.getObject() == null) {
+        if (pasteModel.getObject() == null || (pasteModel.getObject().isPrivate() && params.getAsInteger("0") != null)) {
             throw new RestartResponseException(PasteNotFound.class);
         }
-        if ((pasteModel.getObject()).isAbuseFlag()) {
+        if (pasteModel.getObject().isAbuseFlag()) {
             throw new RestartResponseException(PasteSpam.class);
         }
 
