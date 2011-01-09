@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.resources.JavaScriptReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.springframework.web.util.JavaScriptUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

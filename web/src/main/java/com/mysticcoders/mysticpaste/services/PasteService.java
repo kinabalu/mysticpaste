@@ -1,8 +1,6 @@
 package com.mysticcoders.mysticpaste.services;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.model.PasteStats;
-import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 
 import java.util.List;
 
@@ -11,10 +9,6 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 public interface PasteService {
-
-    public Long createSimpleObject(String content);
-
-    public SimpleObject retrieveSimpleObject(Long id);
 
     List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded) throws InvalidClientException;
 
@@ -34,8 +28,6 @@ public interface PasteService {
             throws InvalidClientException, ParentNotFoundException;
 
     List<PasteItem> getItemsForUser(String clientToken, String userToken) throws InvalidClientException;
-
-    PasteStats getStats(String clientToken) throws InvalidClientException;
 
     long getLatestItemsCount(String clientToken) throws InvalidClientException;
 
