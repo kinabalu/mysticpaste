@@ -8,9 +8,6 @@ import com.mysticcoders.mysticpaste.utils.TokenGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -156,6 +153,7 @@ public class PasteServiceImpl implements PasteService {
 
         long id = itemDao.create(item);
 
+/*
         if (!item.isPrivate() && twitter && twitterEnabled() && (twitterUsername != null && twitterPassword != null)) {
             Twitter twitterClient = new Twitter(twitterUsername, twitterPassword);
             twitterClient.setSource("mysticpaste.com - " + clientToken);
@@ -172,9 +170,12 @@ public class PasteServiceImpl implements PasteService {
             try {
                 Status status = twitterClient.updateStatus(sb.toString());
                 System.out.println("Successfully updated the status to [" + status.getText() + "].");
-            } catch (TwitterException e) { /* it's not the end of the world if twitter doesn't update */ }
+            } catch (TwitterException e) { */
+/* it's not the end of the world if twitter doesn't update *//*
+ }
 
         }
+*/
 
         return id;
     }
@@ -221,8 +222,8 @@ public class PasteServiceImpl implements PasteService {
         itemDao.markAbuse(pasteItem);
     }
 
-    public List<PasteItem> hasChildren(long pasteId) {
-        return itemDao.getChildren(pasteId);
+    public List<PasteItem> hasChildren(PasteItem pasteItem) {
+        return itemDao.getChildren(pasteItem);
     }
 
     private void validateClient(String clientToken) throws InvalidClientException {

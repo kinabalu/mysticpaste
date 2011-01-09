@@ -41,5 +41,5 @@ public interface PasteItemDao {
 
     void markAbuse(PasteItem pasteItem);
 
-    List<PasteItem> getChildren(long pasteId);
+    List<PasteItem> getChildren(PasteItem pasteItem);
 }

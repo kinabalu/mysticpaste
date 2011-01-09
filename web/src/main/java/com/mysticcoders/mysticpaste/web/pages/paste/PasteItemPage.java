@@ -48,6 +48,8 @@ public class PasteItemPage extends BasePage {
         super(PasteItemPage.class);
 
         add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
+
+        System.out.println("PasteItemPage");
     }
 
     protected String getTitle() {

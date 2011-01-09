@@ -109,11 +109,21 @@
             <artifactId>wicket-spring</artifactId>
         </dependency>
 
-        <!--  HIBERNATE DEPENDNECIES -->
+        <!--  HIBERNATE DEPENDENCIES -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>javassist</groupId>
+          <artifactId>javassist</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
@@ -258,13 +268,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
-<!--
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
         </dependency>
--->
 
         <!--  JUNIT DEPENDENCY FOR TESTING -->
         <dependency>
@@ -317,12 +325,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- RESTEASY DEPENDENCIES -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -366,10 +368,6 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

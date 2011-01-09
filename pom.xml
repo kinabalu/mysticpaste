@@ -45,7 +45,7 @@
     <repositories>
         <repository>
             <id>jboss</id>
-            <url>http://repository.jboss.org/maven2</url>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
             <id>mystic</id>
@@ -87,12 +87,23 @@
 		            <artifactId>wicket-spring</artifactId>
 		            <version>${wicket.version}</version>
 		        </dependency>
-		        <!--  HIBERNATE DEPENDNECIES -->
+		        <!--  HIBERNATE DEPENDENCIES -->
 		        <dependency>
 		            <groupId>org.hibernate</groupId>
 		            <artifactId>hibernate-annotations</artifactId>
 		            <version>${hibernate.version}</version>
 		        </dependency>
+                <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                    <version>${hibernate.version}</version>
+                </dependency>
+                  <dependency>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                    <version>3.9.0.GA</version>
+                    <scope>runtime</scope>
+                  </dependency>
 		        <dependency>
 		            <groupId>c3p0</groupId>
 		            <artifactId>c3p0</artifactId>
@@ -262,13 +273,12 @@
 		            <artifactId>slf4j-log4j12</artifactId>
 		            <version>${slf4j.version}</version>
 		        </dependency>
-		<!--
+
 		        <dependency>
 		            <groupId>log4j</groupId>
 		            <artifactId>log4j</artifactId>
 		            <version>${log4j.version}</version>
 		        </dependency>
-		-->
 
 		        <!--  JUNIT DEPENDENCY FOR TESTING -->
 		        <dependency>
@@ -331,20 +341,22 @@
 		        </dependency>
 
 		        <!-- RESTEASY DEPENDENCIES -->
+<!-- unused
 		        <dependency>
 		            <groupId>org.jboss.resteasy</groupId>
 		            <artifactId>resteasy-jaxrs</artifactId>
 		            <version>${resteasy.version}</version>
 		        </dependency>
+-->
 
 		    </dependencies>
     </dependencyManagement>
 
     <properties>
-        <wicket.version>1.4.0</wicket.version>
+        <wicket.version>1.4.15</wicket.version>
         <jetty.version>6.1.4</jetty.version>
         <spring.version>3.0.0.RELEASE</spring.version>
-        <hibernate.version>3.4.0.GA</hibernate.version>
+        <hibernate.version>3.5.0-Final</hibernate.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <junit.version>4.5</junit.version>
         <postgres.version>8.3-603.jdbc4</postgres.version>
@@ -353,7 +365,7 @@
         <commons-fileupload.version>1.2.1</commons-fileupload.version>
         <jta.version>1.0.1B</jta.version>
         <dbcp.version>1.2.2</dbcp.version>
-        <slf4j.version>1.4.2</slf4j.version>
+        <slf4j.version>1.6.1</slf4j.version>
         <log4j.version>1.2.14</log4j.version>
         <easymock.version>2.4</easymock.version>
         <resteasy.version>1.0.2.GA</resteasy.version>

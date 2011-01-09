@@ -159,7 +159,7 @@ public class PasteItemDaoImpl implements PasteItemDao {
 */
     }
 
-    public List<PasteItem> getChildren(long pasteId) {
+    public List<PasteItem> getChildren(PasteItem pasteItem) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

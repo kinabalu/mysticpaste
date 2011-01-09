@@ -118,22 +118,26 @@ public abstract class ViewPastePage extends BasePage {
             }
         };
 
+/*
         final AbstractReadOnlyModel<List<PasteItem>> childPastes = new AbstractReadOnlyModel<List<PasteItem>>() {
             public List<PasteItem> getObject() {
-//                return null;
                 return pasteService.hasChildren(pasteModel.getObject().getId());
             }
         };
+*/
+
+        final List<PasteItem> pasteChildren = pasteService.hasChildren(pasteModel.getObject());
+
+//        final List<PasteItem> pasteChildren = new ArrayList<PasteItem>();
         WebMarkupContainer hasChildPastes = new WebMarkupContainer("hasChildPastes") {
             @Override
             public boolean isVisible() {
-                List<PasteItem> children = childPastes.getObject();
-                return children != null && children.size() > 0;
+                return pasteChildren != null && pasteChildren.size() > 0;
             }
         };
         add(hasChildPastes);
 
-        hasChildPastes.add(new ListView<PasteItem>("childPastes", childPastes) {
+        hasChildPastes.add(new ListView<PasteItem>("childPastes", pasteChildren) {
 
             @Override
             protected void populateItem(ListItem<PasteItem> item) {

@@ -28,7 +28,8 @@ import java.util.List;
 @Entity
 @Table(name = "PASTE_ITEMS")
 @NamedQueries({@NamedQuery(name = "item.getById",
-                query = "from PasteItem item where item.id = :id"),
+//                query = "from PasteItem item where item.id = :id"),
+                query = "from PasteItem item left join fetch item.parent where item.id = :id"),
         @NamedQuery(name = "item.find",
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null order by item.timestamp desc"),
         @NamedQuery(name = "item.findThreaded",
@@ -44,7 +45,7 @@ import java.util.List;
         @NamedQuery(name = "item.count",
                 query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
         @NamedQuery(name = "item.children",
-                query = "from PasteItem item where item.parent.id = :itemId ")
+                query = "from PasteItem item where item.parent = :pasteItem")
 })
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;

@@ -11,5 +11,7 @@ public class HelpPage extends BasePage {
 
     public HelpPage() {
         super(HelpPage.class);
+
+        System.out.println("HelpPage");
     }
 }

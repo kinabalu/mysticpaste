@@ -4,3 +4,5 @@ target
 db
 sql
 test-output
+.gradle
+db:*

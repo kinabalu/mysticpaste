@@ -41,5 +41,5 @@ public interface PasteService {
 
     void markAbuse(PasteItem pasteItem);
 
-    List<PasteItem> hasChildren(long pasteId);
+    List<PasteItem> hasChildren(PasteItem pasteItem);
 }

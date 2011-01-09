@@ -4,6 +4,7 @@ import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,10 +99,15 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
         save(item);
     }
 
-    public List<PasteItem> getChildren(long pasteId) {
+    public List<PasteItem> getChildren(PasteItem pasteItem) {
+/*
+        System.out.println("getChildren(PasteItem pasteItem)");
         return (List<PasteItem>)getSession()
         .getNamedQuery("item.children")
-                .setParameter("itemId", pasteId)
+                .setParameter("pasteItem", pasteItem)
                 .list();
+*/
+        return new ArrayList<PasteItem>();
     }
+
 }

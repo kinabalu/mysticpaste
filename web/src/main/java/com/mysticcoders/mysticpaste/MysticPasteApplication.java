@@ -1,5 +1,6 @@
 package com.mysticcoders.mysticpaste;
 
+import com.mysticcoders.mysticpaste.web.pages.HelpPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
@@ -59,6 +60,7 @@ public class MysticPasteApplication extends WebApplication {
         mountBookmarkablePage("/new", PasteItemPage.class);
         mountBookmarkablePage("/history", HistoryPage.class);
         mountBookmarkablePage("/plugin", PluginPage.class);
+        mountBookmarkablePage("/help", HelpPage.class);
         mount(new IndexedParamUrlCodingStrategy("/view", ViewPublicPage.class));
         mount(new IndexedParamUrlCodingStrategy("/private", ViewPrivatePage.class));
     }
