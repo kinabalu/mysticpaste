@@ -82,7 +82,6 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
             <list>
                 <value>com.mysticcoders.mysticpaste.model.PasteItem</value>
                 <value>com.mysticcoders.mysticpaste.model.Client</value>                
-                <value>com.mysticcoders.mysticpaste.model.PasteComment</value>                
             </list>
         </property>
 
