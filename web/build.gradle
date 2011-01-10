@@ -1,0 +1,202 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: 'code-quality'
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'jetty'
+apply plugin: 'project-report'
+apply plugin: 'war'
+
+sourceCompatibility = 1.5
+version = '1.0-SNAPSHOT'
+description: 'A pastebin application using Apache Wicket'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'MysticPaste', 'Implementation-Version': version
+    }
+}
+
+sourceSets{
+    main {
+        resources {
+            //make sure that wicket .html & .properties are copied as part of the build
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+repositories {
+  mavenCentral()
+  mavenRepo name: 'jboss-releases', urls: "https://repository.jboss.org/nexus/content/repositories/releases/"
+
+}
+
+slf4j_version       = '1.6.1'
+wicket_version      = '1.4.15'
+hibernate_version   = '3.5.0-Final'
+spring_version      = '3.0.0.RELEASE'
+jetty_version       = '6.1.4'
+junit_version       = '4.8.1'
+servlet_api_version = '2.5'
+c3p0_version        = '0.9.1.2'
+postgres_version    = '8.3-603.jdbc4'
+common_lang_version = '2.4'
+javamail_version    = '1.4.1'
+commons_fileupload_version  = '1.2.1'
+jta_version         = '1.0.1B'
+dbcp_version        = '1.2.2'
+log4j_version       = '1.2.14'
+easymock_version    = '2.4'
+resteasy_version    = '1.0.2.GA'
+hazelcast_version   = '1.7.1'
+hsqldb_version	 = '1.8.0.7'
+
+dependencies {
+
+    compile group: 'org.incava'			, name: 'java-diff'          , version: '1.1'
+
+    // Wicket Dependencies
+    compile group: 'org.apache.wicket'    , name: 'wicket'             , version: wicket_version
+    compile group: 'org.apache.wicket'    , name: 'wicket-extensions'  , version: wicket_version
+    compile group: 'org.apache.wicket'    , name: 'wicket-ioc'         , version: wicket_version
+    compile group: 'org.apache.wicket'    , name: 'wicket-spring'      , version: wicket_version
+
+
+/*
+		        <dependency>
+		            <groupId>org.hibernate</groupId>
+		            <artifactId>hibernate-annotations</artifactId>
+		            <version>${hibernate.version}</version>
+		        </dependency>
+                <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                    <version>${hibernate.version}</version>
+                </dependency>
+                  <dependency>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                    <version>3.9.0.GA</version>
+                    <scope>runtime</scope>
+                  </dependency>
+*/
+
+
+    compile group: 'org.hibernate'    , name: 'hibernate-annotations'  , version: hibernate_version
+    compile group: 'org.hibernate'    , name: 'hibernate-core'         , version: hibernate_version
+    compile group: 'javassist'        , name: 'javassist'              , version: '3.9.0.GA'
+    compile group: 'c3p0'             , name: 'c3p0'                   , version: c3p0_version
+    compile group: 'postgresql'       , name: 'postgresql'             , version: postgres_version
+    compile group: 'javax.transaction', name: 'jta'                    , version: jta_version
+    compile group: 'commons-dbcp'     , name: 'commons-dbcp'           , version: dbcp_version
+    compile group: 'hsqldb'			 , name: 'hsqldb'	               , version: hsqldb_version
+
+    compile group: 'org.springframework', name: 'spring-core'          , version: spring_version
+    compile group: 'org.springframework', name: 'spring-test'          , version: spring_version
+    compile group: 'org.springframework', name: 'spring-beans'         , version: spring_version
+    compile group: 'org.springframework', name: 'spring-orm'           , version: spring_version
+    compile group: 'org.springframework', name: 'spring-web'           , version: spring_version
+    compile group: 'org.springframework', name: 'spring-tx'            , version: spring_version
+
+
+    compile group: 'org.slf4j'            , name: 'slf4j-log4j12'      , version: slf4j_version
+
+    providedCompile group: 'javax.servlet' , name: 'servlet-api'   , version: servlet_api_version
+
+    testCompile group: 'junit', name: 'junit', version: junit_version
+
+/*
+
+		        <!--  JUNIT DEPENDENCY FOR TESTING -->
+		        <dependency>
+		            <groupId>junit</groupId>
+		            <artifactId>junit</artifactId>
+		            <version>${junit.version}</version>
+		            <scope>test</scope>
+		        </dependency>
+
+		        <!-- EasyMock for test cases -->
+
+		        <dependency>
+		            <groupId>org.easymock</groupId>
+		            <artifactId>easymock</artifactId>
+		            <version>2.4</version>
+		        </dependency>
+
+		        <dependency>
+		            <groupId>org.easymock</groupId>
+		            <artifactId>easymockclassextension</artifactId>
+		            <version>2.4</version>
+		        </dependency>
+
+		        <dependency>
+		            <groupId>org.dbunit</groupId>
+		            <artifactId>dbunit</artifactId>
+		            <version>2.2</version>
+		            <scope>test</scope>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.unitils</groupId>
+		            <artifactId>unitils</artifactId>
+		            <version>1.0</version>
+		        </dependency>
+
+		        <dependency>
+		            <groupId>hsqldb</groupId>
+		            <artifactId>hsqldb</artifactId>
+		            <version>1.8.0.7</version>
+		        </dependency>
+
+		        <!--  JETTY DEPENDENCIES FOR TESTING  -->
+		        <dependency>
+		            <groupId>org.mortbay.jetty</groupId>
+		            <artifactId>jetty</artifactId>
+		            <version>${jetty.version}</version>
+		            <scope>provided</scope>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.mortbay.jetty</groupId>
+		            <artifactId>jetty-util</artifactId>
+		            <version>${jetty.version}</version>
+		            <scope>provided</scope>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.mortbay.jetty</groupId>
+		            <artifactId>jetty-management</artifactId>
+		            <version>${jetty.version}</version>
+		            <scope>provided</scope>
+		        </dependency>
+
+		        <!-- RESTEASY DEPENDENCIES -->
+		        <dependency>
+		            <groupId>org.jboss.resteasy</groupId>
+		            <artifactId>resteasy-jaxrs</artifactId>
+		            <version>${resteasy.version}</version>
+		        </dependency>
+   */
+
+}
+
+war {
+  webInf { from 'src/main/webapp/WEB-INF'}
+  webXml = file('src/main/webapp/WEB-INF/web.xml')
+}
+
+jar.enabled = true
+
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(':devwar')) {
+        version = '1.0'
+    } else {
+        version = '1.0-SNAPSHOT'
+    }
+}
+
+task devwar(dependsOn: 'war') << {
+  println 'Building WAR for development'
+}
+
+task distribution(dependsOn: 'war') << {
+  println 'Building WAR for production'
+}
