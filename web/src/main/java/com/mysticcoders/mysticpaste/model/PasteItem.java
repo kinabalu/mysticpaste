@@ -92,6 +92,10 @@ public class PasteItem implements Serializable {
     @Transient
     protected int viewCount;
 
+    @Basic
+    @Column(name = "CLIENT_IP")
+    protected String clientIp;
+
     public long getId() {
         return id;
     }
@@ -206,6 +210,14 @@ public class PasteItem implements Serializable {
 
     public void setParent(PasteItem parent) {
         this.parent = parent;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
     public int getContentLineCount() {

@@ -39,6 +39,7 @@ import org.apache.wicket.util.string.Strings;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -250,6 +251,7 @@ public abstract class ViewPastePage extends BasePage {
         pasteItem.setPrivate(pI.isPrivate());
         pasteItem.setType(pI.getType());
         pasteItem.setParent(pI);
+        pasteItem.setClientIp(getClientIpAddress());
 
         try {
             pasteService.detachItem(pI);       // TODO this is a horrible hack, we should instead clone pasteItem in the Model

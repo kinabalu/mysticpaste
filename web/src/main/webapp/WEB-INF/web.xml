@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/com/mysticcoders/mysticpaste/spring/applicationContext.xml</param-value>
+        <param-value>classpath:/applicationContext.xml</param-value>
     </context-param>
 
     <context-param>

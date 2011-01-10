@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
 /**
@@ -98,6 +99,17 @@ public class BasePage extends WebPage {
         super.onBeforeRender();
     }
 
+
+    /**
+     * Returns the X-Forwarded-For header
+     *
+     * @return
+     */
+    protected String getClientIpAddress() {
+        HttpServletRequest request = getWebRequestCycle().getWebRequest().getHttpServletRequest();
+
+        return request.getHeader("X-Forwarded-For");
+    }
 
     public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
         return new HeaderContributor(new IHeaderContributor() {

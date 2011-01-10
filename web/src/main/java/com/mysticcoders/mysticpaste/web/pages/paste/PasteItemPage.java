@@ -108,8 +108,8 @@ public class PasteItemPage extends BasePage {
             }
 
             pasteItem.setPrivate(isPrivate);
-
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
+            pasteItem.setClientIp(getClientIpAddress());
 
             try {
                 pasteService.createItem("web", pasteItem);

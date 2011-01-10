@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
  * @author: joed
  * Date  : Mar 7, 2009
  */
-@SpringApplicationContext({"/com/mysticcoders/mysticpaste/spring/applicationContext.xml", "applicationContext-test.xml"})
+@SpringApplicationContext({"/applicationContext.xml", "applicationContext-test.xml"})
 public abstract class AbstractIntegrationTest extends UnitilsJUnit4 {
 
 
