@@ -1,12 +1,9 @@
 package com.mysticcoders.webapp;
 
 import com.mysticcoders.integrations.AbstractIntegrationTest;
-import com.mysticcoders.mysticpaste.HomePage;
-import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.spring.test.ApplicationContextMock;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;

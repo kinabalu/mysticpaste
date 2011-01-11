@@ -1,0 +1,60 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Overview</h2>
+        </div>
+        <div class="block_content">
+            This pastebin was built using <a href="http://wicket.apache.org" target="_blank">Apache Wicket</a>.  The original code was
+            built by several folks as a tutorial for learning Wicket named <a href="http://www.mysticcoders.com/blog/2009/03/09/5-days-of-wicket/" target="_blank">5 Days of Wicket</a>.  There's a link in the
+            navigation to the <a href="http://github.com/kinabalu/mysticpaste/">source code</a> which you can peruse at your leisure.
+            <br />
+            <br />
+            The idea of a pastebin is simple, copy all or a fragment of code you need help with into the content box on the page.
+            Select which language the code is in for nice syntax highlighting provided by the <a href="http://alexgorbatchev.com/SyntaxHighlighter/" target="_blank">SyntaxHighlighter</a>
+            JavaScript library.  You will receive a small URL to paste into an email, IRC, mailing list, or instant message to receive help
+            on your issue.
+            <br />
+            <br />
+            We have plugins for 4 different development environments so you can paste directly from the editor.
+        </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Tips</h2>
+        </div>
+        <div class="block_content">
+                Added functionality is available for those who need more.
+                <ol>
+                    <li>To get the raw text of a paste, click the link or just append "text" to your URL i.e. /view/1/text</li>
+                    <li>To download the paste, append "download" to your URL i.e. /view/1/download</li>
+                    <li>To copy and paste the contents of a paste, just double-click the content area.</li>
+                </ol>
+
+                <br />
+                To highlight certain lines in a text, append the line numbers separated by commas (will also accept ranges) like so:
+                <ul>
+                    <li>/view/1/1-3</li>
+                    <li>/view/1/1,2,3</li>
+                    <li>/view/1/1-2,3</li>
+                </ul>
+
+        </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+</wicket:extend>
+</html>

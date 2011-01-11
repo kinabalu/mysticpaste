@@ -83,13 +83,22 @@ public class HighlighterPanel extends Panel {
         return null;
     }
 
-    public HighlighterPanel(String id, IModel model) {
+    public HighlighterPanel(String id, IModel<String> model) {
         this(id, model, null);
     }
 
-    public HighlighterPanel(String id, IModel model, String language) {
-        this(id, model, language, null);
+    public HighlighterPanel(String id, IModel<String> model, String language) {
+        this(id, model, language, false, null);
     }
+
+    public HighlighterPanel(String id, IModel<String> model, String language, boolean excludeExternalResources) {
+        this(id, model, language, excludeExternalResources, null);
+    }
+
+    public HighlighterPanel(String id, IModel<String> model, String language, final boolean excludeExternalResources, String highlightLines) {
+        this(id, model, language, excludeExternalResources, highlightLines, null);
+    }
+
 
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shCore.css"));
@@ -106,7 +115,7 @@ public class HighlighterPanel extends Panel {
      * @param localLanguage
      * @param highlightLines
      */
-    public HighlighterPanel(String id, IModel model, String localLanguage, String highlightLines) {
+    public HighlighterPanel(String id, final IModel<String> model, String localLanguage, final boolean excludeExternalResources, String highlightLines, final List<Integer> changedLines) {
         super(id);
 
         this.language = localLanguage;

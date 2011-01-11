@@ -35,6 +35,11 @@ public class ViewPublicPage extends ViewPastePage {
         return new PasteModel(id);
     }
 
+    @Override
+    protected boolean isPublic() {
+        return true;
+    }
+
     private class PasteModel extends LoadableDetachableModel<PasteItem> {
 
         String id;

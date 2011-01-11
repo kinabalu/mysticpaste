@@ -1,0 +1,105 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <wicket:container wicket:id="diffView">
+    <div class="block">
+
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Diff With Original</h2>
+
+            <ul class="tabs">
+                <li><a wicket:id="originalPasteLink">Original Paste</a></li>
+            </ul>
+
+        </div>
+        <div class="block_content">
+
+            <div wicket:id="highlightedContent">[highlightedContent]</div>
+
+        </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+    </wicket:container>
+
+
+    <div class="block">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <strong>Language: <wicket:container wicket:id="type">[type]</wicket:container></strong>
+
+            <ul class="tabs">
+                <li><a wicket:id="rawLink">Raw</a></li>
+                <li><a wicket:id="downloadLink">Download</a></li>
+                <li><a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></li>
+                <li><a href="ViewPastePage.html#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
+            </ul>
+        </div>
+        <div class="block_content">
+
+            <div wicket:id="highlightedContent">[highlightedContent]</div>
+
+        </div>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <wicket:container wicket:id="hasChildPastes">
+        <div class="block">
+            <div class="block_head">
+                <div class="bheadl"></div>
+                <div class="bheadr"></div>
+
+                <h2>Paste Replies</h2>
+            </div>
+            <div class="block_content">
+                <ul wicket:id="childPastes">
+                    <li><a wicket:id="viewChildPaste">Paste #<wicket:container wicket:id="pasteId">[pasteId]</wicket:container></a> <wicket:container wicket:id="posted">[posted]</wicket:container></li>
+                </ul>
+            </div>
+        </div>
+    <p>&nbsp;</p>
+    </wicket:container>
+
+    <div class="block">
+
+        <form wicket:id="replyForm">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</h2>
+        </div>
+        <div class="block_content">
+            <a name="replytopaste"></a>
+
+            <textarea wicket:id="content" id="rawPaste" wrap="off"
+                      style="height: 250px; width: 100%; background-color: #eeeeee; border: 1px solid #555;"></textarea>
+
+            <p>&nbsp;</p>
+
+            <p class="right" align="right">
+                <input type="submit" class="submit long" value="Reply" />
+            </p>
+
+        </div>
+        </form>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+
+    <wicket:child/>
+
+
+</wicket:extend>
+</html>

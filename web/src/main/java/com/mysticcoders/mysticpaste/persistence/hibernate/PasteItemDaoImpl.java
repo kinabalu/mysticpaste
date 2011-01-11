@@ -1,9 +1,9 @@
 package com.mysticcoders.mysticpaste.persistence.hibernate;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,11 +16,6 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
     protected PasteItemDaoImpl() {
         super(PasteItem.class);
     }
-
-    public Long createSimpleObject(String content) { return null; }
-
-    public SimpleObject retrieveSimpleObject(Long id) { return null; }
-
 
     public Long create(PasteItem item) {
         save(item);
@@ -36,24 +31,6 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
                 .setLong("id", id).setMaxResults(1)
                 .uniqueResult();
     }
-
-/*
-    @SuppressWarnings("unchecked")
-    public List<PasteItem> findByLanguage(LanguageEnum languageType, int count, int startIndex) {
-        return getSession()
-                .getNamedQuery("item.findByLanguage")
-                .setParameter("type", languageType)
-                .setMaxResults(count).setFirstResult(startIndex).list();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<PasteItem> findByLanguageThreaded(LanguageEnum languageType, int count, int startIndex) {
-        return getSession()
-                .getNamedQuery("item.findByLanguageThreaded")
-                .setParameter("type", languageType)
-                .setMaxResults(count).setFirstResult(startIndex).list();
-    }
-*/
 
     @SuppressWarnings("unchecked")
     public List<PasteItem> find(int count, int startIndex) {
@@ -82,7 +59,7 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
                 .setParameter("token", userToken).list();
     }
 
-    
+
     public long getPasteCount() {
         Long count = (Long) getSession()
                 .getNamedQuery("item.count")
@@ -97,4 +74,18 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
         item.markAbuse();
         save(item);
     }
+
+    public List<PasteItem> getChildren(PasteItem pasteItem) {
+        System.out.println("getChildren(PasteItem pasteItem)");
+        return (List<PasteItem>)getSession()
+        .getNamedQuery("item.children")
+                .setParameter("pasteItem", pasteItem)
+                .list();
+//        return new ArrayList<PasteItem>();
+    }
+
+    public void detachItem(PasteItem pasteItem) {
+        getSession().evict(pasteItem);
+    }
+
 }

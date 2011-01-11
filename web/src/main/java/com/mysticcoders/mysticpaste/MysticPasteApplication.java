@@ -3,13 +3,11 @@ package com.mysticcoders.mysticpaste;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
-import com.mysticcoders.mysticpaste.web.pages.view.ViewPastePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
 import org.slf4j.Logger;
@@ -53,7 +51,6 @@ public class MysticPasteApplication extends WebApplication {
         getMarkupSettings().setStripWicketTags(true);
 
 
-        mountPage("/home", HomePage.class);
         mountPage("/new", PasteItemPage.class);
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);

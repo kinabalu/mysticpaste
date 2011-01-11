@@ -1,14 +1,11 @@
 package com.mysticcoders.webapp;
 
 import com.mysticcoders.integrations.AbstractIntegrationTest;
-import com.mysticcoders.mysticpaste.HomePage;
 import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
-import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
-import com.mysticcoders.mysticpaste.persistence.PasteCommentDao;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
@@ -16,7 +13,6 @@ import org.apache.wicket.spring.test.ApplicationContextMock;
 import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.application.IComponentInstantiationListener;
-import org.apache.wicket.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.unitils.spring.annotation.SpringBeanByType;

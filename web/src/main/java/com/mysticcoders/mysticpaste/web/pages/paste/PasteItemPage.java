@@ -37,7 +37,6 @@ public class PasteItemPage extends BasePage {
     public PasteItemPage() {
         super(PasteItemPage.class);
 
-        add(new FeedbackPanel("feedback"));
         add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
     }
 
@@ -58,7 +57,6 @@ public class PasteItemPage extends BasePage {
 
     public class PasteForm extends StatelessForm<PasteItem> {
 
-        private boolean twitter = false;
         private LanguageSyntax languageType = HighlighterPanel.getLanguageSyntax("plain");
 
         public LanguageSyntax getLanguageType() {
@@ -69,16 +67,7 @@ public class PasteItemPage extends BasePage {
             this.languageType = languageType;
         }
 
-        public boolean isTwitter() {
-            return twitter;
-        }
-
-        public void setTwitter(boolean twitter) {
-            this.twitter = twitter;
-        }
-
-        @Override
-        protected void onSubmit() {
+        private void onPaste(boolean isPrivate) {
 
 
 /*
@@ -117,10 +106,12 @@ public class PasteItemPage extends BasePage {
                 return;
             }
 
+            pasteItem.setPrivate(isPrivate);
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
+            pasteItem.setClientIp(getClientIpAddress());
 
             try {
-                pasteService.createItem("web", pasteItem, twitter);
+                pasteService.createItem("web", pasteItem);
                 PageParameters params = new PageParameters();
                 if (pasteItem.isPrivate()) {
 //                    this.setRedirect(true);
@@ -156,6 +147,10 @@ public class PasteItemPage extends BasePage {
         public PasteForm(String id, IModel<PasteItem> model) {
             super(id, model);
 
+            add(new FeedbackPanel("feedback"));
+
+            languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMcBain
+
 /*
             setMultiPart(true);
             setMaxSize(Bytes.kilobytes(1024));
@@ -163,10 +158,21 @@ public class PasteItemPage extends BasePage {
             add(fileUploadField = new FileUploadField("imageFile", new PropertyModel(PasteForm.this,  "imageFile")));
 */
 
-            add(new CheckBox("private"));
-            add(new CheckBox("twitter", new PropertyModel<Boolean>(PasteForm.this, "twitter")));
+            Button pasteButton = new Button("paste") {
+                @Override
+                public void onSubmit() {
+                    onPaste(false);
+                }
+            };
 
-            add(new Button("paste"));
+            Button privatePasteButton = new Button("privatePaste") {
+                @Override
+                public void onSubmit() {
+                    onPaste(true);
+                }
+            };
+
+            add(pasteButton, privatePasteButton);
 
             DropDownChoice languageDDC = new DropDownChoice<LanguageSyntax>("type",
                     new PropertyModel<LanguageSyntax>(PasteForm.this, "languageType"),

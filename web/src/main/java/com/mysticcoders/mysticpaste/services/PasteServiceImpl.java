@@ -1,16 +1,11 @@
 package com.mysticcoders.mysticpaste.services;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.model.PasteStats;
-import com.mysticcoders.mysticpaste.model.gae.SimpleObject;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import com.mysticcoders.mysticpaste.utils.TokenGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +28,7 @@ public class PasteServiceImpl implements PasteService {
     private int tokenLength;
 
     private int previewLines;
-   
+
     public PasteServiceImpl() {
         this.tokenLength = DEFAULT_TOKEN_LENGTH;
         this.previewLines = DEFAULT_PREVIEW_LINES;
@@ -43,14 +38,6 @@ public class PasteServiceImpl implements PasteService {
         this.itemDao = itemDao;
         this.tokenLength = tokenLength;
     }
-
-    public Long createSimpleObject(String content) {
-        return itemDao.createSimpleObject(content);
-    }
-
-    public SimpleObject retrieveSimpleObject(Long id) {
-        return itemDao.retrieveSimpleObject(id);
-    }    
 
     @Transactional(readOnly = true)
     public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded)
@@ -156,6 +143,7 @@ public class PasteServiceImpl implements PasteService {
 
         long id = itemDao.create(item);
 
+/*
         if (!item.isPrivate() && twitter && twitterEnabled() && (twitterUsername != null && twitterPassword != null)) {
             Twitter twitterClient = new Twitter(twitterUsername, twitterPassword);
             twitterClient.setSource("mysticpaste.com - " + clientToken);
@@ -172,9 +160,12 @@ public class PasteServiceImpl implements PasteService {
             try {
                 Status status = twitterClient.updateStatus(sb.toString());
                 System.out.println("Successfully updated the status to [" + status.getText() + "].");
-            } catch (TwitterException e) { /* it's not the end of the world if twitter doesn't update */ }
+            } catch (TwitterException e) { */
+/* it's not the end of the world if twitter doesn't update *//*
+ }
 
         }
+*/
 
         return id;
     }
@@ -204,13 +195,6 @@ public class PasteServiceImpl implements PasteService {
     }
 
     @Transactional(readOnly = true)
-    public PasteStats getStats(String clientToken) throws InvalidClientException {
-        validateClient(clientToken);
-        // TODO add stats query(ies).
-        return null;
-    }
-
-    @Transactional(readOnly = true)
     public long getLatestItemsCount(String clientToken) throws InvalidClientException {
         validateClient(clientToken);
         return itemDao.getPasteCount();
@@ -219,6 +203,14 @@ public class PasteServiceImpl implements PasteService {
     @Transactional
     public void markAbuse(PasteItem pasteItem) {
         itemDao.markAbuse(pasteItem);
+    }
+
+    public List<PasteItem> hasChildren(PasteItem pasteItem) {
+        return itemDao.getChildren(pasteItem);
+    }
+
+    public void detachItem(PasteItem pasteItem) {
+        itemDao.detachItem(pasteItem);
     }
 
     private void validateClient(String clientToken) throws InvalidClientException {

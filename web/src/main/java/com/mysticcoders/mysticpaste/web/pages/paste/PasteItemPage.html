@@ -1,0 +1,45 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="block">
+        <form wicket:id="pasteForm">
+        <div class="block_head">
+            <div class="bheadl"></div>
+            <div class="bheadr"></div>
+
+            <h2>Paste Options</h2>
+
+            <ul class="tabs">
+                <li>language: <select wicket:id="type" class="language"><option>Choose One</option><option>Java</option><option>Groovy</option><option>PHP</option></select></li>
+            </ul>
+        </div>
+
+        <div class="block_content">
+<!--
+            <div class="message errormsg" id="feedbackPanel">
+            </div>
+-->
+          <span wicket:id="feedback">[feedback]</span>
+
+            <div id="paste_content">
+                <textarea wicket:id="content" wrap="off" rows="35" style="width: 100%; height: 100%;" width="95%"></textarea>
+
+                <span style="display: none; visibility: hidden;"><input wicket:id="email" /></span>
+
+                <p></p>
+                <hr />
+                <p class="right" align="right">
+                    <input type="submit" wicket:id="privatePaste" class="submit long_blue" value="Create Private Paste" />
+                    <input type="submit" wicket:id="paste" class="submit long" value="Create Public Paste" />
+                </p>
+
+
+            </div>
+        </div>
+        </form>
+
+        <div class="bendl"></div>
+        <div class="bendr"></div>
+    </div>
+</wicket:extend>
+</html>

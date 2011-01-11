@@ -1,23 +1,12 @@
 package com.mysticcoders.mysticpaste.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.incava.util.diff.Diff;
+import org.incava.util.diff.Difference;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "PASTE_ITEMS")
 @NamedQueries({@NamedQuery(name = "item.getById",
-                query = "from PasteItem item where item.id = :id"),
+//                query = "from PasteItem item where item.id = :id"),
+                query = "from PasteItem item left join fetch item.parent where item.id = :id"),
         @NamedQuery(name = "item.find",
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null order by item.timestamp desc"),
         @NamedQuery(name = "item.findThreaded",
@@ -42,7 +32,9 @@ import java.util.List;
         @NamedQuery(name = "item.findByUser",
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.userToken = :token"),
         @NamedQuery(name = "item.count",
-                query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true")
+                query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
+        @NamedQuery(name = "item.children",
+                query = "from PasteItem item where item.parent = :pasteItem")
 })
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
@@ -97,15 +89,12 @@ public class PasteItem implements Serializable {
     @JoinColumn(name = "PARENT_ITEM_ID", nullable = true)
     protected PasteItem parent;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    protected List<PasteItem> children;
+    @Transient
+    protected int viewCount;
 
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "COMMENT_ID", nullable = true)
-    protected List<PasteComment> comments;
-
-
+    @Basic
+    @Column(name = "CLIENT_IP")
+    protected String clientIp;
 
     public long getId() {
         return id;
@@ -223,29 +212,12 @@ public class PasteItem implements Serializable {
         this.parent = parent;
     }
 
-    public List<PasteItem> getChildren() {
-        return children;
+    public String getClientIp() {
+        return clientIp;
     }
 
-    public void setChildren(List<PasteItem> children) {
-        this.children = children;
-    }
-
-    public List<PasteComment> getComments() {
-        return comments;
-    }
-
-    public void addComment(PasteComment comment) {
-        if(comments == null) comments = new ArrayList<PasteComment>();
-
-        comments.add(comment);
-    }
-
-    public void addChild(PasteItem child) {
-        if (null == children) {
-            children = new ArrayList<PasteItem>();
-        }
-        children.add(child);
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
     public int getContentLineCount() {
@@ -253,5 +225,66 @@ public class PasteItem implements Serializable {
 
         String[] lines = getContent().split("\n");
         return lines != null ? lines.length : 0;
+    }
+
+    /**
+     * Return a simplistic diff view of 2 pastes
+     *
+     * @param originalPaste
+     * @param revisedPaste
+     * @return
+     */
+    public static Object[] diffPastes(String originalPaste, String revisedPaste) {
+        int new_line_count = 0;
+        int old_line_count = 0;
+
+        List<String> original = Arrays.asList(originalPaste.split("\n"));
+        List<String> revised = Arrays.asList(revisedPaste.split("\n"));
+
+        List<Integer> changedLines = new ArrayList<Integer>();
+
+        int lineIndex = 0;
+
+        StringBuilder diffText = new StringBuilder();
+        List<Difference> diffs  = new Diff<String>(original, revised).diff();
+        for (Difference diff : diffs) {
+            int        del_start = diff.getDeletedStart();
+            int        del_end   = diff.getDeletedEnd();
+            int        add_start = diff.getAddedStart();
+            int        add_end   = diff.getAddedEnd();
+
+            if (del_end != Difference.NONE) {
+                for (; old_line_count < del_start; ++old_line_count, ++new_line_count) {
+                    diffText.append(original.get(old_line_count)).append("\n");
+                    lineIndex++;
+                }
+                for (; old_line_count <= del_end; ++old_line_count) {
+                    diffText.append("- ").append(original.get(old_line_count)).append("\n");
+                    changedLines.add(lineIndex);
+                    lineIndex++;
+                }
+            }
+
+            if (add_end != Difference.NONE) {
+                for (; new_line_count < add_start; ++new_line_count, ++old_line_count) {
+                    diffText.append(revised.get(new_line_count)).append("\n");
+                    lineIndex++;
+                }
+
+                for (; new_line_count <= add_end; ++new_line_count) {
+                    diffText.append("+ ").append(revised.get(new_line_count)).append("\n");
+                    changedLines.add(lineIndex);
+                    lineIndex++;
+                }
+
+            }
+        }
+
+        for (; new_line_count < revised.size(); ++new_line_count, ++old_line_count) {
+            diffText.append(revised.get(new_line_count));
+        }
+
+        return new Object[]{changedLines, diffText.toString()};        // TODO this is UGGGGGLY
+
     }
 }
