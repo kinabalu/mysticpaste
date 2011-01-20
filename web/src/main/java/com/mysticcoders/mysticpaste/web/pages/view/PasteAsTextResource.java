@@ -3,12 +3,13 @@ package com.mysticcoders.mysticpaste.web.pages.view;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import org.apache.wicket.injection.web.InjectorHolder;
-import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.injection.Injector;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.value.ValueMap;
 
-public class PasteAsTextResource extends DynamicWebResource {
+public class PasteAsTextResource extends AbstractResource {
 
     @SpringBean
     private static PasteService pasteService;
@@ -16,42 +17,56 @@ public class PasteAsTextResource extends DynamicWebResource {
     private static final long serialVersionUID = 1L;
 
     public PasteAsTextResource() {
-        super();
 
-        InjectorHolder.getInjector().inject(this);
+        Injector.get().inject(this);
+    }
+
+    protected ContentDisposition getContentDisposition() {
+        return ContentDisposition.INLINE;
+    }
+
+    protected String getFileName(PageParameters params) {
+        return null;
     }
 
     protected PasteItem pasteItem;
 
     @Override
-    protected ResourceState getResourceState() {
-        ValueMap params = getParameters();
+    protected ResourceResponse newResourceResponse(Attributes attributes) {
+        PageParameters params = attributes.getParameters();
 
         try {
-            if(params.getAsLong("0")!=null){
-                pasteItem = pasteService.getItem("web", params.getAsLong("0"));
+            if (params.get("0") != null) {
+                pasteItem = pasteService.getItem("web", params.get("0").toLong());
             } else {
-                pasteItem = pasteService.findPrivateItem("web", params.getString("0"));
+                pasteItem = pasteService.findPrivateItem("web", params.get("0").toString());
             }
 
-            return new ResourceState() {
+            ResourceResponse resourceResponse = new ResourceResponse();
 
-                @Override
-                public byte[] getData() {
-                    return pasteItem.getContent().getBytes();
+            if (resourceResponse.dataNeedsToBeWritten(attributes)) {
+
+                resourceResponse.setContentDisposition(getContentDisposition());
+
+                if (getFileName(params) != null) {
+                    resourceResponse.setFileName(getFileName(params));
                 }
 
+                resourceResponse.setContentType("text/plain");
+            }
+
+            resourceResponse.setWriteCallback(new WriteCallback() {
                 @Override
-                public String getContentType() {
-                    return "text/plain";
+                public void writeData(Attributes attributes) {
+                    attributes.getResponse().write(pasteItem.getContent().getBytes());
                 }
-            };
+            });
+
+            return resourceResponse;
 
         } catch (InvalidClientException e) {
         }
 
         return null;
     }
-
-
 }

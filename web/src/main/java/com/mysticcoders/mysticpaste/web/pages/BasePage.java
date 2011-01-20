@@ -14,6 +14,10 @@ import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.resource.CompressedResourceReference;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,12 +112,17 @@ public class BasePage extends WebPage {
      * @return
      */
     protected String getClientIpAddress() {
+        String xForwardedFor = ((ServletWebRequest)RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
+        return xForwardedFor;
+//        return ((ServletWebRequest)RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
+/*
         HttpServletRequest request = getWebRequestCycle().getWebRequest().getHttpServletRequest();
 
         return request.getHeader("X-Forwarded-For");
+*/
     }
 
-    public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
+/*    public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
         return new HeaderContributor(new IHeaderContributor() {
             private static final long serialVersionUID = 1L;
 
@@ -126,6 +135,6 @@ public class BasePage extends WebPage {
             }
 
         });
-    }
+    }*/
 
 }

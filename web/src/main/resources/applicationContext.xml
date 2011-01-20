@@ -23,17 +23,10 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
     <bean id="pasteService" class="com.mysticcoders.mysticpaste.services.PasteServiceImpl">
         <property name="itemDao" ref="pasteItemDao"/>
         <property name="tokenLength" value="${private.token.length}" />
-        <property name="twitterUsername" value="${twitter.username}" />
-        <property name="twitterPassword" value="${twitter.password}" />
-        <property name="twitterEnabled" value="${twitter.enabled}" />
     </bean>
 
     <!-- DAOs -->
     <bean id="pasteItemDao" class="com.mysticcoders.mysticpaste.persistence.hibernate.PasteItemDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean id="pasteCommentDao" class="com.mysticcoders.mysticpaste.persistence.hibernate.PasteCommentDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -82,7 +75,6 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
             <list>
                 <value>com.mysticcoders.mysticpaste.model.PasteItem</value>
                 <value>com.mysticcoders.mysticpaste.model.Client</value>                
-                <value>com.mysticcoders.mysticpaste.model.PasteComment</value>                
             </list>
         </property>
 
