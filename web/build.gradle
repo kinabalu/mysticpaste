@@ -6,6 +6,7 @@ apply plugin: 'java'
 apply plugin: 'jetty'
 apply plugin: 'project-report'
 apply plugin: 'war'
+apply plugin: 'maven'
 
 sourceCompatibility = 1.5
 version = '1.0-SNAPSHOT'
@@ -199,4 +200,19 @@ task devwar(dependsOn: 'war') << {
 
 task distribution(dependsOn: 'war') << {
   println 'Building WAR for production'
+}
+
+task writeNewPom << {
+    pom {
+        project {
+            inceptionYear '2011'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("$buildDir/newpom.xml")
 }

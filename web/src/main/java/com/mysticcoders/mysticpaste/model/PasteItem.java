@@ -50,7 +50,7 @@ public class PasteItem implements Serializable {
 
     @Lob
     @Column(name = "HTML_CONTENT")
-    protected String formatedContent;
+    protected String formattedContent;
 
     @Basic
     @Column(name = "LANG_TYPE_CD")
@@ -112,12 +112,12 @@ public class PasteItem implements Serializable {
         this.content = content;
     }
 
-    public String getFormatedContent() {
-        return formatedContent;
+    public String getFormattedContent() {
+        return formattedContent;
     }
 
-    public void setFormatedContent(String formatedContent) {
-        this.formatedContent = formatedContent;
+    public void setFormattedContent(String formattedContent) {
+        this.formattedContent = formattedContent;
     }
 
     /**

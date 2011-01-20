@@ -107,7 +107,6 @@ public class HighlighterPanel extends Panel {
             add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCore.css"));
             //        add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shCoreDjango.css"));
             add(CSSPackageResource.getHeaderContribution(HighlighterPanel.class, "shThemeDefault.css"));
-            add(JavascriptPackageResource.getHeaderContribution(HighlighterPanel.class, "jquery-1.4.4.min.js"));
 
         }
 
