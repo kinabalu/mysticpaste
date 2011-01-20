@@ -1,7 +1,7 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
-import org.apache.wicket.protocol.http.WebResponse;
-import org.apache.wicket.util.value.ValueMap;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,9 +28,13 @@ public class DownloadPasteAsTextResource extends PasteAsTextResource {
      * @param response
      */
     @Override
-    protected void setHeaders(WebResponse response) {
-        ValueMap params = getParameters();
+	protected ResourceResponse newResourceResponse(Attributes arg0) {
+		ResourceResponse resourceResponse = super.newResourceResponse(arg0);
 
-        response.setHeader("Content-Disposition", "attachment; filename=\""+params.getString("0")+".txt\"");
+		PageParameters parameters = arg0.getParameters();
+
+        ((WebResponse)arg0.getResponse()).setHeader("Content-Disposition", "attachment; filename=\""+parameters.get("0")+".txt\"");
+        
+        return resourceResponse;
     }
 }

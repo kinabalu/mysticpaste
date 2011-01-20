@@ -3,6 +3,8 @@ package com.mysticcoders.mysticpaste.web.servlet;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
+
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -42,8 +44,8 @@ public class PluginServlet extends HttpServlet {
 
         PasteItem item = new PasteItem();
         item.setContent(content);
-        if (fileExtension == null || fileExtension.isEmpty()) {
-            item.setType(type == null || type.isEmpty() ? DEFAULT_LANG : type);
+        if (Strings.isEmpty(fileExtension)) {
+            item.setType(Strings.isEmpty(type) ? DEFAULT_LANG : type);
         } else {
             item.setType(mapFileType(fileExtension));
         }

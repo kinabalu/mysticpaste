@@ -14,6 +14,7 @@ import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.resource.CompressedResourceReference;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,13 +109,13 @@ public class BasePage extends WebPage {
      * @return
      */
     protected String getClientIpAddress() {
-        HttpServletRequest request = getWebRequestCycle().getWebRequest().getHttpServletRequest();
+        HttpServletRequest request = ((ServletWebRequest) getRequestCycle().getRequest()).getHttpServletRequest();
 
         return request.getHeader("X-Forwarded-For");
     }
 
-    public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
-        return new HeaderContributor(new IHeaderContributor() {
+    public static IHeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
+        return new IHeaderContributor() {
             private static final long serialVersionUID = 1L;
 
             public void renderHead(IHeaderResponse response) {
@@ -122,10 +123,8 @@ public class BasePage extends WebPage {
                 response.getResponse().write("\n<!--[if IE]-->\n");
                 response.renderCSSReference(new CompressedResourceReference(scope, path));
                 response.getResponse().write("<![endif]-->\n");
-
             }
-
-        });
+        };
     }
 
 }
