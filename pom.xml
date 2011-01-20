@@ -48,10 +48,6 @@
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>mystic</id>
-            <url>http://maven.mysticcoders.com/repository</url>
-        </repository>
-        <repository>
             <id>sonatype</id>
             <url>http://repository.sonatype.org/</url>
         </repository>

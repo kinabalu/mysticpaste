@@ -29,9 +29,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import java.util.ArrayList;
@@ -46,33 +50,29 @@ public abstract class ViewPastePage extends BasePage {
     private String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
     protected String getTitle() {
-        PageParameters params = RequestCycle.get().getPageParameters();
-        return "#" + params.getString("0") + " - Mystic Paste";
+        IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+        return "#" + params.getParameterValue("0") + " - Mystic Paste";
     }
 
     protected abstract boolean isPublic();
 
     public ViewPastePage(final PageParameters params) {
-        if (params.getString("0") == null) {
+        if (params.get("0").isNull()) {
             throw new RestartResponseException(PasteNotFound.class);
         }
 
         String highlightLines = null;
-        if (!Strings.isEmpty(params.getString("1"))) {
-            if (params.getString("1").equals("text")) {
-                RequestParameters rps = new RequestParameters();
-                rps.setResourceKey(new ResourceReference("textPasteResource").getSharedResourceKey());
-                getRequestCycle().setRequestTarget(new SharedResourceRequestTarget(rps));
+        if (!params.get("1").isEmpty()) {
+            if (params.get("1").toString().equals("text")) {
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceReferenceRequestHandler(new SharedResourceReference("textPasteResource")));
                 return;
-            } else if (params.getString("1").equals("download")) {
-                RequestParameters rps = new RequestParameters();
-                rps.setResourceKey(new ResourceReference("downloadAsTextPasteResource").getSharedResourceKey());
-                getRequestCycle().setRequestTarget(new SharedResourceRequestTarget(rps));
+            } else if (params.get("1").toString().equals("download")) {
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceReferenceRequestHandler(new SharedResourceReference("downloadAsTextPasteResource")));
                 return;
             }
 
 
-            String[] lineNumbers = params.getString("1").split(",");
+            String[] lineNumbers = params.get("1").toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
             for (String lineNumber : lineNumbers) {
@@ -99,14 +99,14 @@ public abstract class ViewPastePage extends BasePage {
         }
 
         // User must have copied just the funny private string rather than the whole bit
-        if (params.getAsInteger("0") == null && isPublic()) {
+        if (params.get("0").isNull() && isPublic()) {
             PageParameters pp = new PageParameters();
-            pp.put("0", params.getString("0"));
+            pp.add("0", params.get("0").toString());
             throw new RestartResponseException(ViewPrivatePage.class, pp);
         }
 
-        final IModel<PasteItem> pasteModel = getPasteModel(params.getString("0"));
-        if (pasteModel.getObject() == null || (pasteModel.getObject().isPrivate() && params.getAsInteger("0") != null)) {
+        final IModel<PasteItem> pasteModel = getPasteModel(params.get("0").toString());
+        if (pasteModel.getObject() == null || (pasteModel.getObject().isPrivate() && params.get("0").isNull())) {
             throw new RestartResponseException(PasteNotFound.class);
         }
         if (pasteModel.getObject().isAbuseFlag()) {
@@ -126,7 +126,7 @@ public abstract class ViewPastePage extends BasePage {
         if (pasteModel.getObject().getParent() != null) {
             PasteItem parentPaste = pasteModel.getObject().getParent();
             PageParameters pp = new PageParameters();
-            pp.put("0", parentPaste.getId());
+            pp.add("0", parentPaste.getId());
             diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
 
 
@@ -173,14 +173,14 @@ public abstract class ViewPastePage extends BasePage {
                 PasteItem pasteItem = item.getModelObject();
 
                 PageParameters pp = new PageParameters();
-                pp.put("0", pasteItem.getId());
+                pp.add("0", pasteItem.getId());
                 BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp);
 
                 viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "id")));
 
                 item.add(viewPaste);
 
-                item.add(new Label("posted", HistoryPage.getElapsedTimeSincePost(pasteItem)));      // TODO refactor this into it's own class
+                item.add(new Label("posted", "TODO"));// HistoryPage.getElapsedTimeSincePost(pasteItem)));      // TODO refactor this into it's own class
             }
         });
 
@@ -252,12 +252,12 @@ public abstract class ViewPastePage extends BasePage {
             pasteService.createItem("web", pasteItem);
             PageParameters params = new PageParameters();
             if (pasteItem.isPrivate()) {
-                this.setRedirect(true);
-                params.put("0", pasteItem.getPrivateToken());
+//                this.setRedirect(true);
+                params.add("0", pasteItem.getPrivateToken());
                 setResponsePage(ViewPrivatePage.class, params);
             } else {
-                this.setRedirect(true);
-                params.put("0", Long.toString(pasteItem.getId()));
+//                this.setRedirect(true);
+                params.add("0", Long.toString(pasteItem.getId()));
                 setResponsePage(ViewPublicPage.class, params);
             }
         } catch (InvalidClientException e) {
@@ -269,8 +269,8 @@ public abstract class ViewPastePage extends BasePage {
 
     private BookmarkablePageLink<Void> createExportLink(String id, PageParameters params, String type) {
         PageParameters pp = new PageParameters();
-        pp.put("0", params.getString("0"));
-        pp.put("1", type);
+        pp.add("0", params.get("0").toString());
+        pp.add("1", type);
         return new BookmarkablePageLink<Void>(id, ViewPublicPage.class, pp);
     }
 

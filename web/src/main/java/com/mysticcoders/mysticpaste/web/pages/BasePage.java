@@ -2,25 +2,19 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
+import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
+import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
+import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
-import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
-import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
-import org.apache.wicket.request.resource.CompressedResourceReference;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
 /**
@@ -28,7 +22,7 @@ import java.util.Calendar;
  * Extend this page to pull in the application header/footer.
  *
  * @author Steve Forsyth
- * Date: Mar 8, 2009
+ *         Date: Mar 8, 2009
  */
 public class BasePage extends WebPage {
 
@@ -52,7 +46,7 @@ public class BasePage extends WebPage {
         AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
             public String getObject() {
                 Calendar cal = Calendar.getInstance();
-                return ""+cal.get(Calendar.YEAR);
+                return "" + cal.get(Calendar.YEAR);
             }
         };
 
@@ -95,7 +89,9 @@ public class BasePage extends WebPage {
                 return "UA-254925-6";
             }
 
-            public boolean isVisible() { return true; }
+            public boolean isVisible() {
+                return true;
+            }
         });
     }
 
@@ -112,29 +108,8 @@ public class BasePage extends WebPage {
      * @return
      */
     protected String getClientIpAddress() {
-        String xForwardedFor = ((ServletWebRequest)RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
+        String xForwardedFor = ((ServletWebRequest) RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
         return xForwardedFor;
-//        return ((ServletWebRequest)RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
-/*
-        HttpServletRequest request = getWebRequestCycle().getWebRequest().getHttpServletRequest();
-
-        return request.getHeader("X-Forwarded-For");
-*/
     }
-
-/*    public static HeaderContributor conditionalIEHeaderContribution(final Class<?> scope, final String path) {
-        return new HeaderContributor(new IHeaderContributor() {
-            private static final long serialVersionUID = 1L;
-
-            public void renderHead(IHeaderResponse response) {
-
-                response.getResponse().write("\n<!--[if IE]-->\n");
-                response.renderCSSReference(new CompressedResourceReference(scope, path));
-                response.getResponse().write("<![endif]-->\n");
-
-            }
-
-        });
-    }*/
 
 }

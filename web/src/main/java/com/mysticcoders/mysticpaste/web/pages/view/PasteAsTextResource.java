@@ -33,18 +33,19 @@ public class PasteAsTextResource extends AbstractResource {
 
     @Override
     protected ResourceResponse newResourceResponse(Attributes attributes) {
-        PageParameters params = attributes.getParameters();
 
-        try {
-            if (params.get("0") != null) {
-                pasteItem = pasteService.getItem("web", params.get("0").toLong());
-            } else {
-                pasteItem = pasteService.findPrivateItem("web", params.get("0").toString());
-            }
+        ResourceResponse resourceResponse = newResourceResponse(attributes);
 
-            ResourceResponse resourceResponse = new ResourceResponse();
+        if (resourceResponse.dataNeedsToBeWritten(attributes)) {
+            PageParameters params = attributes.getParameters();
 
-            if (resourceResponse.dataNeedsToBeWritten(attributes)) {
+            try {
+
+                if (params.get("0").isNull()) {
+                    pasteItem = pasteService.getItem("web", params.get("0").toLong());
+                } else {
+                    pasteItem = pasteService.findPrivateItem("web", params.get("0").toString());
+                }
 
                 resourceResponse.setContentDisposition(getContentDisposition());
 
@@ -53,20 +54,17 @@ public class PasteAsTextResource extends AbstractResource {
                 }
 
                 resourceResponse.setContentType("text/plain");
+
+                resourceResponse.setWriteCallback(new WriteCallback() {
+                    @Override
+                    public void writeData(Attributes attributes) {
+                        attributes.getResponse().write(pasteItem.getContent().getBytes());
+                    }
+                });
+
+            } catch (InvalidClientException e) {
             }
-
-            resourceResponse.setWriteCallback(new WriteCallback() {
-                @Override
-                public void writeData(Attributes attributes) {
-                    attributes.getResponse().write(pasteItem.getContent().getBytes());
-                }
-            });
-
-            return resourceResponse;
-
-        } catch (InvalidClientException e) {
         }
-
-        return null;
+        return resourceResponse;
     }
 }

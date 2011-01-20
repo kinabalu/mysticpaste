@@ -30,7 +30,7 @@ public class TestPastePage extends AbstractIntegrationTest {
     private PasteItemDao dao;
 
     @SpringBeanByType
-    private PasteCommentDao commentDao;
+//    private PasteCommentDao commentDao;
 
     protected WicketTester tester;
 
@@ -40,7 +40,7 @@ public class TestPastePage extends AbstractIntegrationTest {
                 ApplicationContextMock();
         appctx.putBean("pasteDao", dao);
         appctx.putBean("pasteService", svc);
-        appctx.putBean("pasteCommentDao", commentDao);
+//        appctx.putBean("pasteCommentDao", commentDao);
 
         tester = new WicketTester(new MysticPasteApplication() {
             @Override

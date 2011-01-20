@@ -19,7 +19,6 @@ public class DownloadPasteAsTextResource extends PasteAsTextResource {
     /**
      * TODO would be great to find out what kind of highlighting they asked for so we could append the proper extension
      */
-
     public ContentDisposition getContentDisposition() {
         return ContentDisposition.ATTACHMENT;
     }
