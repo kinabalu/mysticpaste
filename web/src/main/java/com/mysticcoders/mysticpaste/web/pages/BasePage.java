@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Calendar;
 
@@ -34,6 +35,11 @@ public class BasePage extends WebPage {
 
     public BasePage(Class activePage) {
         this.activePage = activePage;
+        init();
+    }
+
+    public BasePage(PageParameters params) {
+        super(params);
         init();
     }
 

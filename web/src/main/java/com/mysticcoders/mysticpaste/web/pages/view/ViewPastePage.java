@@ -50,13 +50,15 @@ public abstract class ViewPastePage extends BasePage {
     private String numbersWithRange = "\\d+\\s?-\\s?\\d+";
 
     protected String getTitle() {
-        IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-        return "#" + params.getParameterValue("0") + " - Mystic Paste";
+        PageParameters params = getPage().getPageParameters();
+        return "#" + params.get("0") + " - Mystic Paste";
     }
 
     protected abstract boolean isPublic();
 
     public ViewPastePage(final PageParameters params) {
+        super(params);
+
         if (params.get("0").isNull()) {
             throw new RestartResponseException(PasteNotFound.class);
         }
