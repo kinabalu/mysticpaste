@@ -18,11 +18,14 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.devutils.stateless.StatelessComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -41,6 +44,7 @@ import org.apache.wicket.util.string.Strings;
 import java.util.ArrayList;
 import java.util.List;
 
+@StatelessComponent
 public abstract class ViewPastePage extends BasePage {
 
     @SpringBean
@@ -97,7 +101,9 @@ public abstract class ViewPastePage extends BasePage {
             for (String number : numbers) {
                 sb.append(number).append(",");
             }
-            highlightLines = sb.substring(0, sb.length() - 1);
+
+            if(sb.length()>0)
+                highlightLines = sb.substring(0, sb.length() - 1);
         }
 
         // User must have copied just the funny private string rather than the whole bit
@@ -197,24 +203,22 @@ public abstract class ViewPastePage extends BasePage {
 
         final Label markAbuseLabel = new Label("markAbuseLabel", "Report Abuse");
         markAbuseLabel.setOutputMarkupId(true);
-        AjaxLink markAbuseLink = new AjaxLink("markAbuseLink") {
+        StatelessLink markAbuseLink = new StatelessLink("markAbuseLink") {
 
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick() {
                 PasteItem pasteItem = pasteModel.getObject();
 
                 pasteService.markAbuse(pasteItem);
 
                 markAbuseLabel.setDefaultModel(new Model<String>("Marked As Spam"));
                 markAbuseLabel.add(new SimpleAttributeModifier("style", "color: red; font-weight: bold;"));
-
-                target.addComponent(markAbuseLabel);
             }
         };
         add(markAbuseLink);
         markAbuseLink.add(markAbuseLabel);
 
 
-        Form<PasteItem> replyForm = new Form<PasteItem>("replyForm", pasteModel) {
+        StatelessForm<PasteItem> replyForm = new StatelessForm<PasteItem>("replyForm", pasteModel) {
 
             @Override
             protected void onSubmit() {

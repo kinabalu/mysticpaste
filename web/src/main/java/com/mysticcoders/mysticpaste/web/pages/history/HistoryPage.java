@@ -58,13 +58,6 @@ public class HistoryPage extends BasePage {
 
                 item.add(new HighlighterPanel("content",
                         new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType()));
-
-                item.add(new BookmarkablePageLink<Void>("viewLink2", ViewPublicPage.class, params) {
-                    @Override
-                    public boolean isVisible() {
-                        return contentLines.length > 5;
-                    }
-                });
             }
         };
 

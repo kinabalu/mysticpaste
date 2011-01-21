@@ -89,6 +89,11 @@
                     <artifactId>wicket-devutils</artifactId>
                     <version>${wicket.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-request</artifactId>
+                    <version>${wicket.version}</version>
+                </dependency>
 
 		        <!--  HIBERNATE DEPENDENCIES -->
 		        <dependency>

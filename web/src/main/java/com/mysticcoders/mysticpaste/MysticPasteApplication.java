@@ -3,11 +3,15 @@ package com.mysticcoders.mysticpaste;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
+import org.apache.wicket.Application;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
 import org.slf4j.Logger;
@@ -45,6 +49,7 @@ public class MysticPasteApplication extends WebApplication {
         }
 */
 
+
         getComponentInstantiationListeners().add(getSpringComponentInjector(this));
         getComponentPreOnBeforeRenderListeners().add(new StatelessChecker());
 
@@ -55,15 +60,16 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
 
+        ResourceReference pasteAsTextResource =
+                new SharedResourceReference(PasteAsTextResource.class, "pasteAsTextResource");
+
+        getResourceReferenceRegistry().registerResourceReference(pasteAsTextResource);
+        mountSharedResource("/view/${0}/text", pasteAsTextResource);
 
 
 //        mount(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
-        mountPage("/view/${0}/${1}", ViewPublicPage.class);
+//        mountPage("/view/${0}", ViewPublicPage.class);
         mountPage("/private/${0}/${1}", ViewPrivatePage.class);
-
-//        getRootRequestMapperAsCompound().add(new MountedMapper("/view/${pasteId}/${highlightLines}", ViewPublicPage.class));
-//        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}", ViewPrivatePage.class));
-//        getRootRequestMapperAsCompound().add(new MountedMapper("/private/${pasteId}/${highlightLines}", ViewPrivatePage.class));
 
         ServletContext servletContext = super.getServletContext();
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);

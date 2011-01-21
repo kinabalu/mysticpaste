@@ -34,7 +34,7 @@ public class PasteAsTextResource extends AbstractResource {
     @Override
     protected ResourceResponse newResourceResponse(Attributes attributes) {
 
-        ResourceResponse resourceResponse = newResourceResponse(attributes);
+        ResourceResponse resourceResponse = new ResourceResponse();
 
         if (resourceResponse.dataNeedsToBeWritten(attributes)) {
             PageParameters params = attributes.getParameters();
