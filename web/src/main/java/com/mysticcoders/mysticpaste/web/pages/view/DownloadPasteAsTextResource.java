@@ -13,7 +13,7 @@ import org.apache.wicket.request.resource.ContentDisposition;
 public class DownloadPasteAsTextResource extends PasteAsTextResource {
 
     public DownloadPasteAsTextResource() {
-        super();
+        super(DownloadPasteAsTextResource.class.getName(), "downloadPasteAsTextResource");
     }
 
     /**

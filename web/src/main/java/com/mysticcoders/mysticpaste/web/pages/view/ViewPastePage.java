@@ -11,9 +11,11 @@ import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
+import com.mysticcoders.mysticpaste.web.pages.HelpPage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
+import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,6 +27,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -32,6 +36,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
@@ -43,8 +48,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-@StatelessComponent
+//@StatelessComponent
 public abstract class ViewPastePage extends BasePage {
 
     @SpringBean
@@ -69,15 +75,6 @@ public abstract class ViewPastePage extends BasePage {
 
         String highlightLines = null;
         if (!params.get("1").isEmpty()) {
-            if (params.get("1").toString().equals("text")) {
-                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceReferenceRequestHandler(new SharedResourceReference("textPasteResource")));
-                return;
-            } else if (params.get("1").toString().equals("download")) {
-                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceReferenceRequestHandler(new SharedResourceReference("downloadAsTextPasteResource")));
-                return;
-            }
-
-
             String[] lineNumbers = params.get("1").toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
@@ -273,19 +270,25 @@ public abstract class ViewPastePage extends BasePage {
 
     }
 
-    private BookmarkablePageLink<Void> createExportLink(String id, PageParameters params, String type) {
-        PageParameters pp = new PageParameters();
-        pp.add("0", params.get("0").toString());
-        pp.add("1", type);
-        return new BookmarkablePageLink<Void>(id, ViewPublicPage.class, pp);
+    private Link<Void> createRawLink(final String id, final PageParameters params) {
+
+        ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(PasteAsTextResource.class, "pasteAsTextResource", Locale.ENGLISH, null, null, false, false);
+        return new ResourceLink<Void>(id, ref, params) {
+            @Override
+            protected boolean getStatelessHint() {
+                return true;
+            }
+        };
     }
 
-    private BookmarkablePageLink<Void> createRawLink(String id, PageParameters params) {
-        return createExportLink(id, params, "text");
-    }
-
-    private BookmarkablePageLink<Void> createDownloadLink(String id, PageParameters params) {
-        return createExportLink(id, params, "download");
+    private Link<Void> createDownloadLink(String id, PageParameters params) {
+        ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(DownloadPasteAsTextResource.class, "downloadPasteAsTextResource", Locale.ENGLISH, null, null, false, false);
+        return new ResourceLink<Void>(id, ref, params) {
+            @Override
+            protected boolean getStatelessHint() {
+                return true;
+            }
+        };
     }
 
 

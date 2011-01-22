@@ -1,17 +1,23 @@
 package com.mysticcoders.mysticpaste;
 
+import com.mysticcoders.mysticpaste.utils.PriorityResourceMapper;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
+import com.mysticcoders.mysticpaste.web.pages.view.DownloadPasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
+import org.apache.wicket.request.mapper.ResourceMapper;
+import org.apache.wicket.request.mapper.mount.MountMapper;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.SharedResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
 import org.slf4j.Logger;
@@ -60,16 +66,30 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
 
-        ResourceReference pasteAsTextResource =
-                new SharedResourceReference(PasteAsTextResource.class, "pasteAsTextResource");
+        mountPage("/view/${0}", ViewPublicPage.class);
+        mountPage("/view/${0}/${1}", ViewPublicPage.class);             // map the highlight line URL
 
-        getResourceReferenceRegistry().registerResourceReference(pasteAsTextResource);
-        mountSharedResource("/view/${0}/text", pasteAsTextResource);
+        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/text", new PasteAsTextResource()));
+//        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/download", new DownloadPasteAsTextResource()));
+//        mount(new MountMapper("/view/${pasteId}/text", new ResourceReferenceRequestHandler(new PasteAsTextResource())));
 
+        mountPage("/private/${0}", ViewPrivatePage.class);
+        mountPage("/private/${0}/${1}", ViewPrivatePage.class);         // map the highlight line URL
 
-//        mount(new MountedMapper("/view/${pasteId}", ViewPublicPage.class));
-//        mountPage("/view/${0}", ViewPublicPage.class);
-        mountPage("/private/${0}/${1}", ViewPrivatePage.class);
+        ResourceReference pasteAsTextResource = new PasteAsTextResource();
+
+        if (pasteAsTextResource.canBeRegistered()) {
+            getResourceReferenceRegistry().registerResourceReference(pasteAsTextResource);
+        }
+
+        ResourceReference downloadPasteAsTextResource = new DownloadPasteAsTextResource();
+
+        if (pasteAsTextResource.canBeRegistered()) {
+            getResourceReferenceRegistry().registerResourceReference(downloadPasteAsTextResource);
+        }
+
+        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/private/${0}/text", pasteAsTextResource));
+        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/private/${0}/download", downloadPasteAsTextResource));
 
         ServletContext servletContext = super.getServletContext();
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
