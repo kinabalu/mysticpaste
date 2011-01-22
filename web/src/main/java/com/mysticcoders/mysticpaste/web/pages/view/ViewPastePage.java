@@ -26,10 +26,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.ResourceLink;
-import org.apache.wicket.markup.html.link.StatelessLink;
+import org.apache.wicket.markup.html.link.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -270,8 +267,10 @@ public abstract class ViewPastePage extends BasePage {
 
     }
 
-    private Link<Void> createRawLink(final String id, final PageParameters params) {
+    private AbstractLink createRawLink(final String id, final PageParameters params) {
 
+        return new ExternalLink(id, "/view/"+params.get("0")+"/text");
+/*
         ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(PasteAsTextResource.class, "pasteAsTextResource", Locale.ENGLISH, null, null, false, false);
         return new ResourceLink<Void>(id, ref, params) {
             @Override
@@ -279,9 +278,12 @@ public abstract class ViewPastePage extends BasePage {
                 return true;
             }
         };
+*/
     }
 
-    private Link<Void> createDownloadLink(String id, PageParameters params) {
+    private AbstractLink createDownloadLink(String id, PageParameters params) {
+        return new ExternalLink(id, "/view/"+params.get("0")+"/download");
+/*
         ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(DownloadPasteAsTextResource.class, "downloadPasteAsTextResource", Locale.ENGLISH, null, null, false, false);
         return new ResourceLink<Void>(id, ref, params) {
             @Override
@@ -289,6 +291,7 @@ public abstract class ViewPastePage extends BasePage {
                 return true;
             }
         };
+*/
     }
 
 

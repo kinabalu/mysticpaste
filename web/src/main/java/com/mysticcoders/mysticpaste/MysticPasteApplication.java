@@ -70,7 +70,7 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/view/${0}/${1}", ViewPublicPage.class);             // map the highlight line URL
 
         getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/text", new PasteAsTextResource()));
-//        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/download", new DownloadPasteAsTextResource()));
+        getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/download", new DownloadPasteAsTextResource()));
 //        mount(new MountMapper("/view/${pasteId}/text", new ResourceReferenceRequestHandler(new PasteAsTextResource())));
 
         mountPage("/private/${0}", ViewPrivatePage.class);
