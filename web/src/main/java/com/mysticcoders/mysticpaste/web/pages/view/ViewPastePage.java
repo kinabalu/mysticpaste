@@ -9,6 +9,7 @@ package com.mysticcoders.mysticpaste.web.pages.view;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
+import com.mysticcoders.mysticpaste.utils.SpamChecker;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
@@ -25,9 +26,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -53,7 +56,11 @@ public abstract class ViewPastePage extends BasePage {
 
     protected String getTitle() {
         PageParameters params = RequestCycle.get().getPageParameters();
-        return "#" + params.getString("0") + " - Mystic Paste";
+        if(params!=null) {
+            return "#" + params.getString("0") + " - Mystic Paste";
+        } else {
+            return "Mystic Paste";
+        }
     }
 
     protected abstract boolean isPublic();
@@ -226,8 +233,23 @@ public abstract class ViewPastePage extends BasePage {
             }
         };
         add(replyForm);
+
+
+        replyForm.add(new FeedbackPanel("feedback"));
+
+        replyForm.add(new TextField<String>("email", new PropertyModel<String>(ViewPastePage.this, "spamEmail")));
         replyForm.add(new TextArea<String>("content"));
 
+    }
+
+    private String spamEmail;
+
+    public String getSpamEmail() {
+        return spamEmail;
+    }
+
+    public void setSpamEmail(String spamEmail) {
+        this.spamEmail = spamEmail;
     }
 
     private String replyPaste;
@@ -235,17 +257,16 @@ public abstract class ViewPastePage extends BasePage {
     private void onPaste(IModel<PasteItem> pasteModel) {
         PasteItem pI = pasteModel.getObject();
 
-/*
-        if (pasteItem.getContent() == null || pasteItem.getContent().equals("")) {
+        if (pI.getContent() == null || pI.getContent().equals("")) {
             error("Paste content is required!");
             return;
         }
 
-        if (getSpamEmail() != null || hasSpamKeywords(pasteItem.getContent())) {
+        if (getSpamEmail() != null || SpamChecker.hasSpamKeywords(pI.getContent())) {
             error("Spam Spam Spam Spam");
             return;
         }
-*/
+
         PasteItem pasteItem = new PasteItem();
         pasteItem.setContent(pI.getContent());
         pasteItem.setPrivate(pI.isPrivate());

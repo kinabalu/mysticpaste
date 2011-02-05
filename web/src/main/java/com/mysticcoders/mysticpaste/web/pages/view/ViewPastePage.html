@@ -1,4 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+    <meta name="ROBOTS" content="NOFOLLOW" />
+</wicket:head>
 <wicket:extend>
 
     <wicket:container wicket:id="diffView">
@@ -73,6 +76,14 @@
     <div class="block">
 
         <form wicket:id="replyForm">
+
+            <span wicket:id="feedback">[feedback]</span>
+
+            <input wicket:id="email" />
+<!--
+            <span style="display: none; visibility: hidden;"><input wicket:id="email" /></span>
+-->
+
         <div class="block_head">
             <div class="bheadl"></div>
             <div class="bheadr"></div>

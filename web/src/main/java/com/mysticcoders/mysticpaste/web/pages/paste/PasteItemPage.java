@@ -5,21 +5,22 @@ import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
+import com.mysticcoders.mysticpaste.utils.SpamChecker;
 import com.mysticcoders.mysticpaste.web.components.DefaultFocusBehavior;
+import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.util.file.Files;
-import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.file.Folder;
 
 import java.io.File;
 
@@ -55,7 +56,7 @@ public class PasteItemPage extends BasePage {
     public void setSpamEmail(String spamEmail) {
         this.spamEmail = spamEmail;
     }
-    
+
 
     public class PasteForm extends Form<PasteItem> {
 
@@ -102,7 +103,7 @@ public class PasteItemPage extends BasePage {
                 return;
             }
 
-            if (getSpamEmail() != null || hasSpamKeywords(pasteItem.getContent())) {
+            if (getSpamEmail() != null || SpamChecker.hasSpamKeywords(pasteItem.getContent())) {
                 error("Spam Spam Spam Spam");
                 return;
             }
@@ -133,15 +134,6 @@ public class PasteItemPage extends BasePage {
         protected void onSubmit() {
         }
 
-        public boolean hasSpamKeywords(String content) {
-            String lowercasedContent = content.toLowerCase();
-
-            for (String badWord : badWords) {
-                if (lowercasedContent.indexOf(badWord) != -1) return true;
-            }
-
-            return false;
-        }
 
 /*
         private FileUploadField fileUploadField;
@@ -181,7 +173,7 @@ public class PasteItemPage extends BasePage {
             pasteButton.add(new Label("imageLabel", "Create Public Paste"));
 */
             add(pasteButton, privatePasteButton);
-            
+
             DropDownChoice languageDDC = new DropDownChoice<LanguageSyntax>("type",
                     new PropertyModel<LanguageSyntax>(PasteForm.this, "languageType"),
                     HighlighterPanel.getLanguageSyntaxList(), new IChoiceRenderer<LanguageSyntax>() {
@@ -196,114 +188,32 @@ public class PasteItemPage extends BasePage {
                     });
             add(languageDDC);
 
-            TextArea<String> contentTextArea = new TextArea<String>("content");            
+            TextArea<String> contentTextArea = new TextArea<String>("content");
             contentTextArea.add(new DefaultFocusBehavior());
-            
+
             add(contentTextArea);
 
             add(new TextField<String>("email", new PropertyModel<String>(PasteItemPage.this, "spamEmail")));
         }
 
 
-    /**
-     * Check whether the file already exists, and if so, try to delete it.
-     *
-     * @param newFile
-     *            the file to check
-     */
-    private void checkFileExists(File newFile)
-    {
-        if (newFile.exists())
-        {
-            // Try to delete the file
-            if (!Files.remove(newFile))
-            {
-                throw new IllegalStateException("Unable to overwrite " + newFile.getAbsolutePath());
+        /**
+         * Check whether the file already exists, and if so, try to delete it.
+         *
+         * @param newFile the file to check
+         */
+        private void checkFileExists(File newFile) {
+            if (newFile.exists()) {
+                // Try to delete the file
+                if (!Files.remove(newFile)) {
+                    throw new IllegalStateException("Unable to overwrite " + newFile.getAbsolutePath());
+                }
             }
         }
-    }
 
-    private Folder getUploadFolder()
-    {
-        return ((MysticPasteApplication) Application.get()).getUploadFolder();
-    }        
+        private Folder getUploadFolder() {
+            return ((MysticPasteApplication) Application.get()).getUploadFolder();
+        }
 
-        private String[] badWords = new String[]{
-                "[/URL]",
-                "[/url]",
-                "adipex",
-                "adultfriendfinder",
-                "adult-dvd",
-                "adult-friend-finder",
-                "adult-personal",
-                "adult personal",
-                "adult-stories",
-                "adult friends",
-                "boob",
-                "casino",
-                "cheap hotel",
-                "cialis",
-                "classified ad",
-                "diazepam",
-                "diazepan",
-                "fiksa.org",
-                "forexcurrency",
-                "free ringtones",
-                "fuck",
-                "gay porn",
-                "geo.ya",
-                "httpgeo",
-                "hot sex",
-                "hydroconone",
-                "incest",
-                "inderal",
-                "insulin",
-                "jewish dating",
-                "keflex",
-                "klonopin",
-                "lamictal",
-                "lasix",
-                "levaquin",
-                "levitra",
-                "lipitor",
-                "male porn",
-                "malenhancement",
-                "masya",
-                "mature porn",
-                "milf",
-                "murphy bed",
-                "nude celebrity",
-                "oxycodone",
-                "paxil",
-                "payday",
-                "phenergan",
-                "phentermine",
-                "poker",
-                "porn link",
-                "porn video",
-                "porno portal",
-                "pornmaster",
-                "premarin",
-                "prozac",
-                "rape",
-                "strattera",
-                "tramadol",
-                "tussionex",
-                "valium",
-                "viagra",
-                "vicodin",
-                "web gratis",
-                "without prescription",
-                "xanax",
-                "xxx ",
-                " xxx",
-                "xxxvideo",
-                "youradult",
-                "zelnorm",
-                "zenegra",
-                "megaupload.com",
-                "members.lycos.co.uk",
-                "lix.in"
-        };
     }
 }
