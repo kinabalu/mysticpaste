@@ -59,15 +59,12 @@ public class MysticPasteApplication extends WebApplication {
         getComponentInstantiationListeners().add(getSpringComponentInjector(this));
         getComponentPreOnBeforeRenderListeners().add(new StatelessChecker());
 
-        getMarkupSettings().setStripWicketTags(true);
-
-
         mountPage("/new", PasteItemPage.class);
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
 
         mountPage("/view/${0}", ViewPublicPage.class);
-        mountPage("/view/${0}/${1}", ViewPublicPage.class);             // map the highlight line URL
+//        mountPage("/view", ViewPublicPage.class);             // map the highlight line URL
 
         getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/text", new PasteAsTextResource()));
         getRootRequestMapperAsCompound().add(new PriorityResourceMapper("/view/${0}/download", new DownloadPasteAsTextResource()));

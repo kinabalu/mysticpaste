@@ -72,7 +72,7 @@ public abstract class ViewPastePage extends BasePage {
 
         String highlightLines = null;
         if (!params.get("1").isEmpty()) {
-            String[] lineNumbers = params.get("1").toString().split(",");
+            String[] lineNumbers = params.get(1).toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
             for (String lineNumber : lineNumbers) {
@@ -269,6 +269,7 @@ public abstract class ViewPastePage extends BasePage {
 
     private AbstractLink createRawLink(final String id, final PageParameters params) {
 
+        throw new RestartResponseException()
         return new ExternalLink(id, "/view/"+params.get("0")+"/text");
 /*
         ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(PasteAsTextResource.class, "pasteAsTextResource", Locale.ENGLISH, null, null, false, false);
