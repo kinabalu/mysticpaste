@@ -84,6 +84,20 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
 //        return new ArrayList<PasteItem>();
     }
 
+    public List<PasteItem> getAbusePastes(int count, int startIndex) {
+        return (List<PasteItem>)getSession()
+                .getNamedQuery("item.findAllAbuse")
+                .setMaxResults(count).setFirstResult(startIndex).list();
+    }
+
+    public int getAbusePastesCount() {
+        Long count = (Long) getSession()
+                .getNamedQuery("item.abuseCount")
+                .iterate().next();
+
+        return null == count ? 0 : count.intValue();
+    }
+
     public void detachItem(PasteItem pasteItem) {
         getSession().evict(pasteItem);
     }

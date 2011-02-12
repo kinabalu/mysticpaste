@@ -36,4 +36,9 @@ public interface PasteService {
     List<PasteItem> hasChildren(PasteItem pasteItem);
 
     void detachItem(PasteItem pasteItem);
+
+    public List<PasteItem> getAbusePastes(int count, int startIndex);
+
+    public int getAbusePastesCount();
+
 }
