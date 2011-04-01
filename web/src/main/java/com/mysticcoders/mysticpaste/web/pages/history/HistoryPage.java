@@ -6,10 +6,14 @@ import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigationLink;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -48,6 +52,7 @@ public class HistoryPage extends BasePage {
             protected void populateItem(Item<PasteItem> item) {
                 PasteItem pasteItem = item.getModelObject();
 
+                System.out.println("pasteItem["+pasteItem.getId()+"]");
                 PageParameters params = new PageParameters();
                 params.put("0", Long.toString(pasteItem.getId()));
                 item.add(new BookmarkablePageLink<Void>("viewLink", ViewPublicPage.class, params));
@@ -70,16 +75,32 @@ public class HistoryPage extends BasePage {
         historyDataViewContainer.setOutputMarkupId(true);
         add(historyDataViewContainer);
 
-        add(new AjaxPagingNavigator("pageNav", historyDataView) {
+        final AjaxPagingNavigator pageNav = new AjaxPagingNavigator("pageNav", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
-        });
+        };
+
+        add(pageNav);
+
+
+        add(new AjaxPagingNavigationLink("nextPageLink", historyDataView, historyDataView.getCurrentPage()));
+/*
+        add(new AjaxPagingNavigationLink("nextPageLink", historyDataView, historyDataView.getPageCount()+1));
+        add(new AjaxPagingNavigationIncrementLink("prevPageLink", historyDataView, -1));
+*/
+
         add(new AjaxPagingNavigator("pageNav2", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
+            }
+
+            public void onAjaxEvent(AjaxRequestTarget target) {
+                super.onAjaxEvent(target);
+
+                target.addComponent(pageNav);
             }
         });
 

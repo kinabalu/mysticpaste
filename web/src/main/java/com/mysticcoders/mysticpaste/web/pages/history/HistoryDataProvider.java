@@ -7,6 +7,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import java.util.List;
 import java.util.Iterator;
 
 /**
@@ -26,8 +27,14 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
     }
 
     public Iterator<PasteItem> iterator(int first, int count) {
+        System.out.println("first: " + first + ", count: " + count);
         try {
-            return pasteService.getLatestItems("web", count, first, false).iterator();
+            List<PasteItem> items = pasteService.getLatestItems("web", count, first, false);
+
+            for(PasteItem item : items) {
+                System.out.println("item:"+item);
+            }
+            return items.iterator();
         } catch (InvalidClientException e) {
             e.printStackTrace();
         }
@@ -37,6 +44,8 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
     public int size() {
         try {
             int count = new Long(pasteService.getLatestItemsCount("web")).intValue();
+
+            System.out.println("count:"+count);
 
             visible = count > 0;
 

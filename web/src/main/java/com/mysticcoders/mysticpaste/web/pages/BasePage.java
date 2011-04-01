@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.*;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,7 +14,9 @@ import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
@@ -42,6 +45,14 @@ public class BasePage extends WebPage {
     }
 
     private void init() {
+
+        Cookie[] cookies = ((ServletWebRequest) getRequest()).getHttpServletRequest().getCookies();
+
+        if(cookies!=null) {
+            for(Cookie cookie : cookies) {
+                System.out.println(cookie.getName()+"="+cookie.getValue());
+            }
+        }
 
         AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
             public String getObject() {
