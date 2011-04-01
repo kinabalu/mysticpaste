@@ -269,7 +269,6 @@ public abstract class ViewPastePage extends BasePage {
 
     private AbstractLink createRawLink(final String id, final PageParameters params) {
 
-        throw new RestartResponseException()
         return new ExternalLink(id, "/view/"+params.get("0")+"/text");
 /*
         ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(PasteAsTextResource.class, "pasteAsTextResource", Locale.ENGLISH, null, null, false, false);
