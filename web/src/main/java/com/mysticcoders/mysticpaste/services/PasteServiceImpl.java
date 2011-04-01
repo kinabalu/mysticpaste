@@ -39,6 +39,15 @@ public class PasteServiceImpl implements PasteService {
         this.tokenLength = tokenLength;
     }
 
+    public List<PasteItem> getAbusePastes(int count, int startIndex) {
+        return itemDao.getAbusePastes(count, startIndex);
+    }
+
+    public int getAbusePastesCount() {
+        return itemDao.getAbusePastesCount();
+    }
+
+
     @Transactional(readOnly = true)
     public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded)
             throws InvalidClientException {

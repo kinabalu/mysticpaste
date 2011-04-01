@@ -16,6 +16,10 @@ public interface PasteItemDao {
 
     PasteItem get(long id);
 
+    public List<PasteItem> getAbusePastes(int count, int startIndex);
+
+    public int getAbusePastesCount();
+
 /*
     List<PasteItem> findByLanguage(LanguageEnum languageType, int count, int startIndex);
 

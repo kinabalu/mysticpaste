@@ -33,6 +33,10 @@ import java.util.List;
                 query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.userToken = :token"),
         @NamedQuery(name = "item.count",
                 query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
+        @NamedQuery(name = "item.findAllAbuse",
+                query = "from PasteItem item where item.abuseFlag = true"),
+        @NamedQuery(name = "item.abuseCount",
+                query = "select count(item) from PasteItem item where item.abuseFlag = true"),
         @NamedQuery(name = "item.children",
                 query = "from PasteItem item where item.parent = :pasteItem")
 })
