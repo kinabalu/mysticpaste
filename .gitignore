@@ -2,5 +2,6 @@ target
 *.i*
 .DS_Store
 db
+db:mysticpaste*
 sql
 test-output
