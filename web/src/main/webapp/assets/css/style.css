@@ -670,11 +670,11 @@ a:hover {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	background: url("'../images/sdd.jpg'") center right no-repeat;
+	background: url('../images/sdd.jpg') center right no-repeat;
 	}
 
 .block form .cmf-skinned-select:hover {
-	background: url("'../images/sdd_.jpg'") center right no-repeat;
+	background: url('../images/sdd_.jpg') center right no-repeat;
 	}
 
 .block form div.cmf-skinned-text {

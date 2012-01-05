@@ -15,13 +15,9 @@
 
     <developers>
         <developer>
-            <name>Craig Tataryn</name>
-            <email>ctataryn@mysticcoders.com</email>
-        </developer>
-        <developer>
-            <name>Guillermo Castro</name>
-            <email>gcastro@mysticcoders.com</email>
-            <timezone>-6</timezone>
+            <name>Andrew Lombardi</name>
+            <email>andrew@mysticcoders.com</email>
+            <timezone>-8</timezone>
         </developer>
         <developer>
             <name>Johan Edstrom</name>
@@ -32,9 +28,13 @@
             <email>sforsyth@mysticcoders.com</email>
         </developer>
         <developer>
-            <name>Andrew Lombardi</name>
-            <email>andrew@mysticcoders.com</email>
-            <timezone>-8</timezone>
+            <name>Guillermo Castro</name>
+            <email>gcastro@mysticcoders.com</email>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <name>Craig Tataryn</name>
+            <email>ctataryn@mysticcoders.com</email>
         </developer>
     </developers>
 
@@ -66,7 +66,7 @@
 		        <!--  WICKET DEPENDENCIES -->
 		        <dependency>
 		            <groupId>org.apache.wicket</groupId>
-		            <artifactId>wicket</artifactId>
+		            <artifactId>wicket-core</artifactId>
 		            <version>${wicket.version}</version>
 		        </dependency>
 		        <dependency>
@@ -272,7 +272,7 @@
     </dependencyManagement>
 
     <properties>
-        <wicket.version>1.5-SNAPSHOT</wicket.version>
+        <wicket.version>1.5.3</wicket.version>
         <jetty.version>6.1.4</jetty.version>
         <spring.version>3.0.0.RELEASE</spring.version>
         <hibernate.version>3.5.0-Final</hibernate.version>

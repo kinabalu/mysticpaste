@@ -12,8 +12,11 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.*;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * View Paste.
@@ -27,8 +30,12 @@ public class ViewPublicPage extends ViewPastePage {
     @SpringBean
     PasteService pasteService;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public ViewPublicPage(PageParameters params) {
         super(params);
+
+        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getId()+"]");
     }
 
     protected IModel<PasteItem> getPasteModel(String id) {

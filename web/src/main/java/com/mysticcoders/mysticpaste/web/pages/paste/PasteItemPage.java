@@ -5,6 +5,7 @@ import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
+import com.mysticcoders.mysticpaste.utils.StringUtils;
 import com.mysticcoders.mysticpaste.web.components.DefaultFocusBehavior;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
@@ -20,6 +21,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -34,6 +37,8 @@ public class PasteItemPage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     public PasteItemPage() {
         super(PasteItemPage.class);
 
@@ -101,7 +106,7 @@ public class PasteItemPage extends BasePage {
                 return;
             }
 
-            if (getSpamEmail() != null || hasSpamKeywords(pasteItem.getContent())) {
+            if (getSpamEmail() != null || StringUtils.hasSpamKeywords(pasteItem.getContent())) {
                 error("Spam Spam Spam Spam");
                 return;
             }
@@ -110,6 +115,8 @@ public class PasteItemPage extends BasePage {
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
             pasteItem.setClientIp(getClientIpAddress());
 
+            logger.info("New "+pasteItem.getContent()+" line "+(isPrivate ? "private":"public")+" paste created with IP:"+getClientIpAddress()+" language set at:"+pasteItem.getType());
+            
             try {
                 pasteService.createItem("web", pasteItem);
                 PageParameters params = new PageParameters();
@@ -126,16 +133,6 @@ public class PasteItemPage extends BasePage {
                 // Do nothing at this point as we haven't defined what an "Invalid Client" is.
                 e.printStackTrace();
             }
-        }
-
-        public boolean hasSpamKeywords(String content) {
-            String lowercasedContent = content.toLowerCase();
-
-            for (String badWord : badWords) {
-                if (lowercasedContent.indexOf(badWord) != -1) return true;
-            }
-
-            return false;
         }
 
 /*
@@ -215,82 +212,7 @@ public class PasteItemPage extends BasePage {
             return ((MysticPasteApplication) Application.get()).getUploadFolder();
         }
 
-        private String[] badWords = new String[]{
-                "[/URL]",
-                "[/url]",
-                "adipex",
-                "adultfriendfinder",
-                "adult-dvd",
-                "adult-friend-finder",
-                "adult-personal",
-                "adult personal",
-                "adult-stories",
-                "adult friends",
-                "boob",
-                "casino",
-                "cheap hotel",
-                "cialis",
-                "classified ad",
-                "diazepam",
-                "diazepan",
-                "fiksa.org",
-                "forexcurrency",
-                "free ringtones",
-                "fuck",
-                "gay porn",
-                "geo.ya",
-                "httpgeo",
-                "hot sex",
-                "hydroconone",
-                "incest",
-                "inderal",
-                "insulin",
-                "jewish dating",
-                "keflex",
-                "klonopin",
-                "lamictal",
-                "lasix",
-                "levaquin",
-                "levitra",
-                "lipitor",
-                "male porn",
-                "malenhancement",
-                "masya",
-                "mature porn",
-                "milf",
-                "murphy bed",
-                "nude celebrity",
-                "oxycodone",
-                "paxil",
-                "payday",
-                "phenergan",
-                "phentermine",
-                "poker",
-                "porn link",
-                "porn video",
-                "porno portal",
-                "pornmaster",
-                "premarin",
-                "prozac",
-                "rape",
-                "strattera",
-                "tramadol",
-                "tussionex",
-                "valium",
-                "viagra",
-                "vicodin",
-                "web gratis",
-                "without prescription",
-                "xanax",
-                "xxx ",
-                " xxx",
-                "xxxvideo",
-                "youradult",
-                "zelnorm",
-                "zenegra",
-                "megaupload.com",
-                "members.lycos.co.uk",
-                "lix.in"
-        };
+
+
     }
 }

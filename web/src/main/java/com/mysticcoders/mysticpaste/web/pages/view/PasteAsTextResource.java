@@ -4,6 +4,8 @@ import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -12,12 +14,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
 
 public class PasteAsTextResource extends ResourceReference {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     @SpringBean
     private static PasteService pasteService;
 
@@ -55,7 +61,6 @@ public class PasteAsTextResource extends ResourceReference {
                 if (resourceResponse.dataNeedsToBeWritten(attributes)) {
                     PageParameters params = attributes.getParameters();
 
-
                     resourceResponse.setContentDisposition(getContentDisposition());
 
                     if (getFileName(params) != null) {
@@ -81,8 +86,18 @@ public class PasteAsTextResource extends ResourceReference {
                                 } catch(NumberFormatException e) {
                                     pasteItem = pasteService.findPrivateItem("web", params.get("0").toString());
                                 }
-
-                                attributes.getResponse().write(pasteItem.getContent().getBytes());
+                                
+                                logger.info("Paste ID["+pasteItem.getId()+"] requested text / download");
+                                if(pasteItem.isPrivate()) {
+                                    //X-Robots-Tag: noindex
+                                    ((WebResponse)attributes.getResponse()).addHeader("X-Robots-Tag", "noindex");
+                                }
+                                if(!pasteItem.isAbuseFlag()) {
+                                    attributes.getResponse().write(pasteItem.getContent().getBytes());
+                                } else {
+                                    logger.info("Abuse Paste accessed id["+pasteItem.getId()+"]");
+                                    attributes.getResponse().write("Marked for abuse.".getBytes());
+                                }
                             } catch (InvalidClientException e) {
                             }
 

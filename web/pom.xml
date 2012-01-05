@@ -79,10 +79,6 @@
             <id>jboss</id>
             <url>http://repository.jboss.org/maven2</url>
         </repository>
-        <repository>
-            <id>mystic</id>
-            <url>http://maven.mysticcoders.com/repository</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -94,7 +90,7 @@
         <!--  WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket</artifactId>
+            <artifactId>wicket-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>

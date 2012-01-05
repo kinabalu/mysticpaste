@@ -5,8 +5,12 @@ import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * View Paste.
@@ -18,9 +22,13 @@ public class ViewPrivatePage extends ViewPastePage {
 
     @SpringBean
     PasteService pasteService;
+    
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public ViewPrivatePage(PageParameters params) {
         super(params);
+        
+        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getId()+"]");
     }
 
     protected IModel<PasteItem> getPasteModel(String id) {

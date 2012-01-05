@@ -38,7 +38,7 @@
                 <li><a wicket:id="rawLink">Raw</a></li>
                 <li><a wicket:id="downloadLink">Download</a></li>
                 <li><a wicket:id="markAbuseLink"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></li>
-                <li><a href="ViewPastePage.html#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
+                <li><a href="#replytopaste"><img src="assets/images/action_refresh.gif" border="0" /> Reply to Paste</a></li>
             </ul>
         </div>
         <div class="block_content">
@@ -84,6 +84,8 @@
 
             <textarea wicket:id="content" id="rawPaste" wrap="off"
                       style="height: 250px; width: 100%; background-color: #eeeeee; border: 1px solid #555;"></textarea>
+
+            <span style="display: none; visibility: hidden;"><input wicket:id="email" /></span>
 
             <p>&nbsp;</p>
 

@@ -76,7 +76,6 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
     }
 
     public List<PasteItem> getChildren(PasteItem pasteItem) {
-        System.out.println("getChildren(PasteItem pasteItem)");
         return (List<PasteItem>)getSession()
         .getNamedQuery("item.children")
                 .setParameter("pasteItem", pasteItem)

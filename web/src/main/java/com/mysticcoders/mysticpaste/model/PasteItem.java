@@ -5,10 +5,8 @@ import org.incava.util.diff.Difference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author <a href="mailto:gcastro@mysticcoders.com">Guillermo Castro</a>
@@ -34,10 +32,12 @@ import java.util.List;
         @NamedQuery(name = "item.count",
                 query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
         @NamedQuery(name = "item.children",
-                query = "from PasteItem item where item.parent = :pasteItem")
+                query = "from PasteItem item where item.parent = :pasteItem AND item.isPrivate <> true AND item.abuseFlag <> true")
 })
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -238,6 +238,9 @@ public class PasteItem implements Serializable {
         int new_line_count = 0;
         int old_line_count = 0;
 
+        System.out.println("Original: "+(originalPaste!=null?originalPaste.length():0)+ " line(s)");
+        System.out.println("Revised: "+(revisedPaste!=null?revisedPaste.length():0)+ " line(s)");
+
         List<String> original = Arrays.asList(originalPaste.split("\n"));
         List<String> revised = Arrays.asList(revisedPaste.split("\n"));
 
@@ -287,4 +290,43 @@ public class PasteItem implements Serializable {
         return new Object[]{changedLines, diffText.toString()};        // TODO this is UGGGGGLY
 
     }
+
+
+    public static String getElapsedTimeSincePost(PasteItem pasteItem) {
+        String returnString;
+
+        Calendar today = Calendar.getInstance();
+        Calendar postDate = Calendar.getInstance();
+        postDate.setTime(pasteItem.getTimestamp());
+
+        long time = today.getTimeInMillis() - postDate.getTimeInMillis();
+        long mins = time / 1000 / 60;
+        long hours = mins / 60;
+        long days = hours / 24;
+
+        if (days > 30) {
+            // If it is more than 30 days old... just show the post date
+            returnString = "Posted " + sdf.format(postDate.getTime());
+        } else {
+            if (days > 0) {
+                // Then it is more than 1 day old but less than 30 days old... so show how many days old it is
+                returnString = "Posted " + days + " day" + (days > 1 ? "s" : "") + " ago";
+            } else {
+                if (hours > 0) {
+                    // It has been more than 1 hr and less than a day... so display hrs
+                    returnString = "Posted " + hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+                } else {
+                    if (mins > 0) {
+                        // It has been more than 1 min and less than an hour... so display mins
+                        returnString = "Posted " + mins + " minute" + (mins > 1 ? "s" : "") + " ago";
+                    } else {
+                        returnString = "Posted less than a minute ago";
+                    }
+                }
+            }
+        }
+
+        return returnString;
+    }
+
 }
