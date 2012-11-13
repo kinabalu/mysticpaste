@@ -129,38 +129,6 @@
             <artifactId>bootstrap</artifactId>
         </dependency>
 
-        <!--  HIBERNATE DEPENDENCIES -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>javassist</groupId>
-          <artifactId>javassist</artifactId>
-          <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>c3p0</groupId>
-            <artifactId>c3p0</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-        </dependency>
-
         <!-- SPRING DEPENDENCIES -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -177,29 +145,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-        </dependency>
+     		 <groupId>org.springframework.data</groupId>
+     		 <artifactId>spring-data-mongodb</artifactId>
+     	</dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-
-        <dependency>
-     		 <groupId>org.springframework.data</groupId>
-     		 <artifactId>spring-data-mongodb</artifactId>
-     	</dependency>
 
         <dependency>
         	<groupId>org.mongodb</groupId>
@@ -248,11 +201,6 @@
         <dependency>
             <groupId>org.unitils</groupId>
             <artifactId>unitils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
         </dependency>
 
         <!--  JETTY DEPENDENCIES FOR TESTING  -->
