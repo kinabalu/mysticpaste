@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-2.5.xsd
-        http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-        http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security-2.0.4.xsd"
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd"
        default-autowire="byName">
 
     <!--  tell spring to use annotation based congfigurations -->
@@ -42,112 +36,7 @@
 
     <!-- Wicket Application -->
     <bean id="wicketApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication">
-        <!--
-        <constructor-arg>
-            <bean class="com.mysticcoders.mysticpasteste.PastebinConfig">
-                <property name="someProp" value="${some.value}"/>
-            </bean>
-        </constructor-arg>
-        <property name="configurationType" value="${wicket.configuration.type}" />
-        <property name="someService" ref="someServiceBean" />
-        -->
     </bean>
-
-<!--
-    <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-
-        <property name="persistenceUnitName" value="mysticpaste-persistence"/>
-        <property name="dataSource" ref="dataSource"/>
-
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="databasePlatform" value="${hibernate.dialect}"/>
-                <property name="showSql" value="${hibernate.show_sql}"/>
-            </bean>
-        </property>
-
-        <property name="jpaProperties">
-            <value>
-                hibernate.jdbc.batch_size=20
-                hibernate.order_inserts=true
-                hibernate.order_updates=true
-            </value>
-        </property>
-    </bean>
--->
-
-<!--
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
--->
-
-<!--
-    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
--->
-
-    <!-- Tell Spring it should use @Transactional annotations -->
-    <tx:annotation-driven/>
-
-<!--
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${jdbc.driver}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="maxActive" value="100"/>
-        <property name="maxWait" value="1000"/>
-        <property name="poolPreparedStatements" value="true"/>
-        <property name="defaultAutoCommit" value="true"/>
-    </bean>
--->
-
-    <!-- Proxy to a set of filters that enforce authentication and authorization. -->
-<!--
-    <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
-        <property name="filterInvocationDefinitionSource">
-            <value>
-                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-                PATTERN_TYPE_APACHE_ANT
-                /**=httpSessionContextIntegrationFilter
-            </value>
-        </property>
-    </bean>
--->
-
-    <!-- Maintains security context between requests (using the session). -->
-<!--
-    <bean id="httpSessionContextIntegrationFilter"
-          class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
--->
-<!--
-        <property name="forceEagerSessionCreation" value="true"/>
--->
-<!--
-        <property name="allowSessionCreation" value="false" />
-    </bean>
--->
-
-
-<!--
-    <bean id="mysticPasteApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication" />
-
-    <security:authentication-provider user-service-ref="userDetailsService">
-    </security:authentication-provider>
--->
-
-    <!-- = = = = = = = = AUTHENTICATION = = = = = = = -->
-<!--
-    <bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
-        <property name="userDetailsService" ref="userDetailsService"/>
-    </bean>
-
-    <bean id="userDetailsService" class="org.springframework.security.userdetails.jdbc.JdbcDaoImpl">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
--->
 
     <!-- Loads MongoDB configuraton -->
    	<import resource="mongo-config.xml"/>
