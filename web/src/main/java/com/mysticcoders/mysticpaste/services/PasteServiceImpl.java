@@ -25,7 +25,7 @@ public class PasteServiceImpl implements PasteService {
 
     public static final int DEFAULT_PREVIEW_LINES = 5;
 
-    @Resource(name="mongoPasteItemDao")
+    @Resource(name = "mongoPasteItemDao")
     private PasteItemDao pasteItemDao;
 
     public void setPasteItemDao(PasteItemDao pasteItemDao) {

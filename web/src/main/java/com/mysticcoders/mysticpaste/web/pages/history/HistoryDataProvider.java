@@ -22,20 +22,14 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
 
     public HistoryDataProvider(PasteService pasteService) {
         this.pasteService = pasteService;
-        System.out.println("pasteService:"+pasteService);
     }
 
     public Iterator<PasteItem> iterator(long first, long count) {
-        System.out.println("First: " + first + ", Count:" + count);
-        Iterator<PasteItem> items = pasteService.getLatestItems("web", (int)count, (int)first).iterator();
-        System.out.println("items:"+items.hasNext());
-        return items;
+        return pasteService.getLatestItems("web", (int)count, (int)first).iterator();
     }
 
     public long size() {
         int count = new Long(pasteService.getLatestItemsCount("web")).intValue();
-
-        System.out.println("size:"+count);
         visible = count > 0;
 
         return count;

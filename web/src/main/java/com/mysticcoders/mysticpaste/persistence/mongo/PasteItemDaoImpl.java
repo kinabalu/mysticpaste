@@ -53,14 +53,12 @@ public class PasteItemDaoImpl implements PasteItemDao {
         query.skip(startIndex);
         // Execute the query and find all matching entries
         List<PasteItem> items = mongoTemplate.find(query, PasteItem.class, "pastes");
-        System.out.println("pasteItemDaoImpl.items:"+items);
         return items;
     }
 
     public long count() {
         Query query = new Query(where("abuseFlag").is(false).and("private").is(false));
         long count = mongoTemplate.count(query, "pastes");
-        System.out.println("count:"+count);
         return count;
     }
 

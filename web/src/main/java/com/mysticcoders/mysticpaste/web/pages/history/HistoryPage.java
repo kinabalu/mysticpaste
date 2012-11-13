@@ -38,13 +38,10 @@ public class HistoryPage extends BasePage {
 
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
 
-        System.out.println("inside historyPage");
         historyDataView = new DataView<PasteItem>("history", historyDataProvider, ITEMS_PER_PAGE) {
             protected void populateItem(Item<PasteItem> item) {
                 final PasteItem pasteItem = item.getModelObject();
 
-                System.out.println("historyDataView.pasteItem:" + pasteItem.getContent());
-                System.out.println("historyDataView.pasteItem.itemId:" + pasteItem.getItemId());
                 PageParameters params = new PageParameters();
                 params.add("0", pasteItem.getItemId());
                 item.add(new BookmarkablePageLink<Void>("viewLink", ViewPublicPage.class, params));
