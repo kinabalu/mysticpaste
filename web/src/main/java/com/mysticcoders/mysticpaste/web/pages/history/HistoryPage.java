@@ -5,7 +5,6 @@ import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -15,14 +14,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 /**
  * List the paste history.
  *
  * @author Steve Forsyth
- * Date: Mar 8, 2009
+ *         Date: Mar 8, 2009
  */
 public class HistoryPage extends BasePage {
 
@@ -31,8 +27,10 @@ public class HistoryPage extends BasePage {
 
     DataView historyDataView;
 
+    private final int ITEMS_PER_PAGE = 5;
+
     protected String getTitle() {
-        return "Pastes - Mystic Paste";
+        return "Paste History - Mystic Paste";
     }
 
     public HistoryPage() {
@@ -40,12 +38,15 @@ public class HistoryPage extends BasePage {
 
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
 
-        historyDataView = new DataView<PasteItem>("history", historyDataProvider, 5) {
+        System.out.println("inside historyPage");
+        historyDataView = new DataView<PasteItem>("history", historyDataProvider, ITEMS_PER_PAGE) {
             protected void populateItem(Item<PasteItem> item) {
-                PasteItem pasteItem = item.getModelObject();
+                final PasteItem pasteItem = item.getModelObject();
 
+                System.out.println("historyDataView.pasteItem:" + pasteItem.getContent());
+                System.out.println("historyDataView.pasteItem.itemId:" + pasteItem.getItemId());
                 PageParameters params = new PageParameters();
-                params.add("0", Long.toString(pasteItem.getId()));
+                params.add("0", pasteItem.getItemId());
                 item.add(new BookmarkablePageLink<Void>("viewLink", ViewPublicPage.class, params));
 
                 final String[] contentLines = pasteItem.getContent().split("\n");
@@ -53,7 +54,14 @@ public class HistoryPage extends BasePage {
                         (contentLines.length > 1 ? "s" : "") + ")"));
 
                 item.add(new Label("posted", PasteItem.getElapsedTimeSincePost(pasteItem)));
+                WebMarkupContainer hasImage = new WebMarkupContainer("hasImage") {
+                    @Override
+                    public boolean isVisible() {
+                        return pasteItem.hasImage();
 
+                    }
+                };
+                item.add(hasImage);
                 item.add(new HighlighterPanel("content",
                         new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType()));
             }
@@ -64,18 +72,23 @@ public class HistoryPage extends BasePage {
         historyDataViewContainer.setOutputMarkupId(true);
         add(historyDataViewContainer);
 
-        add(new AjaxPagingNavigator("pageNav", historyDataView) {
+        PastePagingNavigator pageNav = new PastePagingNavigator("pageNav", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
-        });
-        add(new AjaxPagingNavigator("pageNav2", historyDataView) {
+        };
+        PastePagingNavigator pageNav2 = new PastePagingNavigator("pageNav2", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
-        });
+        };
+
+        pageNav.setDependentNavigator(pageNav2);
+        pageNav2.setDependentNavigator(pageNav);
+        add(pageNav);
+        add(pageNav2);
 
         add(new Label("noPastesFound", "No Pastes Found") {
             @Override

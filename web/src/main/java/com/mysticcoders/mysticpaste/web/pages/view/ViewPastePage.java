@@ -7,15 +7,14 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.utils.StringUtils;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -67,8 +66,8 @@ public abstract class ViewPastePage extends BasePage {
         }
 
         String highlightLines = null;
-        if (!params.get("1").isEmpty()) {
-            String[] lineNumbers = params.get(1).toString().split(",");
+        if (!params.get(0).isEmpty()) {
+            String[] lineNumbers = params.get(0).toString().split(",");
 
             List<String> numbers = new ArrayList<String>();
             for (String lineNumber : lineNumbers) {
@@ -114,8 +113,20 @@ public abstract class ViewPastePage extends BasePage {
             pasteModel.getObject().setContent("");
         }
 
-        this.setDefaultModel(new CompoundPropertyModel(pasteModel));
+        this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
         add(new Label("type"));
+
+
+        WebMarkupContainer hasImage = new WebMarkupContainer("hasImage") {
+            @Override
+            public boolean isVisible() {
+                return pasteModel.getObject().hasImage();
+
+            }
+        };
+        ExternalLink imageLocationLink = new ExternalLink("imageLocation", new PropertyModel<String>(pasteModel, "imageLocation"));
+        hasImage.add(imageLocationLink);
+        add(hasImage);
 
         WebMarkupContainer diffView = new WebMarkupContainer("diffView") {
             @Override
@@ -125,9 +136,9 @@ public abstract class ViewPastePage extends BasePage {
         };
 
         if (pasteModel.getObject().getParent() != null) {
-            PasteItem parentPaste = pasteModel.getObject().getParent();
+            PasteItem parentPaste = pasteService.getItem("web", pasteModel.getObject().getParent());
             PageParameters pp = new PageParameters();
-            pp.add("0", parentPaste.getId());
+            pp.add("0", parentPaste.getItemId());
             diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
 
 
@@ -144,15 +155,6 @@ public abstract class ViewPastePage extends BasePage {
                     changedLines));
         }
         add(diffView);
-
-
-/*
-        final AbstractReadOnlyModel<List<PasteItem>> childPastes = new AbstractReadOnlyModel<List<PasteItem>>() {
-            public List<PasteItem> getObject() {
-                return pasteService.hasChildren(pasteModel.getObject().getId());
-            }
-        };
-*/
 
         final List<PasteItem> pasteChildren = pasteService.hasChildren(pasteModel.getObject());
 
@@ -172,10 +174,10 @@ public abstract class ViewPastePage extends BasePage {
                 PasteItem pasteItem = item.getModelObject();
 
                 PageParameters pp = new PageParameters();
-                pp.add("0", pasteItem.getId());
+                pp.add("0", pasteItem.getItemId());
                 BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp);
 
-                viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "id")));
+                viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "itemId")));
 
                 item.add(viewPaste);
 
@@ -202,7 +204,7 @@ public abstract class ViewPastePage extends BasePage {
                 pasteService.markAbuse(pasteItem);
 
                 markAbuseLabel.setDefaultModel(new Model<String>("Marked As Spam"));
-                markAbuseLabel.add(new SimpleAttributeModifier("style", "color: red; font-weight: bold;"));
+                markAbuseLabel.add(new AttributeModifier("style", "color: red; font-weight: bold;"));
             }
         };
         add(markAbuseLink);
@@ -252,54 +254,30 @@ public abstract class ViewPastePage extends BasePage {
         pasteItem.setContent(pI.getContent());
         pasteItem.setPrivate(pI.isPrivate());
         pasteItem.setType(pI.getType());
-        pasteItem.setParent(pI);
+        pasteItem.setParent(pI.getItemId());
         pasteItem.setClientIp(getClientIpAddress());
 
-        try {
-            pasteService.detachItem(pI);       // TODO this is a horrible hack, we should instead clone pasteItem in the Model
-            pasteService.createItem("web", pasteItem);
-            PageParameters params = new PageParameters();
-            if (pasteItem.isPrivate()) {
+//        pasteService.detachItem(pI);       // TODO this is a horrible hack, we should instead clone pasteItem in the Model
+        pasteService.createItem("web", pasteItem);
+        PageParameters params = new PageParameters();
+        if (pasteItem.isPrivate()) {
 //                this.setRedirect(true);
-                params.add("0", pasteItem.getPrivateToken());
-                setResponsePage(ViewPrivatePage.class, params);
-            } else {
+            params.add("0", pasteItem.getItemId());
+            setResponsePage(ViewPrivatePage.class, params);
+        } else {
 //                this.setRedirect(true);
-                params.add("0", Long.toString(pasteItem.getId()));
-                setResponsePage(ViewPublicPage.class, params);
-            }
-        } catch (InvalidClientException e) {
-            // Do nothing at this point as we haven't defined what an "Invalid Client" is.
-            e.printStackTrace();
+            params.add("0", pasteItem.getItemId());
+            setResponsePage(ViewPublicPage.class, params);
         }
 
     }
 
     private AbstractLink createRawLink(final String id, final PageParameters params) {
-
         return new ExternalLink(id, "/view/" + params.get("0") + "/text");
-/*
-        ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(PasteAsTextResource.class, "pasteAsTextResource", Locale.ENGLISH, null, null, false, false);
-        return new ResourceLink<Void>(id, ref, params) {
-            @Override
-            protected boolean getStatelessHint() {
-                return true;
-            }
-        };
-*/
     }
 
     private AbstractLink createDownloadLink(String id, PageParameters params) {
         return new ExternalLink(id, "/view/" + params.get("0") + "/download");
-/*
-        ResourceReference ref = Application.get().getResourceReferenceRegistry().getResourceReference(DownloadPasteAsTextResource.class, "downloadPasteAsTextResource", Locale.ENGLISH, null, null, false, false);
-        return new ResourceLink<Void>(id, ref, params) {
-            @Override
-            protected boolean getStatelessHint() {
-                return true;
-            }
-        };
-*/
     }
 
 

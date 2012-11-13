@@ -4,8 +4,10 @@ import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -14,9 +16,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.string.JavaScriptUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,8 +103,8 @@ public class HighlighterPanel extends Panel {
 
 
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shCore.css"));
-        response.renderCSSReference(new PackageResourceReference(HighlighterPanel.class, "shThemeDefault.css"));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(HighlighterPanel.class, "shCore.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(HighlighterPanel.class, "shThemeDefault.css")));
     }
 
     private String language;
@@ -148,7 +150,6 @@ public class HighlighterPanel extends Panel {
         if (highlightLines != null)
             brushConfig.append("; highlight: [").append(highlightLines).append("]");
 
-        codePanel.add(new AttributeModifier("class", true, new Model<String>(brushConfig.toString())));
-
+        codePanel.add(new AttributeModifier("class", new Model<String>(brushConfig.toString())));
     }
 }

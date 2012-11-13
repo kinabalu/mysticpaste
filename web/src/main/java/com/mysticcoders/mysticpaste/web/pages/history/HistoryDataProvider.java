@@ -1,7 +1,6 @@
 package com.mysticcoders.mysticpaste.web.pages.history;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -23,28 +22,23 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
 
     public HistoryDataProvider(PasteService pasteService) {
         this.pasteService = pasteService;
+        System.out.println("pasteService:"+pasteService);
     }
 
-    public Iterator<PasteItem> iterator(int first, int count) {
-        try {
-            return pasteService.getLatestItems("web", count, first, false).iterator();
-        } catch (InvalidClientException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Iterator<PasteItem> iterator(long first, long count) {
+        System.out.println("First: " + first + ", Count:" + count);
+        Iterator<PasteItem> items = pasteService.getLatestItems("web", (int)count, (int)first).iterator();
+        System.out.println("items:"+items.hasNext());
+        return items;
     }
 
-    public int size() {
-        try {
-            int count = new Long(pasteService.getLatestItemsCount("web")).intValue();
+    public long size() {
+        int count = new Long(pasteService.getLatestItemsCount("web")).intValue();
 
-            visible = count > 0;
+        System.out.println("size:"+count);
+        visible = count > 0;
 
-            return count;
-        } catch (InvalidClientException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return count;
     }
 
     public boolean isVisible() {

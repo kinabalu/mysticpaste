@@ -11,7 +11,9 @@ public class HelpPage extends BasePage {
 
     public HelpPage() {
         super(HelpPage.class);
+    }
 
-        System.out.println("HelpPage");
+    protected String getTitle() {
+        return "Help - Mystic Paste";
     }
 }

@@ -8,10 +8,10 @@ package com.mysticcoders.mysticpaste.web.components.google;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.string.JavaScriptUtils;
 
 public abstract class GoogleAnalyticsSnippet extends Panel {
 

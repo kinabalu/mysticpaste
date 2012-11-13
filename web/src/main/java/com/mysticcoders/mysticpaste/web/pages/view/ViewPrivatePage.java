@@ -1,12 +1,9 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -28,7 +25,7 @@ public class ViewPrivatePage extends ViewPastePage {
     public ViewPrivatePage(PageParameters params) {
         super(params);
         
-        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getId()+"]");
+        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getItemId()+"]");
     }
 
     protected IModel<PasteItem> getPasteModel(String id) {
@@ -50,13 +47,7 @@ public class ViewPrivatePage extends ViewPastePage {
         }
 
         protected PasteItem load() {
-            try {
-                return pasteService.findPrivateItem("web", id);
-            } catch (InvalidClientException e) {
-                // Do nothing as the validation is not yet implemented
-                e.printStackTrace();
-            }
-            return null;
+            return pasteService.getItem("web", id);
         }
     }
 

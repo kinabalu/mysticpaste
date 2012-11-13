@@ -22,8 +22,9 @@
 
     <developers>
         <developer>
-            <name>Craig Tataryn</name>
-            <email>ctataryn@mysticcoders.com</email>
+            <name>Andrew Lombardi</name>
+            <email>andrew@mysticcoders.com</email>
+            <timezone>-8</timezone>
         </developer>
         <developer>
             <name>Guillermo Castro</name>
@@ -39,9 +40,8 @@
             <email>sforsyth@mysticcoders.com</email>
         </developer>
         <developer>
-            <name>Andrew Lombardi</name>
-            <email>andrew@mysticcoders.com</email>
-            <timezone>-8</timezone>
+            <name>Craig Tataryn</name>
+            <email>ctataryn@mysticcoders.com</email>
         </developer>
     </developers>
 
@@ -119,7 +119,15 @@
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>bootstrap</artifactId>
+        </dependency>
 
         <!--  HIBERNATE DEPENDENCIES -->
         <dependency>
@@ -129,6 +137,10 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
         <dependency>
           <groupId>javassist</groupId>
@@ -177,25 +189,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
-            <groupId>net.java.dev.jets3t</groupId>
-            <artifactId>jets3t</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+     		 <groupId>org.springframework.data</groupId>
+     		 <artifactId>spring-data-mongodb</artifactId>
+     	</dependency>
+
+        <dependency>
+        	<groupId>org.mongodb</groupId>
+        	<artifactId>mongo-java-driver</artifactId>
         </dependency>
 
         <!-- LOGGING DEPENDENCIES - LOG4J -->

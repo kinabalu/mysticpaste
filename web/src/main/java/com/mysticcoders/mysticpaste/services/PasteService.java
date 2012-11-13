@@ -10,30 +10,21 @@ import java.util.List;
  */
 public interface PasteService {
 
-    List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded) throws InvalidClientException;
+    List<PasteItem> getLatestItems(String clientToken, int count, int startIndex) ;
 
-    PasteItem getItem(String clientToken, long id) throws InvalidClientException;
+    PasteItem getItem(String clientToken, String id) ;
 
-    PasteItem findPrivateItem(String clientToken, String privateToken) throws InvalidClientException;
+    String createItem(String clientToken, PasteItem item);
 
-    List<PasteItem> findItemsByLanguage(String clientToken, String languageType, int count, int startIndex,
-                                        boolean threaded)
-            throws InvalidClientException;
+    String createItem(String clientToken, PasteItem item, boolean twitter);
 
-    long createItem(String clientToken, PasteItem item) throws InvalidClientException;
+    String createReplyItem(String clientToken, PasteItem item, String parentId)
+            throws ParentNotFoundException;
 
-    long createItem(String clientToken, PasteItem item, boolean twitter) throws InvalidClientException;
-
-    long createReplyItem(String clientToken, PasteItem item, long parentId)
-            throws InvalidClientException, ParentNotFoundException;
-
-    List<PasteItem> getItemsForUser(String clientToken, String userToken) throws InvalidClientException;
-
-    long getLatestItemsCount(String clientToken) throws InvalidClientException;
+    long getLatestItemsCount(String clientToken);
 
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> hasChildren(PasteItem pasteItem);
 
-    void detachItem(PasteItem pasteItem);
 }

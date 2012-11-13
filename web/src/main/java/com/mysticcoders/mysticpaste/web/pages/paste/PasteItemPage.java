@@ -3,15 +3,16 @@ package com.mysticcoders.mysticpaste.web.pages.paste;
 import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.utils.StringUtils;
 import com.mysticcoders.mysticpaste.web.components.DefaultFocusBehavior;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
+import com.mysticcoders.mysticpaste.web.components.spin.Spin;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import org.apache.wicket.Application;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -38,11 +39,12 @@ public class PasteItemPage extends BasePage {
     PasteService pasteService;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     public PasteItemPage() {
         super(PasteItemPage.class);
 
         add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
+        add(new Spin());
     }
 
     protected String getTitle() {
@@ -74,40 +76,16 @@ public class PasteItemPage extends BasePage {
 
         private void onPaste(boolean isPrivate) {
 
-
-/*
-            final FileUpload upload = fileUploadField.getFileUpload();
-            if (upload != null)
-            {
-                // Create a new file
-                File newFile = new File(getUploadFolder(), upload.getClientFileName());
-
-                // Check new file, delete if it allready existed
-                checkFileExists(newFile);
-                try
-                {
-                    // Save to new file
-                    newFile.createNewFile();
-                    upload.writeTo(newFile);
-
-                    System.out.println("upload.clientFileName:"+upload.getClientFileName());
-                    //UploadPage.this.info("saved file: " + upload.getClientFileName());
-                }
-                catch (Exception e)
-                {
-                    throw new IllegalStateException("Unable to write file");
-                }
-            }
-*/
-
             PasteItem pasteItem = PasteForm.this.getModelObject();
             if (pasteItem.getContent() == null || pasteItem.getContent().equals("")) {
                 error("Paste content is required!");
+                feedbackContainer.setVisible(true);
                 return;
             }
 
             if (getSpamEmail() != null || StringUtils.hasSpamKeywords(pasteItem.getContent())) {
                 error("Spam Spam Spam Spam");
+                feedbackContainer.setVisible(true);
                 return;
             }
 
@@ -115,23 +93,18 @@ public class PasteItemPage extends BasePage {
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
             pasteItem.setClientIp(getClientIpAddress());
 
-            logger.info("New "+pasteItem.getContent()+" line "+(isPrivate ? "private":"public")+" paste created with IP:"+getClientIpAddress()+" language set at:"+pasteItem.getType());
-            
-            try {
-                pasteService.createItem("web", pasteItem);
-                PageParameters params = new PageParameters();
-                if (pasteItem.isPrivate()) {
+            logger.info("New " + pasteItem.getContent() + " line " + (isPrivate ? "private" : "public") + " paste created with IP:" + getClientIpAddress() + " language set at:" + pasteItem.getType());
+
+            pasteService.createItem("web", pasteItem);
+            PageParameters params = new PageParameters();
+            if (pasteItem.isPrivate()) {
 //                    this.setRedirect(true);
-                    params.add("0", pasteItem.getPrivateToken());
-                    setResponsePage(ViewPrivatePage.class, params);
-                } else {
+                params.add("0", pasteItem.getItemId());
+                setResponsePage(ViewPrivatePage.class, params);
+            } else {
 //                    this.setRedirect(true);
-                    params.add("0", Long.toString(pasteItem.getId()));
-                    setResponsePage(ViewPublicPage.class, params);
-                }
-            } catch (InvalidClientException e) {
-                // Do nothing at this point as we haven't defined what an "Invalid Client" is.
-                e.printStackTrace();
+                params.add("0", pasteItem.getItemId());
+                setResponsePage(ViewPublicPage.class, params);
             }
         }
 
@@ -141,19 +114,18 @@ public class PasteItemPage extends BasePage {
         private FileUpload imageFile;
 */
 
+        private WebMarkupContainer feedbackContainer;
+
         public PasteForm(String id, IModel<PasteItem> model) {
             super(id, model);
 
-            add(new FeedbackPanel("feedback"));
+            FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+            feedbackContainer = new WebMarkupContainer("feedbackContainer");
+            feedbackContainer.add(feedbackPanel);
+            feedbackContainer.setVisible(false);
+            add(feedbackContainer);
 
             languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMcBain
-
-/*
-            setMultiPart(true);
-            setMaxSize(Bytes.kilobytes(1024));
-
-            add(fileUploadField = new FileUploadField("imageFile", new PropertyModel(PasteForm.this,  "imageFile")));
-*/
 
             Button pasteButton = new Button("paste") {
                 @Override
@@ -174,22 +146,26 @@ public class PasteItemPage extends BasePage {
             DropDownChoice languageDDC = new DropDownChoice<LanguageSyntax>("type",
                     new PropertyModel<LanguageSyntax>(PasteForm.this, "languageType"),
                     HighlighterPanel.getLanguageSyntaxList(), new IChoiceRenderer<LanguageSyntax>() {
-                        public String getDisplayValue(LanguageSyntax syntax) {
-                            return syntax.getName();
-                        }
+                public String getDisplayValue(LanguageSyntax syntax) {
+                    return syntax.getName();
+                }
 
-                        public String getIdValue(LanguageSyntax languageSyntax, int index) {
-                            return languageSyntax.getLanguage();
-                        }
+                public String getIdValue(LanguageSyntax languageSyntax, int index) {
+                    return languageSyntax.getLanguage();
+                }
 
-                    });
+            });
             add(languageDDC);
 
             TextArea<String> contentTextArea = new TextArea<String>("content");
             contentTextArea.add(new DefaultFocusBehavior());
+            contentTextArea.setMarkupId("content");
 
             add(contentTextArea);
 
+            HiddenField imageLocationField = new HiddenField("imageLocation");
+            imageLocationField.setMarkupId("imageLocation");
+            add(imageLocationField);
             add(new TextField<String>("email", new PropertyModel<String>(PasteItemPage.this, "spamEmail")));
         }
 
@@ -211,7 +187,6 @@ public class PasteItemPage extends BasePage {
         private Folder getUploadFolder() {
             return ((MysticPasteApplication) Application.get()).getUploadFolder();
         }
-
 
 
     }

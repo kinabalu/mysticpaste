@@ -1,9 +1,7 @@
 package com.mysticcoders.integrations;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.model.Client;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -33,30 +31,12 @@ public class PasteServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testGetCurrentCount() {
-
+    public void testCreateAndRetrieve() {
         PasteItem paste = new PasteItem();
         paste.setContent("TEST-DATA");
         paste.setType("text");
-        paste.setUserToken("USER");
 
-        try {
-
-            svc.createItem("CLIENT", paste);
-            assertTrue(svc.getItemsForUser("CLIENT", "USER").size() == 1);
-        } catch (InvalidClientException e) {
-            e.printStackTrace();  //TODO
-        }
-    }
-
-    @Test
-    public void testCreateAndRetrieve() throws InvalidClientException {
-        PasteItem paste = new PasteItem();
-        paste.setContent("TEST-DATA");
-        paste.setType("text");
-        paste.setUserToken("USER");
-
-        Long id = svc.createItem("CLIENT", paste);
+        String id = svc.createItem("CLIENT", paste);
         System.out.println(id);
         PasteItem item2 = svc.getItem("CLIENT", id);
 
@@ -65,15 +45,15 @@ public class PasteServiceIntegrationTest extends AbstractIntegrationTest {
 
     }
 
+/*
     @Test
-    public void testCreatePrivateItem() throws InvalidClientException {
+    public void testCreatePrivateItem() {
         PasteItem paste = new PasteItem();
         paste.setContent("TEST-DATA");
         paste.setType("text");
-        paste.setUserToken("USER");
         paste.setPrivate(true);
 
-        Long id = svc.createItem("CLIENT", paste);
+        String id = svc.createItem("CLIENT", paste);
         System.out.println(id);
         PasteItem item2 = svc.getItem("CLIENT", id);
 
@@ -81,6 +61,7 @@ public class PasteServiceIntegrationTest extends AbstractIntegrationTest {
         assertEquals(10, item2.getPrivateToken().length());
         System.out.println(item2.getPrivateToken());
     }
+*/
 
 
 }

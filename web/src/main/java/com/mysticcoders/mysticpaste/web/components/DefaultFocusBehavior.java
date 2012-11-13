@@ -8,7 +8,9 @@ package com.mysticcoders.mysticpaste.web.components;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 public class DefaultFocusBehavior extends Behavior {
@@ -28,7 +30,7 @@ public class DefaultFocusBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse headerResponse) {
         super.renderHead(component, headerResponse);
-        headerResponse.renderOnLoadJavaScript("document.getElementById('"
-                + component.getMarkupId() + "').focus();");
+        headerResponse.render(OnDomReadyHeaderItem.forScript("document.getElementById('"
+                        + component.getMarkupId() + "').focus();"));
     }
 }

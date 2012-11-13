@@ -1,7 +1,7 @@
 package com.mysticcoders.mysticpaste.utils;
 
+import org.apache.wicket.core.request.mapper.ResourceMapper;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.mapper.ResourceMapper;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.resource.ResourceReference;
 

@@ -2,11 +2,11 @@ package com.mysticcoders.mysticpaste.services;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
-import com.mysticcoders.mysticpaste.utils.TokenGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +16,8 @@ import java.util.List;
  * @author <a href="mailto:andrew@mysticcoders.com">Andrew Lombardi</a>
  * @version $Revision$ $Date$
  */
+
+@Service("pasteService")
 public class PasteServiceImpl implements PasteService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -23,9 +25,14 @@ public class PasteServiceImpl implements PasteService {
 
     public static final int DEFAULT_PREVIEW_LINES = 5;
 
-    private PasteItemDao itemDao;
+    @Resource(name="mongoPasteItemDao")
+    private PasteItemDao pasteItemDao;
 
-    private int tokenLength;
+    public void setPasteItemDao(PasteItemDao pasteItemDao) {
+        this.pasteItemDao = pasteItemDao;
+    }
+
+    private int tokenLength = 10;
 
     private int previewLines;
 
@@ -34,24 +41,12 @@ public class PasteServiceImpl implements PasteService {
         this.previewLines = DEFAULT_PREVIEW_LINES;
     }
 
-    public PasteServiceImpl(PasteItemDao itemDao, int tokenLength) {
-        this.itemDao = itemDao;
-        this.tokenLength = tokenLength;
-    }
-
-    @Transactional(readOnly = true)
-    public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex, boolean threaded)
-            throws InvalidClientException {
-        logger.trace("Service: getLatestItems. clientToken = {}, count = {}, startIndex = {}, threaded = {}",
-                new Object[]{clientToken, count, startIndex, threaded});
-        validateClient(clientToken);
+    public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex) {
+        logger.trace("Service: getLatestItems. clientToken = {}, count = {}, startIndex = {}",
+                new Object[]{clientToken, count, startIndex});
         List<PasteItem> results;
-        if (threaded) {
-            results = itemDao.findThreaded(count, startIndex);
-        } else {
-            results = itemDao.find(count, startIndex);
-        }
-
+        results = pasteItemDao.find(count, startIndex);
+//        System.out.println("results:"+results);
         if (null == results) {
             logger.warn("Found no items in database.");
             results = new ArrayList<PasteItem>();
@@ -59,40 +54,9 @@ public class PasteServiceImpl implements PasteService {
         return results;
     }
 
-    @Transactional(readOnly = true)
-    public PasteItem getItem(String clientToken, long id) throws InvalidClientException {
-        validateClient(clientToken);
+    public PasteItem getItem(String clientToken, String id) {
 
-        return itemDao.get(id);
-    }
-
-    @Transactional(readOnly = true)
-    public PasteItem findPrivateItem(String clientToken, String privateToken) throws InvalidClientException {
-        validateClient(clientToken);
-
-        return itemDao.findByToken(privateToken);
-    }
-
-    @Transactional(readOnly = true)
-    public List<PasteItem> findItemsByLanguage(String clientToken, String languageType, int count,
-                                               int startIndex, boolean threaded)
-            throws InvalidClientException {
-        validateClient(clientToken);
-
-        List<PasteItem> results;
-/*
-        LanguageEnum type = LanguageEnum.valueOf(languageType);
-        if (threaded) {
-            results = itemDao.findByLanguageThreaded(languageType, count, startIndex);
-        } else {
-            results = itemDao.findByLanguage(languageType, count, startIndex);
-        }
-        if (null == results) {
-            results = new ArrayList<PasteItem>();
-        }
-        return results;
-*/
-        return null;
+        return pasteItemDao.get(id);
     }
 
     private String twitterUsername;
@@ -127,102 +91,43 @@ public class PasteServiceImpl implements PasteService {
         this.twitterEnabled = twitterEnabled;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public long createItem(String clientToken, PasteItem item) throws InvalidClientException {
+    public String createItem(String clientToken, PasteItem item) {
         return createItem(clientToken, item, true);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public long createItem(String clientToken, PasteItem item, boolean twitter) throws InvalidClientException {
-        validateClient(clientToken);
-        if (null != item && item.isPrivate()) {
-            item.setPrivateToken(TokenGenerator.generateToken(getTokenLength()));
-        }
+    public String createItem(String clientToken, PasteItem item, boolean twitter) {
         // set created Timestamp
         item.setTimestamp(new Date(System.currentTimeMillis()));
 
-        long id = itemDao.create(item);
-
-/*
-        if (!item.isPrivate() && twitter && twitterEnabled() && (twitterUsername != null && twitterPassword != null)) {
-            Twitter twitterClient = new Twitter(twitterUsername, twitterPassword);
-            twitterClient.setSource("mysticpaste.com - " + clientToken);
-
-            int contentLineCount = item.getContentLineCount();
-
-            StringBuffer sb = new StringBuffer();
-            sb.append("#").append(item.getType());
-            sb.append(" paste at http://mysticpaste.com/view/");
-            sb.append(item.getId());
-            sb.append(" posted - ");
-            sb.append(contentLineCount).append(" line").append(contentLineCount > 1 ? "s" : "").append(" - can you help?");
-
-            try {
-                Status status = twitterClient.updateStatus(sb.toString());
-                System.out.println("Successfully updated the status to [" + status.getText() + "].");
-            } catch (TwitterException e) { */
-/* it's not the end of the world if twitter doesn't update *//*
- }
-
-        }
-*/
-
-        return id;
+        return pasteItemDao.create(item);
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
-    public long createReplyItem(String clientToken, PasteItem item, long parentId)
-            throws InvalidClientException, ParentNotFoundException {
-        validateClient(clientToken);
-        long id;
-        PasteItem parent = itemDao.get(parentId);
+    public String createReplyItem(String clientToken, PasteItem item, String parentId)
+            throws ParentNotFoundException {
+        String id;
+        PasteItem parent = pasteItemDao.get(parentId);
         if (null != parent) {
-            item.setParent(parent);
+            item.setParent(parent.getItemId());
             // set created timestamp
             item.setTimestamp(new Date(System.currentTimeMillis()));
-            id = itemDao.create(item);
+            id = pasteItemDao.create(item);
         } else {
             throw new ParentNotFoundException("Parent does not exist");
         }
         return id;
     }
 
-    @Transactional(readOnly = true)
-    public List<PasteItem> getItemsForUser(String clientToken, String userToken) throws InvalidClientException {
-        validateClient(clientToken);
-        return itemDao.findByUser(userToken);
+    public long getLatestItemsCount(String clientToken) {
+        return pasteItemDao.count();
     }
 
-    @Transactional(readOnly = true)
-    public long getLatestItemsCount(String clientToken) throws InvalidClientException {
-        validateClient(clientToken);
-        return itemDao.getPasteCount();
-    }
-
-    @Transactional
     public void markAbuse(PasteItem pasteItem) {
-        itemDao.markAbuse(pasteItem);
+        pasteItemDao.markAbuse(pasteItem);
     }
 
     public List<PasteItem> hasChildren(PasteItem pasteItem) {
-        return itemDao.getChildren(pasteItem);
-    }
-
-    public void detachItem(PasteItem pasteItem) {
-        itemDao.detachItem(pasteItem);
-    }
-
-    private void validateClient(String clientToken) throws InvalidClientException {
-        // TODO add client validation
-    }
-
-    public PasteItemDao getItemDao() {
-        return itemDao;
-    }
-
-    public void setItemDao(PasteItemDao itemDao) {
-        this.itemDao = itemDao;
+        return pasteItemDao.getChildren(pasteItem);
     }
 
     public int getTokenLength() {

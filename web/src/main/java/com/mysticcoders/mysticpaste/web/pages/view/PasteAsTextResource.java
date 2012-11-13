@@ -1,19 +1,15 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +19,7 @@ import java.util.Locale;
 public class PasteAsTextResource extends ResourceReference {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     @SpringBean
     private static PasteService pasteService;
 
@@ -73,34 +69,25 @@ public class PasteAsTextResource extends ResourceReference {
                         @Override
                         public void writeData(Attributes attributes) {
                             PageParameters params = attributes.getParameters();
-                            try {
-
-                                if(params.get("0").isNull()) {
-                                    // handle this with a big fat error page?
-                                    return;
-                                }
-                                try {
-                                    long pasteItemId = params.get("0").toLong();
-
-                                    pasteItem = pasteService.getItem("web", pasteItemId);
-                                } catch(NumberFormatException e) {
-                                    pasteItem = pasteService.findPrivateItem("web", params.get("0").toString());
-                                }
-                                
-                                logger.info("Paste ID["+pasteItem.getId()+"] requested text / download");
-                                if(pasteItem.isPrivate()) {
-                                    //X-Robots-Tag: noindex
-                                    ((WebResponse)attributes.getResponse()).addHeader("X-Robots-Tag", "noindex");
-                                }
-                                if(!pasteItem.isAbuseFlag()) {
-                                    attributes.getResponse().write(pasteItem.getContent().getBytes());
-                                } else {
-                                    logger.info("Abuse Paste accessed id["+pasteItem.getId()+"]");
-                                    attributes.getResponse().write("Marked for abuse.".getBytes());
-                                }
-                            } catch (InvalidClientException e) {
+                            if (params.get("0").isNull()) {
+                                // handle this with a big fat error page?
+                                return;
                             }
 
+                            String pasteItemId = params.get("0").toString();
+                            pasteItem = pasteService.getItem("web", pasteItemId);
+
+                            logger.info("Paste ID[" + pasteItem.getItemId() + "] requested text / download");
+                            if (pasteItem.isPrivate()) {
+                                //X-Robots-Tag: noindex
+                                ((WebResponse) attributes.getResponse()).addHeader("X-Robots-Tag", "noindex");
+                            }
+                            if (!pasteItem.isAbuseFlag()) {
+                                attributes.getResponse().write(pasteItem.getContent().getBytes());
+                            } else {
+                                logger.info("Abuse Paste accessed id[" + pasteItem.getItemId() + "]");
+                                attributes.getResponse().write("Marked for abuse.".getBytes());
+                            }
                         }
                     });
 

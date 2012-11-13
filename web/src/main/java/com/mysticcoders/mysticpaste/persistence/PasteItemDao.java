@@ -10,31 +10,15 @@ import java.util.List;
  */
 public interface PasteItemDao {
 
-    Long create(PasteItem item);
+    String create(PasteItem item);
 
-    void update(PasteItem item);
-
-    PasteItem get(long id);
-
-/*
-    List<PasteItem> findByLanguage(LanguageEnum languageType, int count, int startIndex);
-
-    List<PasteItem> findByLanguageThreaded(LanguageEnum languageType, int count, int startIndex);
-*/
+    PasteItem get(String id);
 
     List<PasteItem> find(int count, int startIndex);
 
-    List<PasteItem> findThreaded(int count, int startIndex);
-
-    PasteItem findByToken(String privateToken);
-
-    List<PasteItem> findByUser(String userToken);
-
-    long getPasteCount();
+    long count();
 
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> getChildren(PasteItem pasteItem);
-
-    void detachItem(PasteItem pasteItem);
 }

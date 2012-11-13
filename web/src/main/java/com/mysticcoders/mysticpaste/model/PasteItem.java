@@ -3,105 +3,38 @@ package com.mysticcoders.mysticpaste.model;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * @author <a href="mailto:gcastro@mysticcoders.com">Guillermo Castro</a>
+ * @author <a href="mailto:andrew@mysticcoders.com">Andrew Lombardi</a>
  * @version $Revision$ $Date$
  */
-@Entity
-@Table(name = "PASTE_ITEMS")
-@NamedQueries({@NamedQuery(name = "item.getById",
-//                query = "from PasteItem item where item.id = :id"),
-                query = "from PasteItem item left join fetch item.parent where item.id = :id"),
-        @NamedQuery(name = "item.find",
-                query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null order by item.timestamp desc"),
-        @NamedQuery(name = "item.findThreaded",
-                query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.parent is null order by item.timestamp desc"),
-        @NamedQuery(name = "item.findByLanguage",
-                query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.type = :type order by item.timestamp desc"),
-        @NamedQuery(name = "item.findByLanguageThreaded",
-                query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.parent is null and item.type = :type order by item.timestamp desc"),
-        @NamedQuery(name = "item.findByToken",
-                query = "from PasteItem item where item.privateToken = :token"),
-        @NamedQuery(name = "item.findByUser",
-                query = "from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true and item.content is not null and item.userToken = :token"),
-        @NamedQuery(name = "item.count",
-                query = "select count(item) from PasteItem item where item.isPrivate <> true AND item.abuseFlag <> true"),
-        @NamedQuery(name = "item.children",
-                query = "from PasteItem item where item.parent = :pasteItem AND item.isPrivate <> true AND item.abuseFlag <> true")
-})
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ITEM_ID")
-    protected long id;
-
-    @Lob
-    @Column(name = "CONTENT")
+    protected String itemId;
     protected String content;
-
-    @Lob
-    @Column(name = "HTML_CONTENT")
-    protected String formatedContent;
-
-    @Basic
-    @Column(name = "LANG_TYPE_CD")
     protected String type;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATE_TS")
     protected Date timestamp;
-
-    @Basic
-    @Column(name = "USER_TOKEN")
-    protected String userToken;
-
-
-    @Basic
-    @Column(name = "ABUSE_FLAG")
     protected boolean abuseFlag;
-
-//    @Basic
-//    @Column(name = "CLIENT_TOKEN")
-//    protected String clientToken;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLIENT_ID")
-    protected Client client;
-
-    @Basic
-    @Column(name = "PRIVATE_FLG")
-    protected boolean isPrivate;
-
-    @Basic
-    @Column(name = "PRIVATE_TOKEN", unique = true, updatable = false)
-    protected String privateToken;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "PARENT_ITEM_ID", nullable = true)
-    protected PasteItem parent;
-
-    @Transient
+    protected boolean privateFlag;
+    protected String parent;
+    protected String clientIp;
     protected int viewCount;
 
-    @Basic
-    @Column(name = "CLIENT_IP")
-    protected String clientIp;
+    private String imageLocation;
 
-    public long getId() {
-        return id;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public String getContent() {
@@ -112,29 +45,21 @@ public class PasteItem implements Serializable {
         this.content = content;
     }
 
-    public String getFormatedContent() {
-        return formatedContent;
-    }
-
-    public void setFormatedContent(String formatedContent) {
-        this.formatedContent = formatedContent;
-    }
-
     /**
      * Calculate up to 5 lines for a preview and return it to end user
      *
      * @return up to 5 lines of paste, or empty string
      */
     public String getPreviewContent() {
-        if(getContent() == null || getContent().length() == 0) return "";
+        if (getContent() == null || getContent().length() == 0) return "";
 
         String[] contentLines = getContent().split("\n");
 
-        if(contentLines==null) return "";
+        if (contentLines == null) return "";
 
         StringBuffer previewContent = new StringBuffer();
 
-        for(int i=0; i< (contentLines.length < 5 ? contentLines.length : 5); i++) {
+        for (int i = 0; i < (contentLines.length < 5 ? contentLines.length : 5); i++) {
             previewContent.append(contentLines[i]).append("\n");
         }
         return previewContent.toString();
@@ -156,30 +81,6 @@ public class PasteItem implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public String getUserToken() {
-        return userToken;
-    }
-
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
-    }
-
-//    public String getClientToken() {
-//        return clientToken;
-//    }
-//
-//    public void setClientToken(String clientToken) {
-//        this.clientToken = clientToken;
-//    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
     public boolean isAbuseFlag() {
         return abuseFlag;
     }
@@ -189,39 +90,47 @@ public class PasteItem implements Serializable {
     }
 
     public boolean isPrivate() {
-        return isPrivate;
+        return privateFlag;
     }
 
-    public void setPrivate(boolean aPrivate) {
-        isPrivate = aPrivate;
+    public void setPrivate(boolean privateFlag) {
+        privateFlag = this.privateFlag;
     }
 
-    public String getPrivateToken() {
-        return privateToken;
-    }
-
-    public void setPrivateToken(String privateToken) {
-        this.privateToken = privateToken;
-    }
-
-    public PasteItem getParent() {
+    public String getParent() {
         return parent;
     }
 
-    public void setParent(PasteItem parent) {
+    public void setParent(String parent) {
         this.parent = parent;
-    }
-
-    public String getClientIp() {
-        return clientIp;
     }
 
     public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
     }
 
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void increaseViewCount() {
+        viewCount += 1;
+    }
+
+    public String getImageLocation() {
+        return imageLocation;
+    }
+
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
+    }
+
+    public boolean hasImage() {
+        return this.imageLocation != null && this.imageLocation.length() > 0;
+    }
+
     public int getContentLineCount() {
-        if(getContent() == null || getContent().length() == 0) return 0;
+        if (getContent() == null || getContent().length() == 0) return 0;
 
         String[] lines = getContent().split("\n");
         return lines != null ? lines.length : 0;
@@ -238,8 +147,8 @@ public class PasteItem implements Serializable {
         int new_line_count = 0;
         int old_line_count = 0;
 
-        System.out.println("Original: "+(originalPaste!=null?originalPaste.length():0)+ " line(s)");
-        System.out.println("Revised: "+(revisedPaste!=null?revisedPaste.length():0)+ " line(s)");
+        System.out.println("Original: " + (originalPaste != null ? originalPaste.length() : 0) + " line(s)");
+        System.out.println("Revised: " + (revisedPaste != null ? revisedPaste.length() : 0) + " line(s)");
 
         List<String> original = Arrays.asList(originalPaste.split("\n"));
         List<String> revised = Arrays.asList(revisedPaste.split("\n"));
@@ -249,12 +158,12 @@ public class PasteItem implements Serializable {
         int lineIndex = 0;
 
         StringBuilder diffText = new StringBuilder();
-        List<Difference> diffs  = new Diff<String>(original, revised).diff();
+        List<Difference> diffs = new Diff<String>(original, revised).diff();
         for (Difference diff : diffs) {
-            int        del_start = diff.getDeletedStart();
-            int        del_end   = diff.getDeletedEnd();
-            int        add_start = diff.getAddedStart();
-            int        add_end   = diff.getAddedEnd();
+            int del_start = diff.getDeletedStart();
+            int del_end = diff.getDeletedEnd();
+            int add_start = diff.getAddedStart();
+            int add_end = diff.getAddedEnd();
 
             if (del_end != Difference.NONE) {
                 for (; old_line_count < del_start; ++old_line_count, ++new_line_count) {
@@ -287,7 +196,7 @@ public class PasteItem implements Serializable {
             diffText.append(revised.get(new_line_count));
         }
 
-        return new Object[]{changedLines, diffText.toString()};        // TODO this is UGGGGGLY
+        return new Object[]{changedLines, diffText.toString()};
 
     }
 

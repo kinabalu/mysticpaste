@@ -1,18 +1,8 @@
 package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
-import com.mysticcoders.mysticpaste.web.pages.BasePage;
-import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.*;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -35,7 +25,7 @@ public class ViewPublicPage extends ViewPastePage {
     public ViewPublicPage(PageParameters params) {
         super(params);
 
-        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getId()+"]");
+        logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getItemId()+"]");
     }
 
     protected IModel<PasteItem> getPasteModel(String id) {
@@ -56,13 +46,7 @@ public class ViewPublicPage extends ViewPastePage {
         }
 
         protected PasteItem load() {
-            try {
-                return pasteService.getItem("web", Long.parseLong(id));
-            } catch (InvalidClientException e) {
-                // Do nothing as the validation is not yet implemented
-                e.printStackTrace();
-            }
-            return null;
+            return pasteService.getItem("web", id);
         }
     }
 

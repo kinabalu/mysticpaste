@@ -2,7 +2,9 @@ package com.mysticcoders.mysticpaste.persistence.hibernate;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * @author <a href="mailto:gcastro@mysticcoders.com">Guillermo Castro</a>
  * @version $Revision$ $Date$
  */
+//@Repository("pasteItemDao")
 public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements PasteItemDao {
 
 
@@ -17,74 +20,67 @@ public class PasteItemDaoImpl extends AbstractDaoHibernate<PasteItem> implements
         super(PasteItem.class);
     }
 
-    public Long create(PasteItem item) {
-        save(item);
-        return item.getId();
+    public String create(PasteItem item) {
+        return null;
+//        save(item);
+//        return item.getItemId();
     }
 
     public void update(PasteItem item) {
         save(item);
     }
 
-    public PasteItem get(long id) {
-        return (PasteItem) getSession().getNamedQuery("item.getById")
-                .setLong("id", id).setMaxResults(1)
-                .uniqueResult();
+    public PasteItem get(String id) {
+        return null;
+//        return (PasteItem) getEntityManager().createNamedQuery("item.getById")
+//                .setParameter("id", id).setMaxResults(1)
+//                .getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
     public List<PasteItem> find(int count, int startIndex) {
-        return getSession().getNamedQuery("item.find")
-                .setMaxResults(count).setFirstResult(startIndex).list();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<PasteItem> findThreaded(int count, int startIndex) {
-        return getSession()
-                .getNamedQuery("item.findThreaded")
-                .setMaxResults(count).setFirstResult(startIndex).list();
+        return getEntityManager().createNamedQuery("item.find")
+                .setMaxResults(count).setFirstResult(startIndex).getResultList();
     }
 
     public PasteItem findByToken(String privateToken) {
-        return (PasteItem) getSession()
-                .getNamedQuery("item.findByToken")
+        return (PasteItem) getEntityManager()
+                .createNamedQuery("item.findByToken")
                 .setParameter("token", privateToken)
-                .uniqueResult();
+                .getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
     public List<PasteItem> findByUser(String userToken) {
-        return getSession()
-                .getNamedQuery("item.findByUser")
-                .setParameter("token", userToken).list();
+        return getEntityManager()
+                .createNamedQuery("item.findByUser")
+                .setParameter("token", userToken).getResultList();
     }
 
 
-    public long getPasteCount() {
-        Long count = (Long) getSession()
-                .getNamedQuery("item.count")
-                .iterate().next();
+    public long count() {
+        Integer count = getEntityManager()
+                .createNamedQuery("item.count")
+                .getFirstResult();
 
+        System.out.println("pasteCount:"+count);
         return null == count ? 0 : count;
     }
 
 
     public void markAbuse(PasteItem pasteItem) {
-        PasteItem item = get(pasteItem.getId());
+        PasteItem item = get(pasteItem.getItemId());
         item.markAbuse();
         save(item);
     }
 
     public List<PasteItem> getChildren(PasteItem pasteItem) {
-        return (List<PasteItem>)getSession()
-        .getNamedQuery("item.children")
-                .setParameter("pasteItem", pasteItem)
-                .list();
+        return null;
+//        return (List<PasteItem>)getEntityManager()
+//        .createNamedQuery("item.children")
+//                .setParameter("pasteItem", pasteItem)
+//                .getResultList();
 //        return new ArrayList<PasteItem>();
-    }
-
-    public void detachItem(PasteItem pasteItem) {
-        getSession().evict(pasteItem);
     }
 
 }

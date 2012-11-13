@@ -1,7 +1,6 @@
 package com.mysticcoders.mysticpaste.web.servlet;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
-import com.mysticcoders.mysticpaste.services.InvalidClientException;
 import com.mysticcoders.mysticpaste.services.PasteService;
 
 import org.apache.wicket.util.string.Strings;
@@ -50,12 +49,7 @@ public class PluginServlet extends HttpServlet {
             item.setType(mapFileType(fileExtension));
         }
 
-        try {
-            getPasteService(getServletContext()).createItem("plugin", item);
-        } catch (InvalidClientException e) {
-            e.printStackTrace();
-        }
-
+        getPasteService(getServletContext()).createItem("plugin", item);
 
         StringBuilder sb = new StringBuilder("http://");
         sb.append("mysticpaste.com");
@@ -66,15 +60,15 @@ public class PluginServlet extends HttpServlet {
         }
 */
 
-        sb.append("/view/").append(item.getId());
+        sb.append("/view/").append(item.getItemId());
 
         if (redirect != null && redirect.equalsIgnoreCase("true")) {
             resp.sendRedirect(sb.toString());
 
         } else {
-            resp.setHeader("X-Paste-Identifier", "" + item.getId());  // Added to allow pastebin integration with the VIM plugin
+            resp.setHeader("X-Paste-Identifier", "" + item.getItemId());  // Added to allow pastebin integration with the VIM plugin
 
-            resp.getWriter().print(item.getId());
+            resp.getWriter().print(item.getItemId());
             resp.flushBuffer();
         }
 

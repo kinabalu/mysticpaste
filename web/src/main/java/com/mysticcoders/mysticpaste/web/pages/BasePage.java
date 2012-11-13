@@ -1,22 +1,32 @@
 package com.mysticcoders.mysticpaste.web.pages;
 
+import com.mysticcoders.mysticpaste.web.components.FixBootstrapStylesCssResourceReference;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
-import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import de.agilecoders.wicket.Bootstrap;
+import de.agilecoders.wicket.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.markup.html.bootstrap.html.ChromeFrameMetaTag;
+import de.agilecoders.wicket.markup.html.bootstrap.html.HtmlTag;
+import de.agilecoders.wicket.markup.html.bootstrap.html.MetaTag;
+import de.agilecoders.wicket.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
+import de.agilecoders.wicket.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.markup.html.references.BootstrapJavaScriptReference;
+import de.agilecoders.wicket.settings.IBootstrapSettings;
+import org.apache.wicket.Application;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import java.util.Calendar;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Base Page for the application.
@@ -49,46 +59,15 @@ public class BasePage extends WebPage {
 
     private void init() {
 
-        AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
-            public String getObject() {
-                Calendar cal = Calendar.getInstance();
-                return "" + cal.get(Calendar.YEAR);
-            }
-        };
+        add(new HtmlTag("html"));
 
-        add(new Label("latestYear", dateModel));
+        add(new OptimizedMobileViewportMetaTag("viewport"));
+        add(new ChromeFrameMetaTag("chrome-frame"));
+        add(new MetaTag("description", Model.of("description"), Model.of("Mystic Paste")));
+        add(new MetaTag("author", Model.of("author"), Model.of("Andrew Lombardi <andrew@mysticcoders.com>")));
 
-        WebMarkupContainer newLinkContainer = new WebMarkupContainer("newLinkContainer");
-        if (activePage != null && activePage.equals(PasteItemPage.class)) {
-            newLinkContainer.add(new SimpleAttributeModifier("class", "active"));
-        }
-        newLinkContainer.add(new BookmarkablePageLink<Void>("newLink", PasteItemPage.class));
-        add(newLinkContainer);
-
-        WebMarkupContainer historyLinkContainer = new WebMarkupContainer("historyLinkContainer");
-        if (activePage != null && activePage.equals(HistoryPage.class)) {
-            historyLinkContainer.add(new SimpleAttributeModifier("class", "active"));
-        }
-        historyLinkContainer.add(new BookmarkablePageLink<Void>("historyLink", HistoryPage.class));
-        add(historyLinkContainer);
-
-        WebMarkupContainer pluginLinkContainer = new WebMarkupContainer("pluginLinkContainer");
-        if (activePage != null && activePage.equals(PluginPage.class)) {
-            pluginLinkContainer.add(new SimpleAttributeModifier("class", "active"));
-        }
-        pluginLinkContainer.add(new BookmarkablePageLink<Void>("pluginLink", PluginPage.class));
-        add(pluginLinkContainer);
-
-        WebMarkupContainer helpLinkContainer = new WebMarkupContainer("helpLinkContainer");
-        if (activePage != null && activePage.equals(HelpPage.class)) {
-            helpLinkContainer.add(new SimpleAttributeModifier("class", "active"));
-        }
-        helpLinkContainer.add(new BookmarkablePageLink<Void>("helpLink", HelpPage.class));
-        add(helpLinkContainer);
-
-        add(new ExternalLink("sourceLink", "http://github.com/kinabalu/mysticpaste/"));
-
-        add(new TagExternalLink("blogLink", "http://www.mysticcoders.com/blog"));
+        add(newNavbar("navbar"));
+        add(new Footer("footer"));
 
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {
@@ -99,6 +78,42 @@ public class BasePage extends WebPage {
                 return true;
             }
         });
+
+        add(new BootstrapBaseBehavior());
+    }
+
+    /**
+     * creates a new {@link Navbar} instance
+     *
+     * @param markupId The components markup id.
+     * @return a new {@link Navbar} instance
+     */
+    protected Navbar newNavbar(String markupId) {
+        Navbar navbar = new Navbar(markupId);
+        navbar.setPosition(Navbar.Position.TOP);
+        navbar.invert(false);
+
+        // show brand name and logo
+        navbar.brandName(Model.of("Mystic Paste"));
+//        navbar.brandImage(new PackageResourceReference(BasePage.class, "logo.png"), Model.of("Wicket logo"));
+
+        // show dark navbar
+//        navbar.invert(false);
+
+        navbar.addButton(Navbar.ButtonPosition.LEFT,
+                new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
+                new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
+                new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
+                new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
+
+//                         new NavbarButton<HomePage>(HomePage.class, Model.of("Overview")).setIcon(new Icon(IconType.Home)),
+//                         new NavbarButton<BaseCssPage>(BaseCssPage.class, Model.of("Base CSS")),
+//                         new NavbarButton<ComponentsPage>(ComponentsPage.class, Model.of("Components")),
+//                         new NavbarButton<HomePage>(Scaffolding.class, Model.of("Scaffolding")),
+//                         new NavbarButton<HomePage>(Javascript.class, Model.of("Javascript"))
+        );
+
+        return navbar;
     }
 
     @Override
@@ -108,14 +123,48 @@ public class BasePage extends WebPage {
         super.onBeforeRender();
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(CssHeaderItem.forReference(FixBootstrapStylesCssResourceReference.INSTANCE));
+        response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
+        response.render(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.get()));
+    }
+
+    /**
+     * sets the theme for the current user.
+     *
+     * @param pageParameters current page parameters
+     */
+    private void configureTheme(PageParameters pageParameters) {
+        StringValue theme = pageParameters.get("theme");
+
+        if (!theme.isEmpty()) {
+            IBootstrapSettings settings = Bootstrap.getSettings(getApplication());
+            settings.getActiveThemeProvider().setActiveTheme(theme.toString(""));
+        }
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        configureTheme(getPageParameters());
+    }
+
     /**
      * Returns the X-Forwarded-For header
      *
      * @return
      */
     protected String getClientIpAddress() {
-        String xForwardedFor = ((ServletWebRequest) RequestCycle.get().getRequest()).getHeader("X-Forwarded-For");
-        return xForwardedFor;
+        ServletWebRequest request = ((ServletWebRequest) RequestCycle.get().getRequest());
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null) {
+            ipAddress = request.getContainerRequest().getRemoteHost();
+        }
+        return ipAddress;
     }
 
 }

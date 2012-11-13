@@ -34,16 +34,6 @@
         </init-param>
 	</filter>
 
-	<filter>
-       <filter-name>open.hibernate.session.in.view</filter-name>
-        <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
-    </filter>
-    <filter-mapping>
-       <filter-name>open.hibernate.session.in.view</filter-name>
-       <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-
 	<filter-mapping>
 		<filter-name>wicket.mysticpaste</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -55,7 +45,7 @@
         <url-pattern>/servlet/*</url-pattern>
     </filter-mapping>
 
-    
+
     <servlet>
         <servlet-name>PluginServlet</servlet-name>
         <servlet-class>com.mysticcoders.mysticpaste.web.servlet.PluginServlet</servlet-class>
@@ -64,13 +54,11 @@
         <servlet-name>PluginServlet</servlet-name>
         <url-pattern>/servlet/plugin</url-pattern>
     </servlet-mapping>
-    
 
 	<!--
 		The SpringWebApplicationFactory will need access to a Spring
 		Application context, configured like this...
 	-->
-
 	<listener>
 		<listener-class> 
 		  org.springframework.web.context.ContextLoaderListener 

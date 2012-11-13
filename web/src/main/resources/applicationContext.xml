@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-2.0.4.xsd"
+       default-autowire="byName">
+
+    <!--  tell spring to use annotation based congfigurations -->
+    <context:annotation-config/>
+
+    <context:component-scan base-package="com.mysticcoders.mysticpaste.persistence">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+    <context:component-scan base-package="com.mysticcoders.mysticpaste.services">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
 
     <!-- Configurer that replaces ${...} placeholders with values from properties files -->
     <!-- (in this case, JDBC related properties) -->
@@ -17,17 +38,6 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
             </list>
         </property>
         <property name="ignoreResourceNotFound" value="true"/>
-    </bean>
-
-    <!-- Services Beans -->
-    <bean id="pasteService" class="com.mysticcoders.mysticpaste.services.PasteServiceImpl">
-        <property name="itemDao" ref="pasteItemDao"/>
-        <property name="tokenLength" value="${private.token.length}" />
-    </bean>
-
-    <!-- DAOs -->
-    <bean id="pasteItemDao" class="com.mysticcoders.mysticpaste.persistence.hibernate.PasteItemDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <!-- Wicket Application -->
@@ -43,49 +53,103 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
         -->
     </bean>
 
-    <!--  Database Beans -->
+<!--
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+
+        <property name="persistenceUnitName" value="mysticpaste-persistence"/>
+        <property name="dataSource" ref="dataSource"/>
+
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="databasePlatform" value="${hibernate.dialect}"/>
+                <property name="showSql" value="${hibernate.show_sql}"/>
+            </bean>
+        </property>
+
+        <property name="jpaProperties">
+            <value>
+                hibernate.jdbc.batch_size=20
+                hibernate.order_inserts=true
+                hibernate.order_updates=true
+            </value>
+        </property>
+    </bean>
+-->
+
+<!--
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+-->
+
+<!--
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+-->
+
+    <!-- Tell Spring it should use @Transactional annotations -->
+    <tx:annotation-driven/>
+
+<!--
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driver}"/>
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
+        <property name="maxActive" value="100"/>
+        <property name="maxWait" value="1000"/>
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="defaultAutoCommit" value="true"/>
+    </bean>
+-->
+
+    <!-- Proxy to a set of filters that enforce authentication and authorization. -->
+<!--
+    <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+        <property name="filterInvocationDefinitionSource">
+            <value>
+                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                PATTERN_TYPE_APACHE_ANT
+                /**=httpSessionContextIntegrationFilter
+            </value>
+        </property>
+    </bean>
+-->
+
+    <!-- Maintains security context between requests (using the session). -->
+<!--
+    <bean id="httpSessionContextIntegrationFilter"
+          class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+-->
+<!--
+        <property name="forceEagerSessionCreation" value="true"/>
+-->
+<!--
+        <property name="allowSessionCreation" value="false" />
+    </bean>
+-->
+
+
+<!--
+    <bean id="mysticPasteApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication" />
+
+    <security:authentication-provider user-service-ref="userDetailsService">
+    </security:authentication-provider>
+-->
+
+    <!-- = = = = = = = = AUTHENTICATION = = = = = = = -->
+<!--
+    <bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
     </bean>
 
-    <!-- Hibernate session factory -->
-    <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="userDetailsService" class="org.springframework.security.userdetails.jdbc.JdbcDaoImpl">
         <property name="dataSource" ref="dataSource"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-                <prop key="use_outer_join">${hibernate.use_outer_join}</prop>
-
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-                <prop key="hibernate.cache.provider_class">${hibernate.cache.provider}</prop>
-
-                <prop key="hibernate.connection.pool_size">10</prop>
-                <prop key="hibernate.jdbc.batch_size">1000</prop>
-                <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
-
-            </props>
-        </property>
-        <property name="annotatedClasses">
-            <list>
-                <value>com.mysticcoders.mysticpaste.model.PasteItem</value>
-                <value>com.mysticcoders.mysticpaste.model.Client</value>                
-            </list>
-        </property>
-
-        <property name="schemaUpdate" value="${hibernate.schemaUpdate}"/>
     </bean>
+-->
 
-    <!-- Tell Spring it should use @Transactional annotations -->
-    <tx:annotation-driven/>
+    <!-- Loads MongoDB configuraton -->
+   	<import resource="mongo-config.xml"/>
 
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
 </beans>
