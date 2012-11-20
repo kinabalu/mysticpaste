@@ -17,17 +17,26 @@ public class PasteItem implements Serializable {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
+    private long pasteIndex;
     protected String itemId;
     protected String content;
     protected String type;
     protected Date timestamp;
-    protected boolean abuseFlag;
+    protected int abuseCount;
     protected boolean privateFlag;
     protected String parent;
     protected String clientIp;
     protected int viewCount;
 
     private String imageLocation;
+
+    public long getPasteIndex() {
+        return pasteIndex;
+    }
+
+    public void setPasteIndex(long pasteIndex) {
+        this.pasteIndex = pasteIndex;
+    }
 
     public String getItemId() {
         return itemId;
@@ -81,12 +90,12 @@ public class PasteItem implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public boolean isAbuseFlag() {
-        return abuseFlag;
+    public int getAbuseCount() {
+        return abuseCount;
     }
 
     public void markAbuse() {
-        this.abuseFlag = true;
+        this.abuseCount += 1;
     }
 
     public boolean isPrivate() {

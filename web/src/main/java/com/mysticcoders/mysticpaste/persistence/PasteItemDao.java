@@ -18,6 +18,8 @@ public interface PasteItemDao {
 
     long count();
 
+    int incViewCount(PasteItem pasteItem);
+
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> getChildren(PasteItem pasteItem);

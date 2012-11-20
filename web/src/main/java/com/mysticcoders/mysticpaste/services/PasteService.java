@@ -23,6 +23,8 @@ public interface PasteService {
 
     long getLatestItemsCount(String clientToken);
 
+    int incViewCount(PasteItem pasteItem);
+
     void markAbuse(PasteItem pasteItem);
 
     List<PasteItem> hasChildren(PasteItem pasteItem);

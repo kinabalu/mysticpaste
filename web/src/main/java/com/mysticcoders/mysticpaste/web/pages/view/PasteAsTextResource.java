@@ -82,7 +82,7 @@ public class PasteAsTextResource extends ResourceReference {
                                 //X-Robots-Tag: noindex
                                 ((WebResponse) attributes.getResponse()).addHeader("X-Robots-Tag", "noindex");
                             }
-                            if (!pasteItem.isAbuseFlag()) {
+                            if (pasteItem.getAbuseCount() <= 2) {
                                 attributes.getResponse().write(pasteItem.getContent().getBytes());
                             } else {
                                 logger.info("Abuse Paste accessed id[" + pasteItem.getItemId() + "]");

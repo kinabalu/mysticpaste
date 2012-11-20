@@ -6,12 +6,50 @@
 */
 
 
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -160px;
+}
+
+#main {
+  overflow: visible;
+    padding-bottom: 40px;
+    padding-top: 60px;
+}  /* must be same height as the footer */
+
+/* Set the fixed height of the footer here */
+#push, #footer {
+    height: 100px;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
 
 /* Body and structure
 -------------------------------------------------- */
 body {
     position: relative;
-    padding-top: 40px;
+    /*padding-top: 40px;*/
 }
 
 /* Code in headings */
@@ -284,13 +322,13 @@ hr.soften {
 /* Footer
 -------------------------------------------------- */
 
-.footer {
-    padding: 70px 0;
-    margin-top: 70px;
-    border-top: 1px solid #e5e5e5;
+#footer {
+    padding: 30px 0;
+    /*margin-top: 60px;*/
+    /*border-top: 1px solid #e5e5e5;*/
     background-color: #f5f5f5;
 }
-.footer p {
+#footer p {
     margin-bottom: 0;
     color: #777;
 }
@@ -920,13 +958,13 @@ form.bs-docs-example {
     }
 
     /* Unfloat the back to top link in footer */
-    .footer {
+    #footer {
         margin-left: -20px;
         margin-right: -20px;
         padding-left: 20px;
         padding-right: 20px;
     }
-    .footer p {
+    #footer p {
         margin-bottom: 9px;
     }
 }
@@ -1000,7 +1038,7 @@ form.bs-docs-example {
     }
 
     /* Unfloat the back to top in footer to prevent odd text wrapping */
-    .footer .pull-right {
+    #footer .pull-right {
         float: none;
     }
 }

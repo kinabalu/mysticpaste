@@ -19,13 +19,16 @@
 <body data-spy="scroll" data-target=".subnav">
 
     <div wicket:id="navbar"></div>
-    <div class="container">
 
-        <wicket:child/>
-
+    <div id="wrap">
+        <div class="container" id="main">
+            <wicket:child/>
+            <div style="margin-bottom: 20px;"></div>
+            <div id="push"></div>
+        </div>
     </div>
 
-        <wicket:panel wicket:id="footer"></wicket:panel>
+    <wicket:panel wicket:id="footer"></wicket:panel>
 
 
     <span wicket:id="ga-js">[ga-js]</span>

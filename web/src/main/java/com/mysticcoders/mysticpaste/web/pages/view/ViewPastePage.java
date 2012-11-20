@@ -106,16 +106,26 @@ public abstract class ViewPastePage extends BasePage {
         if (pasteModel.getObject() == null || (pasteModel.getObject().isPrivate() && params.get("0").isNull())) {
             throw new RestartResponseException(PasteNotFound.class);
         }
-        if (pasteModel.getObject().isAbuseFlag()) {
+        if (pasteModel.getObject().getAbuseCount() > 2) {
             throw new RestartResponseException(PasteSpam.class);
         }
         if (pasteModel.getObject().getContent() == null) {
             pasteModel.getObject().setContent("");
         }
 
+        int viewCount = pasteService.incViewCount(pasteModel.getObject());
+
         this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
         add(new Label("type"));
 
+
+        WebMarkupContainer spamAlert = new WebMarkupContainer("spamAlert") {
+            @Override
+            public boolean isVisible() {
+                return pasteModel.getObject().getAbuseCount() > 0;
+            }
+        };
+        add(spamAlert);
 
         WebMarkupContainer hasImage = new WebMarkupContainer("hasImage") {
             @Override

@@ -16,6 +16,10 @@
 
     <div class="container">
 
+    <div wicket:id="spamAlert" class="alert alert-error">
+        <p><i class="icon-warning-sign"></i> Post has been flagged as spam - mark again to remove from view</p>
+    </div>
+
     <div class="row" style="margin-top: 20px;">
         <div class="span6">
             <strong>Language: <wicket:container wicket:id="type">[type]</wicket:container></strong>
@@ -24,23 +28,21 @@
         <div class="span6">
             <div class="pull-right">
             <div class="btn-group">
-              <button class="btn" wicket:id="hasImage"><i class="icon-file"></i> <a wicket:id="imageLocation" target="_blank">Image</a></button>
-              <button class="btn"><a wicket:id="rawLink">Raw</a></button>
-              <button class="btn"><a wicket:id="downloadLink">Download</a></button>
+              <wicket:container wicket:id="hasImage"><button class="btn btn-success" wicket:id="imageLocation"><i class="icon-file icon-white"></i> Image</button></wicket:container>
+              <button class="btn" wicket:id="rawLink">Raw</button>
+              <button class="btn" wicket:id="downloadLink">Download</button>
               <button class="btn"><a wicket:id="markAbuseLink" class="text-warning" onclick="return confirm('Are you sure this paste is SPAM?');"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></button>
             </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="container">
-                <div wicket:id="highlightedContent">[highlightedContent]</div>
-            </div>
-        </div>
-
     </div>
 
-    <p>&nbsp;</p>
+    <div class="row">
+        <div class="container">
+            <div wicket:id="highlightedContent">[highlightedContent]</div>
+        </div>
+    </div>
 
     <wicket:container wicket:id="hasChildPastes">
         <div class="container">

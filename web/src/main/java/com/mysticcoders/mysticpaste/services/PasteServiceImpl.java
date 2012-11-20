@@ -122,6 +122,10 @@ public class PasteServiceImpl implements PasteService {
         return pasteItemDao.count();
     }
 
+    public int incViewCount(PasteItem pasteItem) {
+        return pasteItemDao.incViewCount(pasteItem);
+    }
+
     public void markAbuse(PasteItem pasteItem) {
         pasteItemDao.markAbuse(pasteItem);
     }

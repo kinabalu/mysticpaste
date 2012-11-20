@@ -10,7 +10,6 @@ cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
 mongo = Connection()
 
-
 cursor.execute("SELECT * FROM paste_items")
 
 records = cursor.fetchall()
