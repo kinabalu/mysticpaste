@@ -25,8 +25,11 @@ public interface PasteService {
 
     int incViewCount(PasteItem pasteItem);
 
-    void markAbuse(PasteItem pasteItem);
+    void increaseAbuseCount(PasteItem pasteItem);
+
+    void decreaseAbuseCount(PasteItem pasteItem);
 
     List<PasteItem> hasChildren(PasteItem pasteItem);
 
+    String getAdminPassword();
 }

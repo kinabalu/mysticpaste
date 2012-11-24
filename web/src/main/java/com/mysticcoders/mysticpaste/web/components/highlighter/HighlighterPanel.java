@@ -139,6 +139,7 @@ public class HighlighterPanel extends Panel {
 
                 JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterCoreHandler));
                 JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterLanguageHandler));
+                JavaScriptUtils.writeJavaScript(component.getResponse(), "SyntaxHighlighter.defaults['auto-links'] = false;");
                 JavaScriptUtils.writeJavaScript(component.getResponse(), "SyntaxHighlighter.all();");
             }
         });

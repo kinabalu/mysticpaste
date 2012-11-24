@@ -1,18 +1,60 @@
 <html xmlns:wicket="http://wicket.apache.org">
-
 <wicket:extend>
 
-    <h3>ADMIN</h3>
-    <ul>
-        <li>
-            List of pastes
-                # of lines
-                when pasted
-                IP
-                # of views (even abuse pastes)
-            Pastes by IP
-        </li>
-    </ul>
+    <div class="container">
 
+
+        <div class="row">
+            <div class="span12">
+                <div class="pull-right">
+                    <div wicket:id="pageNav" class="pagination">
+                        <ul>
+                            <li><a href="#">1</a> </li>
+                            <li><a href="#">2</a> </li>
+                            <li><a href="#">3</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <span wicket:id="historyContainer">
+                <section wicket:id="history" class="well">
+                    <div class="row">
+                        <div class="span6">
+                        <a wicket:id="viewLink" target="_blank">View Paste</a> <small wicket:id="lineCount">(27 lines)</small>
+                        <a wicket:id="increaseAbuseCount">Mark Abuse</a>
+                        </div>
+
+                        <div class="pull-right">
+                            <wicket:container wicket:id="hasImage"><i class="icon-file"></i></wicket:container>
+                            <small wicket:id="posted">1 hour ago</small> @ <small wicket:id="clientIp">127.0.0.1-</small>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0px;">
+
+                      <div style="border: 1px #ccc solid;" wicket:id="content"></div>
+
+                    </div>
+                </section>
+        </span>
+
+        <wicket:enclosure>
+            <div wicket:id="noPastesFound" style="font-size: 42px; color: #bbb; top:50%;left:5%;width:90%;line-height:2em;margin-top:-1em;text-align:center;position:absolute;">[noPastesFound]</div>
+        </wicket:enclosure>
+
+        <div class="row">
+            <div class="pull-right">
+                <div wicket:id="pageNav2" class="pagination">
+                    <ul>
+                        <li><a href="#">1</a> </li>
+                        <li><a href="#">2</a> </li>
+                        <li><a href="#">3</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </wicket:extend>
 </html>

@@ -20,7 +20,11 @@ public interface PasteItemDao {
 
     int incViewCount(PasteItem pasteItem);
 
-    void markAbuse(PasteItem pasteItem);
+    void increaseAbuseCount(PasteItem pasteItem);
+
+    void decreaseAbuseCount(PasteItem pasteItem);
 
     List<PasteItem> getChildren(PasteItem pasteItem);
+
+    String getAdminPassword();
 }

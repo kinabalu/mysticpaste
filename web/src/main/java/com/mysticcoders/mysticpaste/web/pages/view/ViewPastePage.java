@@ -211,15 +211,23 @@ public abstract class ViewPastePage extends BasePage {
             public void onClick() {
                 PasteItem pasteItem = pasteModel.getObject();
 
-                pasteService.markAbuse(pasteItem);
+                pasteService.increaseAbuseCount(pasteItem);
 
                 markAbuseLabel.setDefaultModel(new Model<String>("Marked As Spam"));
                 markAbuseLabel.add(new AttributeModifier("style", "color: red; font-weight: bold;"));
             }
         };
-        add(markAbuseLink);
+//        add(markAbuseLink);
         markAbuseLink.add(markAbuseLabel);
 
+        WebMarkupContainer viewCountContainer = new WebMarkupContainer("viewCountContainer") {
+            @Override
+            public boolean isVisible() {
+                return pasteModel.getObject().getViewCount() > 0;
+            }
+        };
+        viewCountContainer.add(new Label("viewCount", new PropertyModel<Integer>(pasteModel, "viewCount")));
+        add(viewCountContainer);
 
         StatelessForm<PasteItem> replyForm = new StatelessForm<PasteItem>("replyForm", pasteModel) {
 

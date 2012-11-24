@@ -45,6 +45,10 @@ public class PasteItemDaoImpl implements PasteItemDao {
         }
     }
 
+    public String getAdminPassword() {
+        return redisTemplate.opsForValue().get("pasteAdminPw");
+    }
+
     public PasteItem get(String id) {
         Query query = new Query(where("itemId").is(id));
         return mongoTemplate.findOne(query, PasteItem.class, "pastes");
@@ -98,7 +102,7 @@ public class PasteItemDaoImpl implements PasteItemDao {
         }
     }
 
-    public void markAbuse(PasteItem pasteItem) {
+    public void increaseAbuseCount(PasteItem pasteItem) {
         try {
             Query query = new Query(where("itemId").is(pasteItem.getItemId()));
             Update update = new Update();
@@ -107,6 +111,23 @@ public class PasteItemDaoImpl implements PasteItemDao {
             if (modifiedPasteItem.getAbuseCount() > 1) {
                 System.out.println("Removing paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
                 redisTemplate.opsForList().remove("pasteHistory", 1, "" + modifiedPasteItem.getPasteIndex());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void decreaseAbuseCount(PasteItem pasteItem) {
+        try {
+            Query query = new Query(where("itemId").is(pasteItem.getItemId()));
+            Update update = new Update();
+            update.inc("abuseCount", -1);
+            PasteItem modifiedPasteItem = mongoTemplate.findAndModify(query, update, PasteItem.class, "pastes");
+            if (modifiedPasteItem.getAbuseCount() > 1) {
+                System.out.println("Restoring paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
+// TODO figure out how we can fix the list and how to include the paste in the proper spot
+//                redisTemplate.opsForList().
+//                redisTemplate.opsForList().remove("pasteHistory", 1, "" + modifiedPasteItem.getPasteIndex());
             }
         } catch (Exception e) {
             e.printStackTrace();

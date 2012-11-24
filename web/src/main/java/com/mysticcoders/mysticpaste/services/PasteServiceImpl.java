@@ -126,12 +126,20 @@ public class PasteServiceImpl implements PasteService {
         return pasteItemDao.incViewCount(pasteItem);
     }
 
-    public void markAbuse(PasteItem pasteItem) {
-        pasteItemDao.markAbuse(pasteItem);
+    public void increaseAbuseCount(PasteItem pasteItem) {
+        pasteItemDao.increaseAbuseCount(pasteItem);
+    }
+
+    public void decreaseAbuseCount(PasteItem pasteItem) {
+        pasteItemDao.decreaseAbuseCount(pasteItem);
     }
 
     public List<PasteItem> hasChildren(PasteItem pasteItem) {
         return pasteItemDao.getChildren(pasteItem);
+    }
+
+    public String getAdminPassword() {
+        return pasteItemDao.getAdminPassword();
     }
 
     public int getTokenLength() {

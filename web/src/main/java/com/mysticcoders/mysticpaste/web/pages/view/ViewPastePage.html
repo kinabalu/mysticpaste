@@ -17,7 +17,7 @@
     <div class="container">
 
     <div wicket:id="spamAlert" class="alert alert-error">
-        <p><i class="icon-warning-sign"></i> Post has been flagged as spam - mark again to remove from view</p>
+        <p><i class="icon-warning-sign"></i> Post has been flagged as spam</p>
     </div>
 
     <div class="row" style="margin-top: 20px;">
@@ -31,7 +31,9 @@
               <wicket:container wicket:id="hasImage"><button class="btn btn-success" wicket:id="imageLocation"><i class="icon-file icon-white"></i> Image</button></wicket:container>
               <button class="btn" wicket:id="rawLink">Raw</button>
               <button class="btn" wicket:id="downloadLink">Download</button>
-              <button class="btn"><a wicket:id="markAbuseLink" class="text-warning" onclick="return confirm('Are you sure this paste is SPAM?');"><span wicket:id="markAbuseLabel">[markAbuseLabel]</span></a></button>
+              <wicket:remove>
+              <button class="btn"><a class="text-warning" onclick="return confirm('Are you sure this paste is SPAM?');"><span>[markAbuseLabel]</span></a></button>
+              </wicket:remove>
             </div>
             </div>
         </div>
@@ -42,8 +44,10 @@
         <div class="container">
             <div wicket:id="highlightedContent">[highlightedContent]</div>
         </div>
+        <div class="pull-right" wicket:id="viewCountContainer">
+        <p><small>Viewed: <span wicket:id="viewCount">[viewCount]</span> time(s)</small></p>
+        </div>
     </div>
-
     <wicket:container wicket:id="hasChildPastes">
         <div class="container">
             <h3>Paste Replies</h3>
