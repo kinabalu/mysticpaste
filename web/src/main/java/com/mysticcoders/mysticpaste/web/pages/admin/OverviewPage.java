@@ -98,8 +98,12 @@ public class OverviewPage extends BasePage {
                     }
                 };
                 item.add(hasImage);
+                item.add(new Label("content",
+                        new PropertyModel<String>(pasteItem, "previewContent")));
+/*
                 item.add(new HighlighterPanel("content",
                         new PropertyModel<String>(pasteItem, "previewContent"), pasteItem.getType()));
+*/
             }
         };
 

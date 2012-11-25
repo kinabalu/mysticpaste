@@ -30,9 +30,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,11 @@ public abstract class ViewPastePage extends BasePage {
 
     public ViewPastePage(final PageParameters params) {
         super(params);
+
+        List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+        for(Cookie cookie : cookies) {
+            System.out.println(cookie.getName() + ":" + cookie.getValue());
+        }
 
         if (params.get("0").isNull()) {
             throw new RestartResponseException(PasteNotFound.class);

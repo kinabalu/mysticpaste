@@ -3,6 +3,8 @@ package com.mysticcoders.mysticpaste.persistence.mongo;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.persistence.PasteItemDao;
 import com.mysticcoders.mysticpaste.utils.TokenGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,6 +23,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 @Repository("mongoPasteItemDao")
 public class PasteItemDaoImpl implements PasteItemDao {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Resource(name = "mongoTemplate")
     private MongoTemplate mongoTemplate;
@@ -68,20 +72,29 @@ public class PasteItemDaoImpl implements PasteItemDao {
         List<PasteItem> items = mongoTemplate.find(query, PasteItem.class, "pastes");
         return items;
 */
+        long beginItemIdsRedis = System.currentTimeMillis();
         List<String> itemIds = redisTemplate.opsForList().range("pasteHistory", startIndex, startIndex + count);
         List<Long> itemsAsLong = new ArrayList<Long>(itemIds.size());
         // Convert from String to Long so Mongo doesn't complain (TODO change this cause it sucks)
         for (String itemId : itemIds) {
             itemsAsLong.add(Long.parseLong(itemId));
         }
+        logger.debug("Time taken to grab redis:pasteHistory:" + (System.currentTimeMillis() - beginItemIdsRedis));
+
+        long beginMongoQuery = System.currentTimeMillis();
         Query query = new Query(where("pasteIndex").in(itemsAsLong));
         query.sort().on("pasteIndex", Order.DESCENDING);
         query.limit(count);
-        return mongoTemplate.find(query, PasteItem.class, "pastes");
+        List<PasteItem> items = mongoTemplate.find(query, PasteItem.class, "pastes");
+        logger.debug("Time taken to query and retrieve pastes:" + (System.currentTimeMillis() - beginMongoQuery));
+        return items;
     }
 
     public long count() {
-        return redisTemplate.opsForList().size("pasteHistory");
+        long beginGetCount = System.currentTimeMillis();
+        long count = redisTemplate.opsForList().size("pasteHistory");
+        logger.debug("Time taken to get redis:pasteHistory count:" + (System.currentTimeMillis() - beginGetCount));
+        return count;
 /*
         Query query = new Query(where("abuseCount").lte(2).and("privateFlag").is(false));
         long count = mongoTemplate.count(query, "pastes");

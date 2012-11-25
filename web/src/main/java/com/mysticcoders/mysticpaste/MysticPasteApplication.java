@@ -1,6 +1,7 @@
 package com.mysticcoders.mysticpaste;
 
 import com.mysticcoders.mysticpaste.utils.PriorityResourceMapper;
+import com.mysticcoders.mysticpaste.web.pages.HelpPage;
 import com.mysticcoders.mysticpaste.web.pages.admin.OverviewPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
@@ -86,6 +87,7 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/private/${0}", ViewPrivatePage.class);
 //        mountPage("/private/${0}/${1}", ViewPrivatePage.class);         // map the highlight line URL
 
+        mountPage("/help", HelpPage.class);
         mountPage("/login", SignInPage.class);
         mountPage("/admin", OverviewPage.class);
 
