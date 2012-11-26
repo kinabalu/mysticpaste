@@ -16,6 +16,7 @@
  */
 .syntaxhighlighter {
   background-color: white !important;
+  padding-bottom: 1px !important;
 }
 .syntaxhighlighter .line.alt1 {
   background-color: white !important;
