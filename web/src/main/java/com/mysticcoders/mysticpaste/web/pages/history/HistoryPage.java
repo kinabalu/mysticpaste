@@ -3,8 +3,13 @@ package com.mysticcoders.mysticpaste.web.pages.history;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
+import com.mysticcoders.mysticpaste.web.components.mousetrap.KeyBinding;
+import com.mysticcoders.mysticpaste.web.components.mousetrap.Mousetrap;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -68,23 +73,69 @@ public class HistoryPage extends BasePage {
             }
         };
 
-        WebMarkupContainer historyDataViewContainer = new WebMarkupContainer("historyContainer");
+        final WebMarkupContainer historyDataViewContainer = new WebMarkupContainer("historyContainer");
         historyDataViewContainer.add(historyDataView);
         historyDataViewContainer.setOutputMarkupId(true);
         add(historyDataViewContainer);
 
-        PastePagingNavigator pageNav = new PastePagingNavigator("pageNav", historyDataView) {
+        final PastePagingNavigator pageNav = new PastePagingNavigator("pageNav", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
         };
-        PastePagingNavigator pageNav2 = new PastePagingNavigator("pageNav2", historyDataView) {
+        final PastePagingNavigator pageNav2 = new PastePagingNavigator("pageNav2", historyDataView) {
             @Override
             public boolean isVisible() {
                 return historyDataProvider.isVisible();
             }
         };
+
+        final AbstractDefaultAjaxBehavior historyNextPageNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                if(pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
+                    pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() + 1);
+                    target.add(historyDataViewContainer, pageNav, pageNav2);
+                }
+            }
+        };
+        final AbstractDefaultAjaxBehavior historyPrevPageNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                if(pageNav.getPageable().getCurrentPage() > 0) {
+                    pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() - 1);
+                    target.add(historyDataViewContainer, pageNav, pageNav2);
+                }
+            }
+        };
+        final AbstractDefaultAjaxBehavior historyFirstPageNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                if(pageNav.getPageable().getCurrentPage() > 1) {
+                    pageNav.getPageable().setCurrentPage(0);
+                    target.add(historyDataViewContainer, pageNav, pageNav2);
+                }
+            }
+        };
+        final AbstractDefaultAjaxBehavior historyLastPageNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                if(pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
+                    pageNav.getPageable().setCurrentPage(pageNav.getPageable().getPageCount() - 1);
+                    target.add(historyDataViewContainer, pageNav, pageNav2);
+                }
+            }
+        };
+
+        add(historyPrevPageNav);
+        add(historyNextPageNav);
+        add(historyFirstPageNav);
+        add(historyLastPageNav);
+        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.LEFT), historyPrevPageNav);
+        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.RIGHT), historyNextPageNav);
+        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.LEFT), historyFirstPageNav);
+        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.RIGHT), historyLastPageNav);
 
         pageNav.setDependentNavigator(pageNav2);
         pageNav2.setDependentNavigator(pageNav);

@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.FixBootstrapStylesCssResourceReference;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
+import com.mysticcoders.mysticpaste.web.components.mousetrap.KeyBinding;
 import com.mysticcoders.mysticpaste.web.components.mousetrap.Mousetrap;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
@@ -17,6 +18,9 @@ import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.settings.IBootstrapSettings;
 import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -24,7 +28,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -39,6 +42,7 @@ import org.apache.wicket.util.string.StringValue;
 public class BasePage extends WebPage {
 
     Class activePage;
+    Mousetrap mousetrap;
 
     public BasePage() {
         init();
@@ -58,6 +62,10 @@ public class BasePage extends WebPage {
         return "Mystic Paste";
     }
 
+    protected Mousetrap getMousetrap() {
+        return mousetrap;
+    }
+
     private void init() {
 
         add(new HtmlTag("html"));
@@ -70,7 +78,7 @@ public class BasePage extends WebPage {
         add(newNavbar("navbar"));
         add(new Footer("footer"));
 
-        add(new Mousetrap());
+        add(mousetrap = new Mousetrap());
 
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {
@@ -81,6 +89,27 @@ public class BasePage extends WebPage {
                 return true;
             }
         });
+
+        final AbstractDefaultAjaxBehavior newNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                throw new RestartResponseException(PasteItemPage.class);
+            }
+        };
+        add(newNav);
+
+        final AbstractDefaultAjaxBehavior historyNav = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                throw new RestartResponseException(HistoryPage.class);
+            }
+        };
+        add(historyNav);
+
+        mousetrap.addBind(new KeyBinding().addKeyCombo("n"),
+                newNav);
+        mousetrap.addBind(new KeyBinding().addKeyCombo("h"),
+                historyNav);
 
         add(new BootstrapBaseBehavior());
     }
@@ -98,22 +127,12 @@ public class BasePage extends WebPage {
 
         // show brand name and logo
         navbar.brandName(Model.of("Mystic Paste"));
-//        navbar.brandImage(new PackageResourceReference(BasePage.class, "logo.png"), Model.of("Wicket logo"));
-
-        // show dark navbar
-//        navbar.invert(false);
 
         navbar.addButton(Navbar.ButtonPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
                 new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
                 new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
                 new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
-
-//                         new NavbarButton<HomePage>(HomePage.class, Model.of("Overview")).setIcon(new Icon(IconType.Home)),
-//                         new NavbarButton<BaseCssPage>(BaseCssPage.class, Model.of("Base CSS")),
-//                         new NavbarButton<ComponentsPage>(ComponentsPage.class, Model.of("Components")),
-//                         new NavbarButton<HomePage>(Scaffolding.class, Model.of("Scaffolding")),
-//                         new NavbarButton<HomePage>(Javascript.class, Model.of("Javascript"))
         );
 
         return navbar;
