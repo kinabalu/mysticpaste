@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.FixBootstrapStylesCssResourceReference;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
+import com.mysticcoders.mysticpaste.web.components.mousetrap.Mousetrap;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
@@ -68,6 +69,8 @@ public class BasePage extends WebPage {
 
         add(newNavbar("navbar"));
         add(new Footer("footer"));
+
+        add(new Mousetrap());
 
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {

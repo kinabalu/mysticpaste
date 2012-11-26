@@ -17,8 +17,13 @@
 </head>
 
 <body data-spy="scroll" data-target=".subnav">
+<script>
+    Mousetrap.bind('ctrl+s', function(e) {
+        alert('Ctrl + S');
+    });
+</script>
 
-    <div wicket:id="navbar"></div>
+<div wicket:id="navbar"></div>
 
     <div id="wrap">
         <div class="container" id="main">
