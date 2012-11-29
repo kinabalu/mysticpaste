@@ -5,3 +5,7 @@ db
 db:mysticpaste*
 sql
 test-output
+WEB-INF
+META-INF
+assets
+*.swp

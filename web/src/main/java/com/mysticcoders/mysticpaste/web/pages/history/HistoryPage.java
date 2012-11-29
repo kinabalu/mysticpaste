@@ -2,12 +2,9 @@ package com.mysticcoders.mysticpaste.web.pages.history;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
-import com.mysticcoders.mysticpaste.web.components.mousetrap.KeyBinding;
-import com.mysticcoders.mysticpaste.web.components.mousetrap.Mousetrap;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
-import org.apache.wicket.RestartResponseException;
+import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -94,7 +91,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyNextPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                if(pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
+                if (pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() + 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
                 }
@@ -103,7 +100,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyPrevPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                if(pageNav.getPageable().getCurrentPage() > 0) {
+                if (pageNav.getPageable().getCurrentPage() > 0) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() - 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
                 }
@@ -112,7 +109,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyFirstPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                if(pageNav.getPageable().getCurrentPage() > 1) {
+                if (pageNav.getPageable().getCurrentPage() > 1) {
                     pageNav.getPageable().setCurrentPage(0);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
                 }
@@ -121,7 +118,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyLastPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                if(pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
+                if (pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getPageCount() - 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
                 }

@@ -1,6 +1,9 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-
+    <div class="alert alert-info fade in">
+        <button type="button" class="close" data-dismiss="alert">?</button>
+        Check out our <a href="/help"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!
+    </div>
     <div class="container">
         <form wicket:id="pasteForm">
             <div class="row" style="margin-top: 20px;">
@@ -70,6 +73,16 @@
         e.preventDefault();
         document.getElementById('content').style.backgroundColor = '#fff';
     }
+
+    // Thanks to http://stackoverflow.com/a/6338207
+    document.onpaste = function(event){
+      var items = event.clipboardData.items;
+      console.log(JSON.stringify(items)); // will give you the mime types
+      var blob = items[0].getAsFile();
+      upload(blob);
+    }
+
+
     function upload(file) {
 
         if(window.localStorage.getItem('upload')) {
@@ -93,6 +106,7 @@
         xhr.onload = function() {
             // Big win!
             parsed_json = JSON.parse(xhr.responseText)
+            console.log(xhr.responseText);
             document.getElementById("imageLocation").value = parsed_json.upload.links.imgur_page;
             document.getElementById("previewImage").src = parsed_json.upload.links.large_thumbnail;
             document.getElementById("imageAttached").setAttribute('class', 'span4')

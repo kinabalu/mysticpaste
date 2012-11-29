@@ -46,14 +46,14 @@
     </developers>
 
     <scm>
-        <connection>scm:hg:https://kenai.com/hg/mystic-apps~mystic-apps</connection>
-        <developerConnection>scm:hg:https://kenai.com/hg/mystic-apps~mystic-apps</developerConnection>
-        <url>http://kenai.com/projects/mystic-apps/sources/mystic-apps/show</url>
+        <connection>https://github.com/kinabalu/mysticpaste.git</connection>
+        <developerConnection>https://github.com/kinabalu/mysticpaste.git</developerConnection>
+        <url>https://github.com/kinabalu/mysticpaste</url>
     </scm>
 
     <issueManagement>
-        <system>JIRA</system>
-        <url>http://kenai.com/jira/browse/MYSTIC_APPS</url>
+        <system>github</system>
+        <url>https://github.com/kinabalu/mysticpaste/issues</url>
     </issueManagement>
 
     <licenses>
@@ -85,6 +85,11 @@
         <dependency>
             <groupId>org.incava</groupId>
             <artifactId>java-diff</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysticcoders</groupId>
+            <artifactId>wicket-mousetrap</artifactId>
         </dependency>
 
         <!--  WICKET DEPENDENCIES -->

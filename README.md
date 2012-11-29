@@ -16,18 +16,6 @@ directly from the editor.
 
 ## Environment Configuration
 
-### Wicket 1.5 Configuration
-
-In order to use Wicket 1.5 you need to either modify the pom.xml to use 1.5-M3 or latest milestone:
-
-`<wicket.version>1.5-M3</wicket.version>`
-
-Or checkout latest from Subversion and manually install it with Maven:
-`
-% svn co http://svn.apache.org/repos/asf/wicket/trunk/ wicket-1.5
-% cd wicket-1.5
-% mvn install -Dmaven.test.skip=true`
-
 ### The Mystic bits
 
 Mystic Paste is setup with Maven so to build a war, just type

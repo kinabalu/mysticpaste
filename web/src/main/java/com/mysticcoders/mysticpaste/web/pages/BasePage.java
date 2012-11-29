@@ -2,11 +2,11 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.FixBootstrapStylesCssResourceReference;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
-import com.mysticcoders.mysticpaste.web.components.mousetrap.KeyBinding;
-import com.mysticcoders.mysticpaste.web.components.mousetrap.Mousetrap;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import com.mysticcoders.wicket.mousetrap.KeyBinding;
+import com.mysticcoders.wicket.mousetrap.Mousetrap;
 import de.agilecoders.wicket.Bootstrap;
 import de.agilecoders.wicket.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.markup.html.bootstrap.html.ChromeFrameMetaTag;
