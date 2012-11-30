@@ -15,6 +15,7 @@ import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -130,20 +131,20 @@ public class PasteItemPage extends BasePage {
 
             languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMcBain
 
+/*
             final SubmitLink pasteButton = new SubmitLink("paste") {
                 @Override
                 public void onSubmit() {
                     onPaste(false);
                 }
             };
-/*
+*/
             Button pasteButton = new Button("paste") {
                 @Override
                 public void onSubmit() {
                     onPaste(false);
                 }
             };
-*/
 
             Button privatePasteButton = new Button("privatePaste") {
                 @Override
@@ -180,14 +181,12 @@ public class PasteItemPage extends BasePage {
             add(new TextField<String>("email", new PropertyModel<String>(PasteItemPage.this, "spamEmail")));
 
             final AbstractDefaultAjaxBehavior doneWithPaste = new AbstractDefaultAjaxBehavior() {
+
                 @Override
                 protected void respond(AjaxRequestTarget target) {
-                    target.add(PasteForm.this);
-                    pasteButton.onSubmit();
-                    System.out.println("pasting");
-/*
-                    onPaste(false);
-*/
+                    String s = "Wicket.Ajax.post({'u': '" + getCallbackUrl() + "', 'f': '" + PasteForm.this.getMarkupId() + "'});";
+                    System.out.println("s:"+s);
+                    target.appendJavaScript(s);
                 }
             };
             add(doneWithPaste);
