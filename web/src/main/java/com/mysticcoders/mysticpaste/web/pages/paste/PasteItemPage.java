@@ -13,9 +13,12 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -180,17 +183,13 @@ public class PasteItemPage extends BasePage {
             add(imageLocationField);
             add(new TextField<String>("email", new PropertyModel<String>(PasteItemPage.this, "spamEmail")));
 
-            final AbstractDefaultAjaxBehavior doneWithPaste = new AbstractDefaultAjaxBehavior() {
+            final AjaxFormSubmitBehavior doneWithPaste = new AjaxFormSubmitBehavior(this, "domready") {
+
+                public void renderHead(final Component component, final IHeaderResponse response) { }
 
                 @Override
-                protected void respond(AjaxRequestTarget target) {
-                    System.err.println("Wow, form submit!!");
-                }
-
-                @Override
-                protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                    super.updateAjaxAttributes(attributes);
-                    attributes.setFormId(PasteForm.this.getMarkupId());
+                protected void onSubmit(AjaxRequestTarget target) {
+                    onPaste(true);
                 }
             };
             add(doneWithPaste);
