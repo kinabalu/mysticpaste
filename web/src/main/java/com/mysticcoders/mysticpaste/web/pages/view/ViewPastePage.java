@@ -8,18 +8,19 @@ package com.mysticcoders.mysticpaste.web.pages.view;
 
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.PasteService;
-import com.mysticcoders.mysticpaste.utils.StringUtils;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
+import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
+import com.mysticcoders.mysticpaste.web.pages.paste.ReplyPastePage;
+import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -63,8 +64,8 @@ public abstract class ViewPastePage extends BasePage {
     public ViewPastePage(final PageParameters params) {
         super(params);
 
-        List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
-        for(Cookie cookie : cookies) {
+        List<Cookie> cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
+        for (Cookie cookie : cookies) {
             System.out.println(cookie.getName() + ":" + cookie.getValue());
         }
 
@@ -211,6 +212,10 @@ public abstract class ViewPastePage extends BasePage {
         add(createRawLink("rawLink", params));
         add(createDownloadLink("downloadLink", params));
 
+        PageParameters repasteParams = new PageParameters();
+        repasteParams.add("0", pasteModel.getObject().getItemId());
+        add(new BookmarkablePageLink<Void>("repasteLink", ReplyPastePage.class, repasteParams));
+
         final Label markAbuseLabel = new Label("markAbuseLabel", "Report Abuse");
         markAbuseLabel.setOutputMarkupId(true);
         StatelessLink markAbuseLink = new StatelessLink("markAbuseLink") {
@@ -236,64 +241,20 @@ public abstract class ViewPastePage extends BasePage {
         viewCountContainer.add(new Label("viewCount", new PropertyModel<Integer>(pasteModel, "viewCount")));
         add(viewCountContainer);
 
-        StatelessForm<PasteItem> replyForm = new StatelessForm<PasteItem>("replyForm", pasteModel) {
 
+        final AbstractDefaultAjaxBehavior repasteKeyBehavior = new AbstractDefaultAjaxBehavior() {
             @Override
-            protected void onSubmit() {
-                onPaste(getModel());
+            protected void respond(AjaxRequestTarget target) {
+                PageParameters repasteParams = new PageParameters();
+                repasteParams.add("0", pasteModel.getObject().getItemId());
+                throw new RestartResponseException(ReplyPastePage.class, repasteParams);
             }
         };
-        add(replyForm);
-        replyForm.add(new TextArea<String>("content"));
+        add(repasteKeyBehavior);
 
-        replyForm.add(new TextField<String>("email", new PropertyModel<String>(ViewPastePage.this, "spamEmail")));
+        getMousetrap().addBind(new KeyBinding().addKeyCombo("r").addKeyCombo("R"),
+                repasteKeyBehavior);
 
-
-    }
-
-    private String replyPaste;
-
-    private String spamEmail;
-
-    public String getSpamEmail() {
-        return spamEmail;
-    }
-
-    public void setSpamEmail(String spamEmail) {
-        this.spamEmail = spamEmail;
-    }
-
-    private void onPaste(IModel<PasteItem> pasteModel) {
-        PasteItem pI = pasteModel.getObject();
-
-        if (pI.getContent() == null || pI.getContent().equals("")) {
-            error("Paste content is required!");
-            return;
-        }
-
-        if (getSpamEmail() != null || StringUtils.hasSpamKeywords(pI.getContent())) {
-            error("Spam Spam Spam Spam");
-            return;
-        }
-        PasteItem pasteItem = new PasteItem();
-        pasteItem.setContent(pI.getContent());
-        pasteItem.setPrivate(pI.isPrivate());
-        pasteItem.setType(pI.getType());
-        pasteItem.setParent(pI.getItemId());
-        pasteItem.setClientIp(getClientIpAddress());
-
-//        pasteService.detachItem(pI);       // TODO this is a horrible hack, we should instead clone pasteItem in the Model
-        pasteService.createItem("web", pasteItem);
-        PageParameters params = new PageParameters();
-        if (pasteItem.isPrivate()) {
-//                this.setRedirect(true);
-            params.add("0", pasteItem.getItemId());
-            setResponsePage(ViewPrivatePage.class, params);
-        } else {
-//                this.setRedirect(true);
-            params.add("0", pasteItem.getItemId());
-            setResponsePage(ViewPublicPage.class, params);
-        }
 
     }
 

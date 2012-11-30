@@ -9,6 +9,7 @@ import com.mysticcoders.mysticpaste.web.components.DefaultFocusBehavior;
 import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.components.spin.Spin;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
+import com.mysticcoders.mysticpaste.web.pages.view.ViewPasteModel;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
@@ -25,6 +26,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.file.Files;
@@ -32,7 +34,9 @@ import org.apache.wicket.util.file.Folder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Cookie;
 import java.io.File;
+import java.util.List;
 
 /**
  * Paste Item page.
@@ -45,12 +49,20 @@ public class PasteItemPage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
+    private IModel<PasteItem> originalPaste;
+
     private static final Logger logger = LoggerFactory.getLogger(PasteItemPage.class);
 
-    public PasteItemPage() {
+    public PasteItemPage(final PageParameters params) {
         super(PasteItemPage.class);
 
-        add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
+        if(!params.get("0").isNull()) {
+            originalPaste = new ViewPasteModel(params.get("0").toString(), pasteService);
+            add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(originalPaste)));
+        } else {
+            add(new PasteForm("pasteForm", new CompoundPropertyModel<PasteItem>(new PasteItem())));
+        }
+
         add(new Spin());
     }
 
@@ -96,6 +108,9 @@ public class PasteItemPage extends BasePage {
                 return;
             }
 
+            if(originalPaste!=null) {
+                pasteItem.setParent(originalPaste.getObject().getItemId());
+            }
             pasteItem.setPrivate(isPrivate);
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
             pasteItem.setClientIp(getClientIpAddress());

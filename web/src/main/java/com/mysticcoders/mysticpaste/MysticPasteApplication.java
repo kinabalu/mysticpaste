@@ -5,6 +5,7 @@ import com.mysticcoders.mysticpaste.web.pages.HelpPage;
 import com.mysticcoders.mysticpaste.web.pages.admin.OverviewPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
+import com.mysticcoders.mysticpaste.web.pages.paste.ReplyPastePage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import com.mysticcoders.mysticpaste.web.pages.view.DownloadPasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
@@ -76,6 +77,8 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/new", PasteItemPage.class);
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
+
+        mountPage("/reply/${0}", ReplyPastePage.class);
 
         mountPage("/view/${0}", ViewPublicPage.class);
 //        mountPage("/view/${0}/${1]", ViewPublicPage.class);             // map the highlight line URL

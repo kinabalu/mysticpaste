@@ -54,9 +54,13 @@ public class OverviewPage extends BasePage {
             throw new RestartResponseException(AccessDeniedPage.class);
         }
 
+        itemsPerPage = params.getParameterValue("itemsPerPage").toInt(ITEMS_PER_PAGE);
+/*
         if(!params.getParameterValue("itemsPerPage").isEmpty()) {
-            itemsPerPage = params.getParameterValue("itemsPerPage").toInt(ITEMS_PER_PAGE);
+        } else {
+            itemsPerPage = ITEMS_PER_PAGE;
         }
+*/
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
         final WebMarkupContainer historyDataViewContainer = new WebMarkupContainer("historyContainer");
 
