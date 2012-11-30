@@ -15,7 +15,7 @@ import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -42,7 +42,7 @@ public class PasteItemPage extends BasePage {
     @SpringBean
     PasteService pasteService;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(PasteItemPage.class);
 
     public PasteItemPage() {
         super(PasteItemPage.class);
@@ -184,9 +184,13 @@ public class PasteItemPage extends BasePage {
 
                 @Override
                 protected void respond(AjaxRequestTarget target) {
-                    String s = "Wicket.Ajax.post({'u': '" + getCallbackUrl() + "', 'f': '" + PasteForm.this.getMarkupId() + "'});";
-                    System.out.println("s:"+s);
-                    target.appendJavaScript(s);
+                    System.err.println("Wow, form submit!!");
+                }
+
+                @Override
+                protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                    super.updateAjaxAttributes(attributes);
+                    attributes.setFormId(PasteForm.this.getMarkupId());
                 }
             };
             add(doneWithPaste);
