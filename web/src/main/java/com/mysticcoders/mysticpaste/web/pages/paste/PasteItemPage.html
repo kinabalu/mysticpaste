@@ -78,7 +78,11 @@
     document.onpaste = function(event){
       var items = event.clipboardData.items;
       console.log(JSON.stringify(items)); // will give you the mime types
-      var blob = items[0].getAsFile();
+      if(items[0].getAsFile()) {
+          var blob = items[0].getAsFile();
+      } else if(items[1].getAsFile()) {
+          var blob = items[1].getAsFile();
+      }
       upload(blob);
     }
 
@@ -89,10 +93,8 @@
             delta = ((new Date()).getTime() - (new Date()).setTime(window.localStorage.getItem('timestamp'))) / 1000;
             if(delta < 100) return;
         }
-
         /* Is the file an image? */
         if (!file || !file.type.match(/image.*/)) return;
-
         $('#uploadingImageModal').modal();
         var target = document.getElementById('spinme');
         spinner.spin(target);

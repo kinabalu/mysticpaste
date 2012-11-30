@@ -106,9 +106,9 @@ public class BasePage extends WebPage {
         };
         add(historyNav);
 
-        mousetrap.addBind(new KeyBinding().addKeyCombo("n"),
+        mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("n"),
                 newNav);
-        mousetrap.addBind(new KeyBinding().addKeyCombo("h"),
+        mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("h"),
                 historyNav);
 
         add(new BootstrapBaseBehavior());

@@ -194,7 +194,9 @@ public class PasteItemPage extends BasePage {
             };
             add(doneWithPaste);
 
-            getMousetrap().addGlobalBind(new KeyBinding().addKeyCombo("command+enter"),
+            getMousetrap().addGlobalBind(new KeyBinding()
+                    .addKeyCombo(KeyBinding.COMMAND, KeyBinding.ENTER)
+                    .addKeyCombo(KeyBinding.ALT, KeyBinding.ENTER),
                     doneWithPaste);
         }
 
