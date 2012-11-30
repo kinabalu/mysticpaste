@@ -105,21 +105,13 @@ public class PasteItemPage extends BasePage {
             pasteService.createItem("web", pasteItem);
             PageParameters params = new PageParameters();
             if (pasteItem.isPrivate()) {
-//                    this.setRedirect(true);
                 params.add("0", pasteItem.getItemId());
                 setResponsePage(ViewPrivatePage.class, params);
             } else {
-//                    this.setRedirect(true);
                 params.add("0", pasteItem.getItemId());
                 setResponsePage(ViewPublicPage.class, params);
             }
         }
-
-/*
-        private FileUploadField fileUploadField;
-
-        private FileUpload imageFile;
-*/
 
         private WebMarkupContainer feedbackContainer;
 
@@ -134,14 +126,6 @@ public class PasteItemPage extends BasePage {
 
             languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMcBain
 
-/*
-            final SubmitLink pasteButton = new SubmitLink("paste") {
-                @Override
-                public void onSubmit() {
-                    onPaste(false);
-                }
-            };
-*/
             Button pasteButton = new Button("paste") {
                 @Override
                 public void onSubmit() {
@@ -189,36 +173,25 @@ public class PasteItemPage extends BasePage {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
+                    System.out.println("called me");
                     onPaste(true);
                 }
             };
             add(doneWithPaste);
 
+/*
             getMousetrap().addGlobalBind(new KeyBinding()
                     .addKeyCombo(KeyBinding.COMMAND, KeyBinding.ENTER)
                     .addKeyCombo(KeyBinding.ALT, KeyBinding.ENTER),
-                    doneWithPaste);
+                    doneWithPaste
+            );
+*/
+            getMousetrap().addDefaultGlobalBind(new KeyBinding()
+                    .addKeyCombo(KeyBinding.COMMAND, "s")
+                    .addKeyCombo(KeyBinding.CTRL, "s"),
+                    doneWithPaste
+            );
         }
-
-
-        /**
-         * Check whether the file already exists, and if so, try to delete it.
-         *
-         * @param newFile the file to check
-         */
-        private void checkFileExists(File newFile) {
-            if (newFile.exists()) {
-                // Try to delete the file
-                if (!Files.remove(newFile)) {
-                    throw new IllegalStateException("Unable to overwrite " + newFile.getAbsolutePath());
-                }
-            }
-        }
-
-        private Folder getUploadFolder() {
-            return ((MysticPasteApplication) Application.get()).getUploadFolder();
-        }
-
 
     }
 }
