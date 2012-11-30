@@ -11,7 +11,10 @@ import com.mysticcoders.mysticpaste.web.components.spin.Spin;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
+import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.Application;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -74,7 +77,7 @@ public class PasteItemPage extends BasePage {
             this.languageType = languageType;
         }
 
-        private void onPaste(boolean isPrivate) {
+        protected void onPaste(boolean isPrivate) {
 
             PasteItem pasteItem = PasteForm.this.getModelObject();
             if (pasteItem.getContent() == null || pasteItem.getContent().equals("")) {
@@ -127,12 +130,20 @@ public class PasteItemPage extends BasePage {
 
             languageType = HighlighterPanel.getLanguageSyntax("text");          // default to text per AMcBain
 
+            final SubmitLink pasteButton = new SubmitLink("paste") {
+                @Override
+                public void onSubmit() {
+                    onPaste(false);
+                }
+            };
+/*
             Button pasteButton = new Button("paste") {
                 @Override
                 public void onSubmit() {
                     onPaste(false);
                 }
             };
+*/
 
             Button privatePasteButton = new Button("privatePaste") {
                 @Override
@@ -167,6 +178,22 @@ public class PasteItemPage extends BasePage {
             imageLocationField.setMarkupId("imageLocation");
             add(imageLocationField);
             add(new TextField<String>("email", new PropertyModel<String>(PasteItemPage.this, "spamEmail")));
+
+            final AbstractDefaultAjaxBehavior doneWithPaste = new AbstractDefaultAjaxBehavior() {
+                @Override
+                protected void respond(AjaxRequestTarget target) {
+                    target.add(PasteForm.this);
+                    pasteButton.onSubmit();
+                    System.out.println("pasting");
+/*
+                    onPaste(false);
+*/
+                }
+            };
+            add(doneWithPaste);
+
+            getMousetrap().addGlobalBind(new KeyBinding().addKeyCombo("command+enter"),
+                    doneWithPaste);
         }
 
 
