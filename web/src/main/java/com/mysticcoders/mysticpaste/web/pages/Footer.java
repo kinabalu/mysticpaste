@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.google.TagExternalLink;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -38,5 +39,6 @@ public class Footer extends Panel {
 
         add(new TagExternalLink("blogLink", "http://www.mysticcoders.com/blog"));
 
+        add(new BookmarkablePageLink<Void>("legalLink", LegalPage.class));
     }
 }

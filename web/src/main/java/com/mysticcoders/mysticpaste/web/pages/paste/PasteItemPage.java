@@ -188,19 +188,11 @@ public class PasteItemPage extends BasePage {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
-                    System.out.println("called me");
                     onPaste(true);
                 }
             };
             add(doneWithPaste);
 
-/*
-            getMousetrap().addGlobalBind(new KeyBinding()
-                    .addKeyCombo(KeyBinding.COMMAND, KeyBinding.ENTER)
-                    .addKeyCombo(KeyBinding.ALT, KeyBinding.ENTER),
-                    doneWithPaste
-            );
-*/
             getMousetrap().addDefaultGlobalBind(new KeyBinding()
                     .addKeyCombo(KeyBinding.COMMAND, "s")
                     .addKeyCombo(KeyBinding.CTRL, "s"),
