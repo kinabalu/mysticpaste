@@ -129,10 +129,10 @@ public class HistoryPage extends BasePage {
         add(historyNextPageNav);
         add(historyFirstPageNav);
         add(historyLastPageNav);
-        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.LEFT), historyPrevPageNav);
-        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.RIGHT), historyNextPageNav);
-        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.LEFT), historyFirstPageNav);
-        getMousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.RIGHT), historyLastPageNav);
+        mousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.LEFT), historyPrevPageNav);
+        mousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.RIGHT), historyNextPageNav);
+        mousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.LEFT), historyFirstPageNav);
+        mousetrap().addBind(new KeyBinding().addKeyCombo(KeyBinding.SHIFT, KeyBinding.RIGHT), historyLastPageNav);
 
         pageNav.setDependentNavigator(pageNav2);
         pageNav2.setDependentNavigator(pageNav);

@@ -5,6 +5,7 @@ import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
+import com.mysticcoders.wicket.alertify.Alertify;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import com.mysticcoders.wicket.mousetrap.Mousetrap;
 import de.agilecoders.wicket.Bootstrap;
@@ -43,6 +44,7 @@ public class BasePage extends WebPage {
 
     Class activePage;
     Mousetrap mousetrap;
+    Alertify alertify;
 
     public BasePage() {
         init();
@@ -62,8 +64,12 @@ public class BasePage extends WebPage {
         return "Mystic Paste";
     }
 
-    protected Mousetrap getMousetrap() {
+    protected Mousetrap mousetrap() {
         return mousetrap;
+    }
+
+    public Alertify alertify() {
+        return alertify;
     }
 
     private void init() {
@@ -79,6 +85,7 @@ public class BasePage extends WebPage {
         add(new Footer("footer"));
 
         add(mousetrap = new Mousetrap());
+        add(alertify = new Alertify());
 
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {
@@ -110,6 +117,9 @@ public class BasePage extends WebPage {
                 newNav);
         mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("h").addKeyCombo("H"),
                 historyNav);
+        mousetrap.addBindJs(new KeyBinding().addKeyCombo("?"),
+                "$('#helpModal').modal();"
+                );
 
         add(new BootstrapBaseBehavior());
     }

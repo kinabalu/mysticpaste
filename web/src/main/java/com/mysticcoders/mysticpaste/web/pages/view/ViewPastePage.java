@@ -12,7 +12,6 @@ import com.mysticcoders.mysticpaste.web.components.highlighter.HighlighterPanel;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteNotFound;
 import com.mysticcoders.mysticpaste.web.pages.error.PasteSpam;
-import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.ReplyPastePage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import org.apache.wicket.AttributeModifier;
@@ -252,7 +251,7 @@ public abstract class ViewPastePage extends BasePage {
         };
         add(repasteKeyBehavior);
 
-        getMousetrap().addBind(new KeyBinding().addKeyCombo("r").addKeyCombo("R"),
+        mousetrap().addBind(new KeyBinding().addKeyCombo("r").addKeyCombo("R"),
                 repasteKeyBehavior);
 
 

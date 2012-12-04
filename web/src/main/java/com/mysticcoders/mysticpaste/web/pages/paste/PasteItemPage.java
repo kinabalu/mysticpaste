@@ -1,6 +1,5 @@
 package com.mysticcoders.mysticpaste.web.pages.paste;
 
-import com.mysticcoders.mysticpaste.MysticPasteApplication;
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import com.mysticcoders.mysticpaste.model.PasteItem;
 import com.mysticcoders.mysticpaste.services.PasteService;
@@ -13,11 +12,8 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPasteModel;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
-import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -26,17 +22,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.file.Files;
-import org.apache.wicket.util.file.Folder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.Cookie;
-import java.io.File;
-import java.util.List;
 
 /**
  * Paste Item page.
@@ -193,11 +182,13 @@ public class PasteItemPage extends BasePage {
             };
             add(doneWithPaste);
 
-            getMousetrap().addDefaultGlobalBind(new KeyBinding()
+/*
+            mousetrap().addDefaultGlobalBind(new KeyBinding()
                     .addKeyCombo(KeyBinding.COMMAND, "s")
                     .addKeyCombo(KeyBinding.CTRL, "s"),
                     doneWithPaste
             );
+*/
         }
 
     }
