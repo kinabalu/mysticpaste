@@ -123,8 +123,8 @@ public abstract class ViewPastePage extends BasePage {
         int viewCount = pasteService.incViewCount(pasteModel.getObject());
 
         this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
-        add(new Label("type"));
 
+        add(new Label("type"));
 
         WebMarkupContainer spamAlert = new WebMarkupContainer("spamAlert") {
             @Override

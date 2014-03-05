@@ -92,11 +92,6 @@
             <artifactId>wicket-mousetrap</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.mysticcoders</groupId>
-            <artifactId>wicket-alertify</artifactId>
-        </dependency>
-
         <!--  WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>

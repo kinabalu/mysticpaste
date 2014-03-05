@@ -12,15 +12,18 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPasteModel;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
+import de.agilecoders.wicket.markup.html.bootstrap.dialog.Alert;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -44,6 +47,10 @@ public class PasteItemPage extends BasePage {
 
     public PasteItemPage(final PageParameters params) {
         super(PasteItemPage.class);
+
+        Alert newFeatureAlert;
+        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")));
+//        newFeatureAlert.getMessageLabel().setEscapeModelStrings(false);
 
         if(!params.get("0").isNull()) {
             originalPaste = new ViewPasteModel(params.get("0").toString(), pasteService);

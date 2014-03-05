@@ -73,11 +73,6 @@
                     <version>0.2-SNAPSHOT</version>
                 </dependency>
                 <dependency>
-                    <groupId>com.mysticcoders</groupId>
-                    <artifactId>wicket-alertify</artifactId>
-                    <version>0.1-SNAPSHOT</version>
-                </dependency>
-                <dependency>
                     <groupId>org.incava</groupId>
                     <artifactId>java-diff</artifactId>
                     <version>1.1</version>
@@ -129,6 +124,9 @@
                     <groupId>de.agilecoders.wicket</groupId>
                     <artifactId>bootstrap</artifactId>
                     <version>0.6.3</version>
+<!--
+                    <version>0.7.5-SNAPSHOT</version>
+-->
                 </dependency>
 
                 <!-- SPRING DEPENDENCIES -->
