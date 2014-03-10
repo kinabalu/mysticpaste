@@ -5,7 +5,8 @@ import com.mysticcoders.mysticpaste.services.PasteService;
 import com.mysticcoders.mysticpaste.web.pages.BasePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
-import de.agilecoders.wicket.markup.html.bootstrap.dialog.Alert;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -43,8 +45,11 @@ public class HistoryPage extends BasePage {
         final HistoryDataProvider historyDataProvider = new HistoryDataProvider(pasteService);
 
         Alert newFeatureAlert;
-        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")));
-//        newFeatureAlert.getMessageLabel().setEscapeModelStrings(false);
+        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")) {
+            protected Component createMessage(final String markupId, final IModel<String> message) {
+                return new Label(markupId, message).setEscapeModelStrings(false);
+            }
+        });
 
         historyDataView = new DataView<PasteItem>("history", historyDataProvider, ITEMS_PER_PAGE) {
             protected void populateItem(Item<PasteItem> item) {

@@ -1,5 +1,8 @@
 package com.mysticcoders.mysticpaste.model;
 
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import org.bson.types.ObjectId;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
 
@@ -12,10 +15,13 @@ import java.util.*;
  * @author <a href="mailto:andrew@mysticcoders.com">Andrew Lombardi</a>
  * @version $Revision$ $Date$
  */
+@Entity("pastes")
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    @Id ObjectId id;
 
     private long pasteIndex;
     protected String itemId;
@@ -247,4 +253,21 @@ public class PasteItem implements Serializable {
         return returnString;
     }
 
+
+    @Override
+    public String toString() {
+        return "PasteItem{" +
+                "imageLocation='" + imageLocation + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", timestamp=" + timestamp +
+                ", abuseCount=" + abuseCount +
+                ", privateFlag=" + privateFlag +
+                ", parent='" + parent + '\'' +
+                ", clientIp='" + clientIp + '\'' +
+                ", viewCount=" + viewCount +
+                ", pasteIndex=" + pasteIndex +
+                '}';
+    }
 }

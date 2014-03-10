@@ -1,7 +1,6 @@
 package com.mysticcoders.mysticpaste.web.components;
 
-import de.agilecoders.wicket.markup.html.bootstrap.dialog.Modal;
-import org.apache.wicket.model.IModel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import org.apache.wicket.model.Model;
 
 /**

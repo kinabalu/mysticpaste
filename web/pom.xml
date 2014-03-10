@@ -131,7 +131,12 @@
 
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>bootstrap</artifactId>
+            <artifactId>wicket-bootstrap-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-themes</artifactId>
         </dependency>
 
         <!-- SPRING DEPENDENCIES -->
@@ -149,6 +154,8 @@
             <artifactId>spring-beans</artifactId>
         </dependency>
 
+
+        <!--
         <dependency>
      		 <groupId>org.springframework.data</groupId>
      		 <artifactId>spring-data-mongodb</artifactId>
@@ -158,10 +165,37 @@
      		 <groupId>org.springframework.data</groupId>
      		 <artifactId>spring-data-redis</artifactId>
      	</dependency>
+        -->
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.google.code.morphia</groupId>
+            <artifactId>morphia</artifactId>
+        </dependency>
+        <!-- Optional Jars (for certain features) but required by maven for building. -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <type>jar</type>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.proxytoys</groupId>
+            <artifactId>proxytoys</artifactId>
+            <version>1.0</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

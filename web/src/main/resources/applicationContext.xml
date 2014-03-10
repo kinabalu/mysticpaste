@@ -40,11 +40,33 @@
     </bean>
 
     <!-- Loads MongoDB configuraton -->
+<!--
    	<import resource="mongo-config.xml"/>
+-->
 
+<!--
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" />
+-->
 
-   	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
+    <bean id="mongo" class="com.mongodb.Mongo">
+        <constructor-arg value="localhost"/>
+        <constructor-arg value="27017"/>
+    </bean>
+
+    <bean id="morphia" class="com.google.code.morphia.Morphia"></bean>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg value="localhost" />
+    </bean>
+
+    <bean id="mongoPasteItemDao" class="com.mysticcoders.mysticpaste.persistence.mongo.PasteItemDaoImpl">
+        <constructor-arg ref="mongo" />
+        <constructor-arg ref="morphia" />
+        <constructor-arg value="mysticpaste" />
+        <constructor-arg ref="jedisPool" />
+    </bean>
+
+   	<!--<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
              p:connectionFactory-ref="connectionFactory"/>
-
+-->
 </beans>

@@ -11,10 +11,13 @@ import com.mysticcoders.mysticpaste.web.pages.view.DownloadPasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
-import de.agilecoders.wicket.Bootstrap;
-import de.agilecoders.wicket.settings.BootstrapSettings;
-import de.agilecoders.wicket.settings.BootswatchThemeProvider;
-import de.agilecoders.wicket.settings.ThemeProvider;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.ThemeProvider;
+import de.agilecoders.wicket.themes.settings.BootswatchThemeProvider;
+//import de.agilecoders.wicket.webjars.WicketWebjars;
+//import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
@@ -50,17 +53,23 @@ public class MysticPasteApplication extends WebApplication {
         super.init();
 
         BootstrapSettings settings = new BootstrapSettings();
+        /*
+        TODO figure out how to set the minify in the 0.9.2 version
         settings.minify(true) // use minimized version of all bootstrap references
                 .useJqueryPP(true)
                 .useModernizr(true)
                 .useResponsiveCss(true)
                 .getBootstrapLessCompilerSettings().setUseLessCompiler(true);
+        */
+
+//        settings.getActiveThemeProvider().setActiveTheme("bootstrap3");
 
         ThemeProvider themeProvider = new BootswatchThemeProvider() {{
-//            add(new MetroTheme());
             defaultTheme("bootstrap");
         }};
         settings.setThemeProvider(themeProvider);
+
+//        WicketWebjars.install(this);
 
         Bootstrap.install(this, settings);
 

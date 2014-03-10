@@ -8,17 +8,17 @@ import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import com.mysticcoders.wicket.mousetrap.Mousetrap;
-import de.agilecoders.wicket.Bootstrap;
-import de.agilecoders.wicket.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.markup.html.bootstrap.html.ChromeFrameMetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.HtmlTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.MetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
-//import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarComponents;
-import de.agilecoders.wicket.markup.html.references.BootstrapJavaScriptReference;
-import de.agilecoders.wicket.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.ChromeFrameMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.MetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -134,25 +134,17 @@ public class BasePage extends WebPage {
     protected Navbar newNavbar(String markupId) {
         Navbar navbar = new Navbar(markupId);
         navbar.setPosition(Navbar.Position.TOP);
-        navbar.invert(false);
+        navbar.setInverted(false);
 
         // show brand name and logo
         navbar.brandName(Model.of("Mystic Paste"));
 
-        navbar.addButton(Navbar.ButtonPosition.LEFT,
-                new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
-                new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
-                new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
-                new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
-        );
-/*
         navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
                 new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
                 new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
                 new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
         ));
-*/
 
         return navbar;
     }
@@ -170,7 +162,7 @@ public class BasePage extends WebPage {
 
         response.render(CssHeaderItem.forReference(FixBootstrapStylesCssResourceReference.INSTANCE));
         response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
-        response.render(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.get()));
+        response.render(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance()));
     }
 
     /**

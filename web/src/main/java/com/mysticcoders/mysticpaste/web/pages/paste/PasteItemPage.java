@@ -12,7 +12,7 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPasteModel;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
-import de.agilecoders.wicket.markup.html.bootstrap.dialog.Alert;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -49,8 +49,11 @@ public class PasteItemPage extends BasePage {
         super(PasteItemPage.class);
 
         Alert newFeatureAlert;
-        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")));
-//        newFeatureAlert.getMessageLabel().setEscapeModelStrings(false);
+        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")) {
+            protected Component createMessage(final String markupId, final IModel<String> message) {
+                return new Label(markupId, message).setEscapeModelStrings(false);
+            }
+        });
 
         if(!params.get("0").isNull()) {
             originalPaste = new ViewPasteModel(params.get("0").toString(), pasteService);
