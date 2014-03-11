@@ -153,7 +153,7 @@ public abstract class ViewPastePage extends BasePage {
         };
 
         if (pasteModel.getObject().getParent() != null) {
-            PasteItem parentPaste = pasteService.getItem("web", pasteModel.getObject().getParent());
+            PasteItem parentPaste = pasteService.getItem(pasteModel.getObject().getParent());
             PageParameters pp = new PageParameters();
             pp.add("0", parentPaste.getItemId());
             diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));

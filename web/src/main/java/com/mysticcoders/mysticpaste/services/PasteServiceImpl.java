@@ -41,6 +41,12 @@ public class PasteServiceImpl implements PasteService {
         this.previewLines = DEFAULT_PREVIEW_LINES;
     }
 
+    public void appendIpAddress(String ipAddress) {
+        pasteItemDao.appendIpAddress(ipAddress);
+    }
+
+
+
     public List<PasteItem> getLatestItems(int count, int startIndex, String filter) {
         logger.trace("Service: getLatestItems. count = {}, startIndex = {}",
                 new Object[]{count, startIndex});

@@ -2,6 +2,7 @@ package com.mysticcoders.mysticpaste;
 
 import com.mysticcoders.mysticpaste.utils.PriorityResourceMapper;
 import com.mysticcoders.mysticpaste.web.pages.HelpPage;
+import com.mysticcoders.mysticpaste.web.pages.LegalPage;
 import com.mysticcoders.mysticpaste.web.pages.admin.OverviewPage;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
@@ -86,6 +87,7 @@ public class MysticPasteApplication extends WebApplication {
         mountPage("/new", PasteItemPage.class);
         mountPage("/history", HistoryPage.class);
         mountPage("/plugin", PluginPage.class);
+        mountPage("/legal", LegalPage.class);
 
         mountPage("/reply/${0}", ReplyPastePage.class);
 

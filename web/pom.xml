@@ -184,6 +184,13 @@
             <groupId>com.google.code.morphia</groupId>
             <artifactId>morphia</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack</artifactId>
+        </dependency>
+
+
         <!-- Optional Jars (for certain features) but required by maven for building. -->
         <dependency>
             <groupId>cglib</groupId>

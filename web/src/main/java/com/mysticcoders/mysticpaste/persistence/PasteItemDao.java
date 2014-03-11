@@ -27,4 +27,6 @@ public interface PasteItemDao {
     List<PasteItem> getChildren(PasteItem pasteItem);
 
     String getAdminPassword();
+
+    void appendIpAddress(String ipAddress);
 }

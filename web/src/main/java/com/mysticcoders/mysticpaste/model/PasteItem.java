@@ -5,6 +5,7 @@ import com.google.code.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
+import org.msgpack.annotation.Message;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import java.util.*;
  * @version $Revision$ $Date$
  */
 @Entity("pastes")
+@Message
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
 
@@ -109,7 +111,7 @@ public class PasteItem implements Serializable {
     }
 
     public void setPrivate(boolean privateFlag) {
-        privateFlag = this.privateFlag;
+        this.privateFlag = privateFlag;
     }
 
     public String getParent() {

@@ -175,6 +175,13 @@
                     <artifactId>morphia</artifactId>
                     <version>0.102</version>
                 </dependency>
+
+                <dependency>
+                    <groupId>org.msgpack</groupId>
+                    <artifactId>msgpack</artifactId>
+                    <version>0.6.10</version>
+                </dependency>
+
                 <!-- Optional Jars (for certain features) but required by maven for building. -->
                 <dependency>
                     <groupId>cglib</groupId>

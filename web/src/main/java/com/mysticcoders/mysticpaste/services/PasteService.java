@@ -34,4 +34,6 @@ public interface PasteService {
     List<PasteItem> hasChildren(PasteItem pasteItem);
 
     String getAdminPassword();
+
+    void appendIpAddress(String ipAddress);
 }

@@ -25,11 +25,11 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
     }
 
     public Iterator<PasteItem> iterator(long first, long count) {
-        return pasteService.getLatestItems("web", (int)count, (int)first).iterator();
+        return pasteService.getLatestItems((int)count, (int)first).iterator();
     }
 
     public long size() {
-        int count = new Long(pasteService.getLatestItemsCount("web")).intValue();
+        int count = new Long(pasteService.getLatestItemsCount()).intValue();
         visible = count > 0;
 
         return count;

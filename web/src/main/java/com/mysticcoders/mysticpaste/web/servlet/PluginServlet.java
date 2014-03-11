@@ -49,7 +49,7 @@ public class PluginServlet extends HttpServlet {
             item.setType(mapFileType(fileExtension));
         }
 
-        getPasteService(getServletContext()).createItem("plugin", item);
+        getPasteService(getServletContext()).createItem(item);
 
         StringBuilder sb = new StringBuilder("http://");
         sb.append("mysticpaste.com");

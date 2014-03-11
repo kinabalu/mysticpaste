@@ -34,6 +34,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.tester.WicketTesterHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Base Page for the application.
@@ -46,6 +50,8 @@ public class BasePage extends WebPage {
 
     Class activePage;
     Mousetrap mousetrap;
+
+    private static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
     public BasePage() {
         init();
@@ -142,7 +148,7 @@ public class BasePage extends WebPage {
         navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
                 new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
-                new NavbarButton<PopularPage>(PopularPage.class, Model.of("Popular")),
+//                new NavbarButton<PopularPage>(PopularPage.class, Model.of("Popular")),
                 new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
                 new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
         ));
@@ -199,6 +205,18 @@ public class BasePage extends WebPage {
             ipAddress = request.getContainerRequest().getRemoteHost();
         }
         return ipAddress;
+    }
+
+    protected String getReferrer() {
+        ServletWebRequest request = ((ServletWebRequest) RequestCycle.get().getRequest());
+
+        return request.getHeader("referer");
+    }
+
+    private String serverName;
+
+    protected String getServerName() {
+        return serverName;
     }
 
 }
