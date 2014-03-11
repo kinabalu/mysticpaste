@@ -14,7 +14,7 @@ public interface PasteItemDao {
 
     PasteItem get(String id);
 
-    List<PasteItem> find(int count, int startIndex);
+    List<PasteItem> find(int count, int startIndex, String filter);
 
     long count();
 

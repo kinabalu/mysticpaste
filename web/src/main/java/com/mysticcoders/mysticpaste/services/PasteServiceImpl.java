@@ -41,11 +41,11 @@ public class PasteServiceImpl implements PasteService {
         this.previewLines = DEFAULT_PREVIEW_LINES;
     }
 
-    public List<PasteItem> getLatestItems(String clientToken, int count, int startIndex) {
-        logger.trace("Service: getLatestItems. clientToken = {}, count = {}, startIndex = {}",
-                new Object[]{clientToken, count, startIndex});
+    public List<PasteItem> getLatestItems(int count, int startIndex, String filter) {
+        logger.trace("Service: getLatestItems. count = {}, startIndex = {}",
+                new Object[]{count, startIndex});
         List<PasteItem> results;
-        results = pasteItemDao.find(count, startIndex);
+        results = pasteItemDao.find(count, startIndex, filter);
 //        System.out.println("results:"+results);
         if (null == results) {
             logger.warn("Found no items in database.");
@@ -54,7 +54,11 @@ public class PasteServiceImpl implements PasteService {
         return results;
     }
 
-    public PasteItem getItem(String clientToken, String id) {
+    public List<PasteItem> getLatestItems(int count, int startIndex) {
+        return getLatestItems(count, startIndex, null);
+    }
+
+    public PasteItem getItem(String id) {
 
         return pasteItemDao.get(id);
     }
@@ -91,11 +95,11 @@ public class PasteServiceImpl implements PasteService {
         this.twitterEnabled = twitterEnabled;
     }
 
-    public String createItem(String clientToken, PasteItem item) {
-        return createItem(clientToken, item, true);
+    public String createItem(PasteItem item) {
+        return createItem(item, true);
     }
 
-    public String createItem(String clientToken, PasteItem item, boolean twitter) {
+    public String createItem(PasteItem item, boolean twitter) {
         // set created Timestamp
         item.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -103,7 +107,7 @@ public class PasteServiceImpl implements PasteService {
     }
 
 
-    public String createReplyItem(String clientToken, PasteItem item, String parentId)
+    public String createReplyItem(PasteItem item, String parentId)
             throws ParentNotFoundException {
         String id;
         PasteItem parent = pasteItemDao.get(parentId);
@@ -118,7 +122,7 @@ public class PasteServiceImpl implements PasteService {
         return id;
     }
 
-    public long getLatestItemsCount(String clientToken) {
+    public long getLatestItemsCount() {
         return pasteItemDao.count();
     }
 

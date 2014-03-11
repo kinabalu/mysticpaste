@@ -142,6 +142,7 @@ public class BasePage extends WebPage {
         navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
                 new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
+                new NavbarButton<PopularPage>(PopularPage.class, Model.of("Popular")),
                 new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
                 new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
         ));

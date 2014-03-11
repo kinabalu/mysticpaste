@@ -10,18 +10,20 @@ import java.util.List;
  */
 public interface PasteService {
 
-    List<PasteItem> getLatestItems(String clientToken, int count, int startIndex) ;
+    List<PasteItem> getLatestItems(int count, int startIndex);
 
-    PasteItem getItem(String clientToken, String id) ;
+    List<PasteItem> getLatestItems(int count, int startIndex, String filter);
 
-    String createItem(String clientToken, PasteItem item);
+    PasteItem getItem(String id);
 
-    String createItem(String clientToken, PasteItem item, boolean twitter);
+    String createItem(PasteItem item);
 
-    String createReplyItem(String clientToken, PasteItem item, String parentId)
+    String createItem(PasteItem item, boolean twitter);
+
+    String createReplyItem(PasteItem item, String parentId)
             throws ParentNotFoundException;
 
-    long getLatestItemsCount(String clientToken);
+    long getLatestItemsCount();
 
     int incViewCount(PasteItem pasteItem);
 
