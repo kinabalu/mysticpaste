@@ -12,15 +12,18 @@ import com.mysticcoders.mysticpaste.web.pages.view.ViewPasteModel;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -44,6 +47,15 @@ public class PasteItemPage extends BasePage {
 
     public PasteItemPage(final PageParameters params) {
         super(PasteItemPage.class);
+
+        logger.info("Referrer:" + getReferrer());
+
+        Alert newFeatureAlert;
+        add(newFeatureAlert = new Alert("newFeatureAlert", Model.of("Check out our <a href=\"/help\"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!")) {
+            protected Component createMessage(final String markupId, final IModel<String> message) {
+                return new Label(markupId, message).setEscapeModelStrings(false);
+            }
+        });
 
         if(!params.get("0").isNull()) {
             originalPaste = new ViewPasteModel(params.get("0").toString(), pasteService);
@@ -101,12 +113,13 @@ public class PasteItemPage extends BasePage {
                 pasteItem.setParent(originalPaste.getObject().getItemId());
             }
             pasteItem.setPrivate(isPrivate);
+            System.out.println("isPrivate:" + isPrivate);
             pasteItem.setType(getLanguageType() != null ? getLanguageType().getLanguage() : "text");
             pasteItem.setClientIp(getClientIpAddress());
 
             logger.info("New " + pasteItem.getContent() + " line " + (isPrivate ? "private" : "public") + " paste created with IP:" + getClientIpAddress() + " language set at:" + pasteItem.getType());
 
-            pasteService.createItem("web", pasteItem);
+            pasteService.createItem(pasteItem);
             PageParameters params = new PageParameters();
             if (pasteItem.isPrivate()) {
                 params.add("0", pasteItem.getItemId());

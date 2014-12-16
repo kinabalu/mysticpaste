@@ -22,6 +22,6 @@ public class ViewPasteModel extends LoadableDetachableModel<PasteItem> {
     }
 
     protected PasteItem load() {
-        return pasteService.getItem("web", id);
+        return pasteService.getItem(id);
     }
 }

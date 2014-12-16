@@ -1,23 +1,24 @@
 package com.mysticcoders.mysticpaste.web.pages;
 
 import com.mysticcoders.mysticpaste.web.components.FixBootstrapStylesCssResourceReference;
+import com.mysticcoders.mysticpaste.web.components.HelpModal;
 import com.mysticcoders.mysticpaste.web.components.google.GoogleAnalyticsSnippet;
 import com.mysticcoders.mysticpaste.web.pages.history.HistoryPage;
 import com.mysticcoders.mysticpaste.web.pages.paste.PasteItemPage;
 import com.mysticcoders.mysticpaste.web.pages.plugin.PluginPage;
-import com.mysticcoders.wicket.alertify.Alertify;
 import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import com.mysticcoders.wicket.mousetrap.Mousetrap;
-import de.agilecoders.wicket.Bootstrap;
-import de.agilecoders.wicket.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.markup.html.bootstrap.html.ChromeFrameMetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.HtmlTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.MetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
-import de.agilecoders.wicket.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
-import de.agilecoders.wicket.markup.html.references.BootstrapJavaScriptReference;
-import de.agilecoders.wicket.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.ChromeFrameMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.MetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -32,6 +33,11 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.tester.WicketTesterHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Base Page for the application.
@@ -44,7 +50,8 @@ public class BasePage extends WebPage {
 
     Class activePage;
     Mousetrap mousetrap;
-    Alertify alertify;
+
+    private static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
     public BasePage() {
         init();
@@ -68,10 +75,6 @@ public class BasePage extends WebPage {
         return mousetrap;
     }
 
-    public Alertify alertify() {
-        return alertify;
-    }
-
     private void init() {
 
         add(new HtmlTag("html"));
@@ -79,13 +82,13 @@ public class BasePage extends WebPage {
         add(new OptimizedMobileViewportMetaTag("viewport"));
         add(new ChromeFrameMetaTag("chrome-frame"));
         add(new MetaTag("description", Model.of("description"), Model.of("Mystic Paste")));
-        add(new MetaTag("author", Model.of("author"), Model.of("Andrew Lombardi <andrew@mysticcoders.com>")));
+        add(new MetaTag("author", Model.of("author"), Model.of("Andrew Lombardi")));
 
         add(newNavbar("navbar"));
         add(new Footer("footer"));
 
         add(mousetrap = new Mousetrap());
-        add(alertify = new Alertify());
+        add(new HelpModal("helpModal", "Help"));
 
         add(new GoogleAnalyticsSnippet("ga-js") {
             public String getTracker() {
@@ -100,6 +103,7 @@ public class BasePage extends WebPage {
         final AbstractDefaultAjaxBehavior newNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
+                System.out.println("newNav");
                 throw new RestartResponseException(PasteItemPage.class);
             }
         };
@@ -108,13 +112,16 @@ public class BasePage extends WebPage {
         final AbstractDefaultAjaxBehavior historyNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
+                System.out.println("historyNav");
                 throw new RestartResponseException(HistoryPage.class);
             }
         };
         add(historyNav);
 
-        mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("n").addKeyCombo("N"),
-                newNav);
+//        mousetrap.addBind(new KeyBinding().addKeyCombo("n").addKeyCombo("N"), newNav);
+
+        String newPasteStr = "Wicket.Ajax.get({'u': '" + newNav.getCallbackUrl() + "'})";
+        mousetrap.addBindJs(new KeyBinding().addKeyCombo("n"), newPasteStr);
         mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("h").addKeyCombo("H"),
                 historyNav);
         /*
@@ -134,17 +141,18 @@ public class BasePage extends WebPage {
     protected Navbar newNavbar(String markupId) {
         Navbar navbar = new Navbar(markupId);
         navbar.setPosition(Navbar.Position.TOP);
-        navbar.invert(false);
+        navbar.setInverted(false);
 
         // show brand name and logo
         navbar.brandName(Model.of("Mystic Paste"));
 
-        navbar.addButton(Navbar.ButtonPosition.LEFT,
+        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),
                 new NavbarButton<HistoryPage>(HistoryPage.class, Model.of("History")),
+//                new NavbarButton<PopularPage>(PopularPage.class, Model.of("Popular")),
                 new NavbarButton<PluginPage>(PluginPage.class, Model.of("Plugins")),
                 new NavbarButton<HelpPage>(HelpPage.class, Model.of("Help"))
-        );
+        ));
 
         return navbar;
     }
@@ -162,7 +170,7 @@ public class BasePage extends WebPage {
 
         response.render(CssHeaderItem.forReference(FixBootstrapStylesCssResourceReference.INSTANCE));
         response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
-        response.render(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.get()));
+        response.render(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance()));
     }
 
     /**
@@ -198,6 +206,18 @@ public class BasePage extends WebPage {
             ipAddress = request.getContainerRequest().getRemoteHost();
         }
         return ipAddress;
+    }
+
+    protected String getReferrer() {
+        ServletWebRequest request = ((ServletWebRequest) RequestCycle.get().getRequest());
+
+        return request.getHeader("referer");
+    }
+
+    private String serverName;
+
+    protected String getServerName() {
+        return serverName;
     }
 
 }

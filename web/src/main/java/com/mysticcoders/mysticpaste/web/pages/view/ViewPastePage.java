@@ -123,8 +123,8 @@ public abstract class ViewPastePage extends BasePage {
         int viewCount = pasteService.incViewCount(pasteModel.getObject());
 
         this.setDefaultModel(new CompoundPropertyModel<PasteItem>(pasteModel));
-        add(new Label("type"));
 
+        add(new Label("type"));
 
         WebMarkupContainer spamAlert = new WebMarkupContainer("spamAlert") {
             @Override
@@ -153,7 +153,7 @@ public abstract class ViewPastePage extends BasePage {
         };
 
         if (pasteModel.getObject().getParent() != null) {
-            PasteItem parentPaste = pasteService.getItem("web", pasteModel.getObject().getParent());
+            PasteItem parentPaste = pasteService.getItem(pasteModel.getObject().getParent());
             PageParameters pp = new PageParameters();
             pp.add("0", parentPaste.getItemId());
             diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));

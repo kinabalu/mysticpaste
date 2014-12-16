@@ -1,7 +1,11 @@
 package com.mysticcoders.mysticpaste.model;
 
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import org.bson.types.ObjectId;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
+import org.msgpack.annotation.Message;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -12,10 +16,14 @@ import java.util.*;
  * @author <a href="mailto:andrew@mysticcoders.com">Andrew Lombardi</a>
  * @version $Revision$ $Date$
  */
+@Entity("pastes")
+@Message
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    @Id ObjectId id;
 
     private long pasteIndex;
     protected String itemId;
@@ -103,7 +111,7 @@ public class PasteItem implements Serializable {
     }
 
     public void setPrivate(boolean privateFlag) {
-        privateFlag = this.privateFlag;
+        this.privateFlag = privateFlag;
     }
 
     public String getParent() {
@@ -247,4 +255,21 @@ public class PasteItem implements Serializable {
         return returnString;
     }
 
+
+    @Override
+    public String toString() {
+        return "PasteItem{" +
+                "imageLocation='" + imageLocation + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", timestamp=" + timestamp +
+                ", abuseCount=" + abuseCount +
+                ", privateFlag=" + privateFlag +
+                ", parent='" + parent + '\'' +
+                ", clientIp='" + clientIp + '\'' +
+                ", viewCount=" + viewCount +
+                ", pasteIndex=" + pasteIndex +
+                '}';
+    }
 }

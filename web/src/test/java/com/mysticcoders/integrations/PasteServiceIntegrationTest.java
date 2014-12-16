@@ -36,9 +36,9 @@ public class PasteServiceIntegrationTest extends AbstractIntegrationTest {
         paste.setContent("TEST-DATA");
         paste.setType("text");
 
-        String id = svc.createItem("CLIENT", paste);
+        String id = svc.createItem(paste);
         System.out.println(id);
-        PasteItem item2 = svc.getItem("CLIENT", id);
+        PasteItem item2 = svc.getItem(id);
 
         assertEquals(item2.getContent(), paste.getContent());
 //        assertEquals(item2.getClientToken(), paste.getClientToken());

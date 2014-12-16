@@ -75,7 +75,7 @@ public class PasteAsTextResource extends ResourceReference {
                             }
 
                             String pasteItemId = params.get("0").toString();
-                            pasteItem = pasteService.getItem("web", pasteItemId);
+                            pasteItem = pasteService.getItem(pasteItemId);
 
                             logger.info("Paste ID[" + pasteItem.getItemId() + "] requested text / download");
                             if (pasteItem.isPrivate()) {

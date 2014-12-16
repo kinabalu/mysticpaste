@@ -26,6 +26,7 @@ public class ViewPublicPage extends ViewPastePage {
         super(params);
 
         logger.info("Client ["+ getClientIpAddress() +"] viewing paste with ID["+getPasteItem().getItemId()+"]");
+        pasteService.appendIpAddress(getClientIpAddress());
     }
 
     protected IModel<PasteItem> getPasteModel(String id) {
@@ -46,7 +47,7 @@ public class ViewPublicPage extends ViewPastePage {
         }
 
         protected PasteItem load() {
-            return pasteService.getItem("web", id);
+            return pasteService.getItem(id);
         }
     }
 

@@ -1,9 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div class="alert alert-info fade in">
-        <button type="button" class="close" data-dismiss="alert">?</button>
-        Check out our <a href="/help"><strong>New Features</strong></a> like <code>image upload</code> via clipboard or drag and drop, <code>keyboard shortcuts</code>, and more!
-    </div>
+    <div wicket:id="newFeatureAlert">[newFeatureAlert]</div>
+
     <div class="container">
         <form wicket:id="pasteForm">
             <div class="row" style="margin-top: 20px;">
