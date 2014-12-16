@@ -43,10 +43,7 @@
     </modules>
 
     <repositories>
-        <repository>
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-        </repository>
+        <!--
         <repository>
             <id>sonatype</id>
             <url>http://repository.sonatype.org/</url>
@@ -56,11 +53,13 @@
             <name>Spring Maven Release Repository</name>
             <url>http://repo.springsource.org/libs-release</url>
         </repository>
+
         <repository>
             <id>mystic-mvn-repo</id>
             <name>Mystic Github Maven Repository</name>
             <url>https://raw.github.com/kinabalu/mystic-mvn-repo/master/snapshots</url>
         </repository>
+        -->
     </repositories>
 
     <dependencyManagement>
@@ -205,13 +204,15 @@
 		            <groupId>org.easymock</groupId>
 		            <artifactId>easymock</artifactId>
 		            <version>2.4</version>
+                    <scope>test</scope>
 		        </dependency>
 
 		        <dependency>
 		            <groupId>org.easymock</groupId>
 		            <artifactId>easymockclassextension</artifactId>
 		            <version>2.4</version>
-		        </dependency>
+                    <scope>test</scope>
+                </dependency>
 
 		        <dependency>
 		            <groupId>org.dbunit</groupId>
@@ -223,35 +224,39 @@
 		            <groupId>org.unitils</groupId>
 		            <artifactId>unitils</artifactId>
 		            <version>1.0</version>
+                    <scope>test</scope>
 		        </dependency>
 
 		        <!--  JETTY DEPENDENCIES FOR TESTING  -->
-		        <dependency>
-		            <groupId>org.mortbay.jetty</groupId>
-		            <artifactId>jetty</artifactId>
-		            <version>${jetty.version}</version>
-		            <scope>provided</scope>
-		        </dependency>
-		        <dependency>
-		            <groupId>org.mortbay.jetty</groupId>
-		            <artifactId>jetty-util</artifactId>
-		            <version>${jetty.version}</version>
-		            <scope>provided</scope>
-		        </dependency>
-		        <dependency>
-		            <groupId>org.mortbay.jetty</groupId>
-		            <artifactId>jetty-management</artifactId>
-		            <version>${jetty.version}</version>
-		            <scope>provided</scope>
-		        </dependency>
-
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-server</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-servlets</artifactId>
+                    <version>${jetty.version}</version>
+                    <!--<scope>provided</scope>-->
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-server</artifactId>
+                    <version>${jetty-version}</version>
+                    <optional>true</optional>
+                </dependency>
 		    </dependencies>
     </dependencyManagement>
 
     <properties>
         <wicket.version>6.2.0</wicket.version>
-        <jetty.version>6.1.26</jetty.version>
-        <spring.version>3.1.2.RELEASE</spring.version>
+        <jetty.version>9.2.6.v20141205</jetty.version>
+        <spring.version>4.1.3.RELEASE</spring.version>
         <hibernate.version>3.5.0-Final</hibernate.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <junit.version>4.5</junit.version>

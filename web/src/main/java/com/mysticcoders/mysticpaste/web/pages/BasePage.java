@@ -117,10 +117,11 @@ public class BasePage extends WebPage {
                 newNav);
         mousetrap.addBind(new KeyBinding(KeyBinding.EVENT_KEYUP).addKeyCombo("h").addKeyCombo("H"),
                 historyNav);
+        /*
         mousetrap.addBindJs(new KeyBinding().addKeyCombo("?"),
                 "$('#helpModal').modal();"
                 );
-
+        */
         add(new BootstrapBaseBehavior());
     }
 
