@@ -3,6 +3,8 @@ package com.mysticcoders.mysticpaste;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -12,6 +14,8 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mysticcoders.mysticpaste";
 
@@ -31,7 +35,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		System.out.println("Plugin Started");
+		logger.info("Plugin Started");
 	}
 
 	/*

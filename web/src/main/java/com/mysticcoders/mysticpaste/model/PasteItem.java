@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
 import org.msgpack.annotation.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -20,7 +22,7 @@ import java.util.*;
 @Message
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
-
+    private static Logger logger = LoggerFactory.getLogger(PasteItem.class);
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     @Id ObjectId id;
@@ -164,8 +166,8 @@ public class PasteItem implements Serializable {
         int new_line_count = 0;
         int old_line_count = 0;
 
-        System.out.println("Original: " + (originalPaste != null ? originalPaste.length() : 0) + " line(s)");
-        System.out.println("Revised: " + (revisedPaste != null ? revisedPaste.length() : 0) + " line(s)");
+        logger.info("Original: " + (originalPaste != null ? originalPaste.length() : 0) + " line(s)");
+        logger.info("Revised: " + (revisedPaste != null ? revisedPaste.length() : 0) + " line(s)");
 
         List<String> original = Arrays.asList(originalPaste.split("\n"));
         List<String> revised = Arrays.asList(revisedPaste.split("\n"));

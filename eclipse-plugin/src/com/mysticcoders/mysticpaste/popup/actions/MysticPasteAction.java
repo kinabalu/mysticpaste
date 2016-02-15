@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.ToolTip;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements an Action Delegate which responds to a context menu item click<br/>
@@ -44,6 +46,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class MysticPasteAction implements IEditorActionDelegate {
 
+	private static final Logger logger = LoggerFactory.getLogger(MysticPasteAction.class);
+	
 	private String selectionText = null;
 	private String fileExtension = null;
 	private Shell shell;
@@ -66,7 +70,7 @@ public class MysticPasteAction implements IEditorActionDelegate {
 	 * balloon tip.
 	 */
 	public void run(IAction action) {
-		System.out.println("run called");
+		logger.debug("run called");
 		if (this.selectionText != null && !this.selectionText.trim().equals("")) {
 			//the action is setup in plugin.xml with an ID that ends in .<lang type>
 			String type = action.getId().substring(action.getId().lastIndexOf('.') + 1);
@@ -85,7 +89,7 @@ public class MysticPasteAction implements IEditorActionDelegate {
 	 * first time, so you can never grey out the item before it is clicked. 
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
-		System.out.println("selectionChanged called");
+		logger.debug("selectionChanged called");
 		if (ITextSelection.class.isAssignableFrom(selection.getClass())) {
 			ITextSelection txtSelection = (ITextSelection) selection;
 			if (txtSelection == null || txtSelection.isEmpty() || txtSelection.getText().trim().equals("")) {
@@ -136,7 +140,7 @@ public class MysticPasteAction implements IEditorActionDelegate {
 			HttpEntity entity = response.getEntity();
 			retString = EntityUtils.toString(entity, HTTP.UTF_8);
 			retString = url + bundle.getString("mysticpaste.view") + retString;
-			System.out.println(retString);
+			logger.debug(retString);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			MessageDialog.openInformation(

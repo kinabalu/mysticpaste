@@ -120,7 +120,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyNextPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                System.out.println("Next Page");
+                logger.info("Next Page");
                 if (pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() + 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
@@ -130,7 +130,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyPrevPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                System.out.println("Previous Page");
+                logger.info("Previous Page");
                 if (pageNav.getPageable().getCurrentPage() > 0) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getCurrentPage() - 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
@@ -140,7 +140,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyFirstPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                System.out.println("First Page");
+                logger.info("First Page");
                 if (pageNav.getPageable().getCurrentPage() > 1) {
                     pageNav.getPageable().setCurrentPage(0);
                     target.add(historyDataViewContainer, pageNav, pageNav2);
@@ -150,7 +150,7 @@ public class HistoryPage extends BasePage {
         final AbstractDefaultAjaxBehavior historyLastPageNav = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                System.out.println("Last Page");
+                logger.info("Last Page");
                 if (pageNav.getPageable().getCurrentPage() < pageNav.getPageable().getPageCount() - 1) {
                     pageNav.getPageable().setCurrentPage(pageNav.getPageable().getPageCount() - 1);
                     target.add(historyDataViewContainer, pageNav, pageNav2);

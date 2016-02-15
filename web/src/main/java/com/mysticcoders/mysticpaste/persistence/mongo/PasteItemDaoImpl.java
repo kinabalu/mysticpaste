@@ -70,10 +70,10 @@ public class PasteItemDaoImpl implements PasteItemDao {
             ds.insert(item);
 
             if(!item.isPrivate()) {
-                System.out.println("ITEM IS NOT PRIVATE");
+                logger.info("ITEM IS NOT PRIVATE");
                 jedis.lpush("pasteHistory", "" + pasteIndex);
                 byte[] packedEntry = packEntry(item);
-                System.out.println(new String(packedEntry));
+                logger.info(new String(packedEntry));
                 jedis.rpop("pasteHistoryCache".getBytes());
                 jedis.lpush("pasteHistoryCache".getBytes(), packedEntry);
             }
@@ -296,7 +296,7 @@ public class PasteItemDaoImpl implements PasteItemDao {
 
             PasteItem modifiedPasteItem = ds.findAndModify(query, updateOp);
             if (modifiedPasteItem.getAbuseCount() > 1) {
-                System.out.println("Removing paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
+                logger.info("Removing paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
                 jedis.lrem("pasteHistory", 1, "" + modifiedPasteItem.getPasteIndex());
             }
         } catch (JedisConnectionException je) {
@@ -321,7 +321,7 @@ public class PasteItemDaoImpl implements PasteItemDao {
 
             PasteItem modifiedPasteItem = ds.findAndModify(query, updateOp);
             if (modifiedPasteItem.getAbuseCount() > 1) {
-                System.out.println("Restoring paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
+                logger.info("Restoring paste [" + modifiedPasteItem.getItemId() + "] because of abuseCount:" + modifiedPasteItem.getAbuseCount());
 // TODO figure out how we can fix the list and how to include the paste in the proper spot
 //                redisTemplate.opsForList().
 //                redisTemplate.opsForList().remove("pasteHistory", 1, "" + modifiedPasteItem.getPasteIndex());
