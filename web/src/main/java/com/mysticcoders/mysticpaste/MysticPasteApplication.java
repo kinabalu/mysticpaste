@@ -136,7 +136,7 @@ public class MysticPasteApplication extends WebApplication {
     }
 
     public static MysticPasteApplication getInstance() {
-        return ((MysticPasteApplication) WebApplication.get());
+        return (MysticPasteApplication) WebApplication.get();
     }
 
     public Class<PasteItemPage> getHomePage() {

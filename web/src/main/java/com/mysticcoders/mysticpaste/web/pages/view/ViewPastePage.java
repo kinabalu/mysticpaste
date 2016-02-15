@@ -110,7 +110,7 @@ public abstract class ViewPastePage extends BasePage {
         }
 
         pasteModel = getPasteModel(params.get("0").toString());
-        if (pasteModel.getObject() == null || (pasteModel.getObject().isPrivate() && params.get("0").isNull())) {
+        if (pasteModel.getObject() == null || pasteModel.getObject().isPrivate() && params.get("0").isNull()) {
             throw new RestartResponseException(PasteNotFound.class);
         }
         if (pasteModel.getObject().getAbuseCount() > 2) {
@@ -156,7 +156,7 @@ public abstract class ViewPastePage extends BasePage {
             PasteItem parentPaste = pasteService.getItem(pasteModel.getObject().getParent());
             PageParameters pp = new PageParameters();
             pp.add("0", parentPaste.getItemId());
-            diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", (parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp));
+            diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class, pp));
 
 
             Object[] diffOutput = PasteItem.diffPastes(parentPaste.getContent(), pasteModel.getObject().getContent());
@@ -192,7 +192,7 @@ public abstract class ViewPastePage extends BasePage {
 
                 PageParameters pp = new PageParameters();
                 pp.add("0", pasteItem.getItemId());
-                BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", (pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class), pp);
+                BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class, pp);
 
                 viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "itemId")));
 

@@ -94,7 +94,7 @@ public class PasteServiceImpl implements PasteService {
     }
 
     public boolean twitterEnabled() {
-        return (twitterEnabled != null) && Boolean.valueOf(twitterEnabled);
+        return twitterEnabled != null && Boolean.valueOf(twitterEnabled);
     }
 
     public void setTwitterEnabled(String twitterEnabled) {
