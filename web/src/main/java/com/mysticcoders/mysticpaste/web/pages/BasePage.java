@@ -200,7 +200,7 @@ public class BasePage extends WebPage {
      * @return
      */
     protected String getClientIpAddress() {
-        ServletWebRequest request = ((ServletWebRequest) RequestCycle.get().getRequest());
+        ServletWebRequest request = (ServletWebRequest) RequestCycle.get().getRequest();
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress == null) {
             ipAddress = request.getContainerRequest().getRemoteHost();
@@ -209,7 +209,7 @@ public class BasePage extends WebPage {
     }
 
     protected String getReferrer() {
-        ServletWebRequest request = ((ServletWebRequest) RequestCycle.get().getRequest());
+        ServletWebRequest request = (ServletWebRequest) RequestCycle.get().getRequest();
 
         return request.getHeader("referer");
     }
