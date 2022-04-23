@@ -296,7 +296,7 @@
     <properties>
         <wicket.version>6.2.0</wicket.version>
         <jetty.version>9.4.22.v20191022</jetty.version>
-        <spring.version>5.2.1.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
         <hibernate.version>3.5.0-Final</hibernate.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <junit.version>4.5</junit.version>
