@@ -294,7 +294,7 @@
     </dependencyManagement>
 
     <properties>
-        <wicket.version>6.2.0</wicket.version>
+        <wicket.version>8.18.0</wicket.version>
         <jetty.version>9.4.41.v20210516</jetty.version>
         <spring.version>6.0.0</spring.version>
         <hibernate.version>3.5.0-Final</hibernate.version>
