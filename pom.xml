@@ -53,7 +53,7 @@
         <jetty.version>12.1.12</jetty.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
-        <slf4j.version>2.0.17</slf4j.version>
+        <slf4j.version>2.0.18</slf4j.version>
         <logback.version>1.5.19</logback.version>
         <morphia.version>2.5.3</morphia.version>
         <mongodb.version>5.5.1</mongodb.version>
