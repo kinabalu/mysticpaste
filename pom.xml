@@ -56,7 +56,7 @@
         <slf4j.version>2.0.17</slf4j.version>
         <logback.version>1.5.19</logback.version>
         <morphia.version>2.5.3</morphia.version>
-        <mongodb.version>5.5.1</mongodb.version>
+        <mongodb.version>5.10.0</mongodb.version>
         <jedis.version>5.2.0</jedis.version>
         <msgpack.version>0.9.9</msgpack.version>
         <jackson.version>2.22.2</jackson.version>
