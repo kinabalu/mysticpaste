@@ -49,7 +49,7 @@
 
         <wicket.version>10.10.0</wicket.version>
         <wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
-        <spring.version>6.2.19</spring.version>
+        <spring.version>7.0.9</spring.version>
         <jetty.version>12.1.12</jetty.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
