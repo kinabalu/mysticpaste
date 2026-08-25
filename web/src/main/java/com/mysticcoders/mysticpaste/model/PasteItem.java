@@ -1,11 +1,10 @@
 package com.mysticcoders.mysticpaste.model;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
-import org.incava.util.diff.Diff;
-import org.incava.util.diff.Difference;
-import org.msgpack.annotation.Message;
+import org.incava.diff.Diff;
+import org.incava.diff.Difference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,6 @@ import java.util.*;
  * @version $Revision$ $Date$
  */
 @Entity("pastes")
-@Message
 public class PasteItem implements Serializable {
     private static final long serialVersionUID = -6467870857777145137L;
     private static Logger logger = LoggerFactory.getLogger(PasteItem.class);

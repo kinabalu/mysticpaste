@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mysticcoders</groupId>
     <artifactId>mysticpaste</artifactId>
@@ -17,7 +17,7 @@
 
     <organization>
         <name>Mystic Coders, LLC</name>
-        <url>http://www.mysticcoders.com/</url>
+        <url>https://www.mysticcoders.com/</url>
     </organization>
 
     <developers>
@@ -46,8 +46,8 @@
     </developers>
 
     <scm>
-        <connection>https://github.com/kinabalu/mysticpaste.git</connection>
-        <developerConnection>https://github.com/kinabalu/mysticpaste.git</developerConnection>
+        <connection>scm:git:https://github.com/kinabalu/mysticpaste.git</connection>
+        <developerConnection>scm:git:https://github.com/kinabalu/mysticpaste.git</developerConnection>
         <url>https://github.com/kinabalu/mysticpaste</url>
     </scm>
 
@@ -59,20 +59,10 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Codehaus repository</id>
-            <url>http://repository.codehaus.org/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>
@@ -80,12 +70,19 @@
             <artifactId>java-diff</artifactId>
         </dependency>
 
+        <!-- SERVLET API -->
         <dependency>
-            <groupId>com.mysticcoders</groupId>
-            <artifactId>wicket-mousetrap</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
-        <!--  WICKET DEPENDENCIES -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+
+        <!-- WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
@@ -102,17 +99,14 @@
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-devutils</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-request</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-util</artifactId>
@@ -139,134 +133,99 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <artifactId>spring-context</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
-
-
-        <!--
-        <dependency>
-     		 <groupId>org.springframework.data</groupId>
-     		 <artifactId>spring-data-mongodb</artifactId>
-     	</dependency>
-
-        <dependency>
-     		 <groupId>org.springframework.data</groupId>
-     		 <artifactId>spring-data-redis</artifactId>
-     	</dependency>
-        -->
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
 
+        <!-- PERSISTENCE -->
+        <dependency>
+            <groupId>dev.morphia.morphia</groupId>
+            <artifactId>morphia-core</artifactId>
+        </dependency>
 
         <dependency>
-            <groupId>com.google.code.morphia</groupId>
-            <artifactId>morphia</artifactId>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.msgpack</groupId>
-            <artifactId>msgpack</artifactId>
-        </dependency>
-
-
-        <!-- Optional Jars (for certain features) but required by maven for building. -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <type>jar</type>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.thoughtworks.proxytoys</groupId>
-            <artifactId>proxytoys</artifactId>
-            <version>1.0</version>
-            <optional>true</optional>
+            <artifactId>jackson-dataformat-msgpack</artifactId>
         </dependency>
 
         <dependency>
-        	<groupId>org.mongodb</groupId>
-        	<artifactId>mongo-java-driver</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <!-- LOGGING DEPENDENCIES - LOG4J -->
+        <!-- LOGGING -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
 
+        <!-- TESTING -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-
-        <!--  JUNIT DEPENDENCY FOR TESTING -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- EasyMock for test cases -->
-
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymockclassextension</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils</artifactId>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-tester</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!--  JETTY DEPENDENCIES FOR TESTING  -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- EMBEDDED JETTY FOR LOCAL DEVELOPMENT -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlets</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <optional>true</optional>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-webapp</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-annotations</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -307,49 +266,36 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                </configuration>
-            </plugin>
-            <!-- Hibernate 3.x maven plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>hibernate3-maven-plugin</artifactId>
-                <version>2.2</version>
-                <!--
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
+                        <id>resolve-dependency-paths</id>
                         <goals>
-                            <goal>hbm2ddl</goal>
+                            <goal>properties</goal>
                         </goals>
                     </execution>
                 </executions>
-                -->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <components>
-                        <component>
-                            <name>hbm2ddl</name>
-                            <implementation>annotationconfiguration</implementation>
-                        </component>
-                    </components>
-                    <componentProperties>
-                        <implementation>annotationconfiguration</implementation>
-                        <outputfilename>schema.ddl</outputfilename>
-                        <drop>false</drop>
-                        <create>true</create>
-                        <export>false</export>
-                        <format>true</format>
-                    </componentProperties>
+                    <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

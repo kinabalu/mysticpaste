@@ -14,21 +14,51 @@ or instant message to receive help on your issue.
 We have plugins for 4 different development environments so you can paste
 directly from the editor.
 
+## Requirements
+
+* JDK 21 or newer
+* Maven 3.9 or newer
+* MongoDB and Redis for anything that reads or writes pastes
+
+The stack is Apache Wicket 10, Spring Framework 6.2, Morphia 2 on the MongoDB
+sync driver 5, Jedis for Redis, and Jakarta EE 10 (`jakarta.servlet`). Embedded
+Jetty 12 is used for local development.
+
 ## Environment Configuration
+
+MongoDB and Redis connection settings live in
+`web/src/main/resources/application.properties` and can be overridden per
+deployment in `web/src/main/resources/application-override.properties` or in
+`/etc/mysticpaste/application.properties`:
+
+```
+mongo.uri=mongodb://localhost:27017
+mongo.database=mysticpaste
+redis.host=localhost
+redis.port=6379
+```
 
 ### The Mystic bits
 
-Mystic Paste is setup with Maven so to build a war, just type
+Mystic Paste is set up with Maven, so to build a war and run the tests:
 
-`mvn package -Dmaven.test.skip=true`
+`mvn clean verify`
 
-Pull it into any IDE and find the Start.java in `web/src/test/java/com/mysticcoders`
+To skip the tests:
 
-Execute the main and you should have a pastebin running.
+`mvn package -DskipTests`
+
+Pull it into any IDE and find the `Start.java` in `web/src/test/java/com/mysticcoders`.
+Execute the main and you should have a pastebin running on
+[http://localhost:8080](http://localhost:8080). Pass `-Djetty.port=<port>` to use
+a different port.
 
 ## Deploying
 
 Deployment should be as simple as adding your own `filters-DEV.properties` and
-then typing :
+then typing:
 
-`mvn package -Dmaven.test.skip=true -PDEV`
+`mvn package -DskipTests -PDEV`
+
+The resulting `web/target/mysticpaste.war` is a Jakarta EE 10 web application and
+needs a Servlet 6.0 container (Jetty 12 `ee10`, Tomcat 10.1+, or similar).
