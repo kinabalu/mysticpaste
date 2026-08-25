@@ -21,7 +21,7 @@ public class PasteAsTextResource extends ResourceReference {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @SpringBean
-    private static PasteService pasteService;
+    private PasteService pasteService;
 
     private static final long serialVersionUID = 1L;
 

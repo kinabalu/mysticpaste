@@ -34,7 +34,7 @@ import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,7 +156,9 @@ public abstract class ViewPastePage extends BasePage {
             PasteItem parentPaste = pasteService.getItem(pasteModel.getObject().getParent());
             PageParameters pp = new PageParameters();
             pp.add("0", parentPaste.getItemId());
-            diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class, pp));
+            Class<? extends BasePage> parentPasteClass =
+                    parentPaste.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class;
+            diffView.add(new BookmarkablePageLink<Void>("originalPasteLink", parentPasteClass, pp));
 
 
             Object[] diffOutput = PasteItem.diffPastes(parentPaste.getContent(), pasteModel.getObject().getContent());
@@ -192,7 +194,9 @@ public abstract class ViewPastePage extends BasePage {
 
                 PageParameters pp = new PageParameters();
                 pp.add("0", pasteItem.getItemId());
-                BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class, pp);
+                Class<? extends BasePage> childPasteClass =
+                        pasteItem.isPrivate() ? ViewPrivatePage.class : ViewPublicPage.class;
+                BookmarkablePageLink<Void> viewPaste = new BookmarkablePageLink<Void>("viewChildPaste", childPasteClass, pp);
 
                 viewPaste.add(new Label("pasteId", new PropertyModel<String>(item.getModel(), "itemId")));
 

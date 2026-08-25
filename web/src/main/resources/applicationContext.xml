@@ -2,14 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+        https://www.springframework.org/schema/context/spring-context.xsd"
        default-autowire="byName">
 
-    <!--  tell spring to use annotation based congfigurations -->
+    <!-- tell spring to use annotation based configurations -->
     <context:annotation-config/>
 
     <context:component-scan base-package="com.mysticcoders.mysticpaste.persistence">
@@ -23,50 +22,34 @@
     </context:component-scan>
 
     <!-- Configurer that replaces ${...} placeholders with values from properties files -->
-    <!-- (in this case, JDBC related properties) -->
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="propertyConfigurer"
+          class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:application.properties</value>
                 <value>classpath:application-override.properties</value>
-                <value>/etc/mysticpaste/application.properties</value>
+                <value>file:/etc/mysticpaste/application.properties</value>
             </list>
         </property>
         <property name="ignoreResourceNotFound" value="true"/>
     </bean>
 
     <!-- Wicket Application -->
-    <bean id="wicketApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication">
+    <bean id="wicketApplication" class="com.mysticcoders.mysticpaste.MysticPasteApplication"/>
+
+    <bean id="mongoClient" class="com.mongodb.client.MongoClients" factory-method="create">
+        <constructor-arg value="${mongo.uri:mongodb://localhost:27017}"/>
     </bean>
-
-    <!-- Loads MongoDB configuraton -->
-<!--
-   	<import resource="mongo-config.xml"/>
--->
-
-<!--
-    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" />
--->
-
-    <bean id="mongo" class="com.mongodb.Mongo">
-        <constructor-arg value="localhost"/>
-        <constructor-arg value="27017"/>
-    </bean>
-
-    <bean id="morphia" class="com.google.code.morphia.Morphia"></bean>
 
     <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
-        <constructor-arg value="localhost" />
+        <constructor-arg index="0" type="java.lang.String" value="${redis.host:localhost}"/>
+        <constructor-arg index="1" type="int" value="${redis.port:6379}"/>
     </bean>
 
     <bean id="mongoPasteItemDao" class="com.mysticcoders.mysticpaste.persistence.mongo.PasteItemDaoImpl">
-        <constructor-arg ref="mongo" />
-        <constructor-arg ref="morphia" />
-        <constructor-arg value="mysticpaste" />
-        <constructor-arg ref="jedisPool" />
+        <constructor-arg index="0" ref="mongoClient"/>
+        <constructor-arg index="1" type="java.lang.String" value="${mongo.database:mysticpaste}"/>
+        <constructor-arg index="2" ref="jedisPool"/>
     </bean>
 
-   	<!--<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
-             p:connectionFactory-ref="connectionFactory"/>
--->
 </beans>

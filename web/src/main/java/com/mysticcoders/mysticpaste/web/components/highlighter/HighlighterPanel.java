@@ -2,23 +2,16 @@ package com.mysticcoders.mysticpaste.web.components.highlighter;
 
 import com.mysticcoders.mysticpaste.model.LanguageSyntax;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.core.util.string.JavaScriptUtils;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,9 +95,19 @@ public class HighlighterPanel extends Panel {
     }
 
 
+    @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
         response.render(CssHeaderItem.forReference(new CssResourceReference(HighlighterPanel.class, "shCore.css")));
         response.render(CssHeaderItem.forReference(new CssResourceReference(HighlighterPanel.class, "shThemeDefault.css")));
+
+        response.render(JavaScriptHeaderItem.forReference(
+                new JavaScriptResourceReference(HighlighterPanel.class, "shCore.js")));
+        response.render(JavaScriptHeaderItem.forReference(
+                new JavaScriptResourceReference(HighlighterPanel.class, getLanguageScript(language))));
+        response.render(OnDomReadyHeaderItem.forScript(
+                "SyntaxHighlighter.defaults['auto-links'] = false; SyntaxHighlighter.all();"));
     }
 
     private String language;
@@ -125,24 +128,6 @@ public class HighlighterPanel extends Panel {
         if (language == null || getLanguageScript(language) == null) language = "text";
 
         Label codePanel = new Label("code", model);
-        codePanel.add(new Behavior() {
-
-            @Override
-            public void beforeRender(Component component) {
-
-                ResourceReference highlighterCoreResource = new PackageResourceReference(HighlighterPanel.class, "shCore.js");
-                IRequestHandler highlighterCoreHandler = new ResourceReferenceRequestHandler(highlighterCoreResource);
-
-                ResourceReference highlighterLanguageResource = new PackageResourceReference(HighlighterPanel.class, getLanguageScript(language));
-                IRequestHandler highlighterLanguageHandler = new ResourceReferenceRequestHandler(highlighterLanguageResource);
-
-
-                JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterCoreHandler));
-                JavaScriptUtils.writeJavaScriptUrl(component.getResponse(), RequestCycle.get().urlFor(highlighterLanguageHandler));
-                JavaScriptUtils.writeJavaScript(component.getResponse(), "SyntaxHighlighter.defaults['auto-links'] = false;");
-                JavaScriptUtils.writeJavaScript(component.getResponse(), "SyntaxHighlighter.all();");
-            }
-        });
         add(codePanel);
 
         StringBuffer brushConfig = new StringBuffer("brush: ");

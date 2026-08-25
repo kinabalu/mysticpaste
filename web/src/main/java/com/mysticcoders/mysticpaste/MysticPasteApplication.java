@@ -13,10 +13,10 @@ import com.mysticcoders.mysticpaste.web.pages.view.PasteAsTextResource;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPrivatePage;
 import com.mysticcoders.mysticpaste.web.pages.view.ViewPublicPage;
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.DefaultThemeProvider;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
-import de.agilecoders.wicket.themes.settings.BootswatchThemeProvider;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 //import de.agilecoders.wicket.webjars.WicketWebjars;
 //import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import org.apache.wicket.application.IComponentInstantiationListener;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -65,9 +65,9 @@ public class MysticPasteApplication extends WebApplication {
 
 //        settings.getActiveThemeProvider().setActiveTheme("bootstrap3");
 
-        ThemeProvider themeProvider = new BootswatchThemeProvider() {{
-            defaultTheme("bootstrap");
-        }};
+        ThemeProvider themeProvider = new DefaultThemeProvider()
+                .add(BootswatchTheme.values())
+                .defaultTheme("bootstrap");
         settings.setThemeProvider(themeProvider);
 
 //        WicketWebjars.install(this);

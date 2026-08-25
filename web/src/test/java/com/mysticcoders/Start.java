@@ -1,47 +1,35 @@
 package com.mysticcoders;
 
-
-import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.ee10.webapp.WebAppContext;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 
+/**
+ * Runs MysticPaste in an embedded Jetty instance for local development.
+ */
 public class Start {
 
-	public static void main(String[] args) throws Exception {
-		/*
-		Server server = new Server();
-		SocketConnector connector = new SocketConnector();
-		// Set some timeout options to make debugging easier.
-		connector.setMaxIdleTime(1000 * 60 * 60);
-		connector.setSoLingerTime(-1);
-		connector.setPort(8080);
-		server.setConnectors(new Connector[] { connector });
+    private static final int DEFAULT_PORT = 8080;
 
-		WebAppContext bb = new WebAppContext();
-		bb.setServer(server);
-		bb.setContextPath("/");
-		bb.setWar("src/main/webapp");
+    public static void main(String[] args) throws Exception {
+        int port = Integer.getInteger("jetty.port", DEFAULT_PORT);
 
-		
-		// START JMX SERVER
-		// MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		// MBeanContainer mBeanContainer = paste MBeanContainer(mBeanServer);
-		// server.getContainer().addEventListener(mBeanContainer);
-		// mBeanContainer.start();
-		
-		server.addHandler(bb);
+        Server server = new Server();
 
-		try {
-			System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
-			server.start();
-			while (System.in.available() == 0) {
-				Thread.sleep(5000);
-			}
-			server.stop();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
-		*/
-	}
+        ServerConnector connector = new ServerConnector(server);
+        connector.setIdleTimeout(1000L * 60 * 60);
+        connector.setPort(port);
+        server.setConnectors(new ServerConnector[]{connector});
+
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath("/");
+        webapp.setWar("web/src/main/webapp");
+        webapp.setParentLoaderPriority(true);
+
+        server.setHandler(webapp);
+
+        System.out.println(">>> STARTING EMBEDDED JETTY SERVER on port " + port + ", PRESS CTRL-C TO STOP");
+        server.start();
+        server.join();
+    }
 }

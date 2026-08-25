@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+    groups:
+      wicket:
+        patterns:
+          - "org.apache.wicket:*"
+          - "de.agilecoders.wicket:*"
+      spring:
+        patterns:
+          - "org.springframework:*"
+      jetty:
+        patterns:
+          - "org.eclipse.jetty:*"
+          - "org.eclipse.jetty.ee10:*"
+      mongodb:
+        patterns:
+          - "org.mongodb:*"
+          - "dev.morphia.morphia:*"
+      testing:
+        patterns:
+          - "org.junit*:*"
+          - "org.mockito:*"
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins:*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"

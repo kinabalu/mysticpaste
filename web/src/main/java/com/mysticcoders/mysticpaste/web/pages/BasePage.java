@@ -10,10 +10,9 @@ import com.mysticcoders.wicket.mousetrap.KeyBinding;
 import com.mysticcoders.wicket.mousetrap.Mousetrap;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.html.ChromeFrameMetaTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.MetaTag;
-import de.agilecoders.wicket.core.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.MobileViewportMetaTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
@@ -33,11 +32,9 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.tester.WicketTesterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Base Page for the application.
@@ -79,8 +76,7 @@ public class BasePage extends WebPage {
 
         add(new HtmlTag("html"));
 
-        add(new OptimizedMobileViewportMetaTag("viewport"));
-        add(new ChromeFrameMetaTag("chrome-frame"));
+        add(new MobileViewportMetaTag("viewport"));
         add(new MetaTag("description", Model.of("description"), Model.of("Mystic Paste")));
         add(new MetaTag("author", Model.of("author"), Model.of("Andrew Lombardi")));
 
@@ -144,7 +140,7 @@ public class BasePage extends WebPage {
         navbar.setInverted(false);
 
         // show brand name and logo
-        navbar.brandName(Model.of("Mystic Paste"));
+        navbar.setBrandName(Model.of("Mystic Paste"));
 
         navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
                 new NavbarButton<PasteItemPage>(PasteItemPage.class, Model.of("New")),

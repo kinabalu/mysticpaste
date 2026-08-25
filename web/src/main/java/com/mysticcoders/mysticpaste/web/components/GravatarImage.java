@@ -17,7 +17,6 @@ package com.mysticcoders.mysticpaste.web.components;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 import java.io.UnsupportedEncodingException;
@@ -70,7 +69,7 @@ public class GravatarImage extends WebComponent {
      * Given an email address this will return a valid Gravatar-based URL which
      * if registered with an image, will show that "gravatar"
      */
-    private class GravatarModel extends AbstractReadOnlyModel<String> {
+    private class GravatarModel implements IModel<String> {
 
         // Base URL for Gravatar
         private static final String GRAVATAR_URL = "http://www.gravatar.com/avatar/";

@@ -29,7 +29,7 @@ public class HistoryDataProvider implements IDataProvider<PasteItem> {
     }
 
     public long size() {
-        int count = new Long(pasteService.getLatestItemsCount()).intValue();
+        int count = (int) pasteService.getLatestItemsCount();
         visible = count > 0;
 
         return count;

@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
 import java.util.Calendar;
 
@@ -26,7 +26,7 @@ public class Footer extends Panel {
     public Footer(String markupId) {
         super(markupId);
 
-        AbstractReadOnlyModel<String> dateModel = new AbstractReadOnlyModel<String>() {
+        IModel<String> dateModel = new IModel<String>() {
             public String getObject() {
                 Calendar cal = Calendar.getInstance();
                 return "" + cal.get(Calendar.YEAR);
