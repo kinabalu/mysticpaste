@@ -47,7 +47,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>21</maven.compiler.release>
 
-        <wicket.version>10.10.0</wicket.version>
+        <wicket.version>10.11.0</wicket.version>
         <wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
         <spring.version>6.2.19</spring.version>
         <jetty.version>12.1.12</jetty.version>
